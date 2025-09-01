@@ -11,3 +11,62 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.player .btn {
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid #333;
+  background: #141414;
+  color: #eee;
+  cursor: pointer;
+}
+
+.player .btn:hover {
+  background: #1b1b1b;
+}
+
+.player .progress-bar {
+  position: relative;
+  height: 6px;
+  background: #2a2a2a;
+  border-radius: 6px;
+  overflow: hidden;
+  cursor: pointer;
+  margin-bottom: 6px;
+}
+
+.player .progress-buffer {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background: #555;
+}
+
+.player .progress-current {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background: #0aa84f;
+}
+
+.center-controls {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.big-play-btn {
+  pointer-events: auto;
+  font-size: 32px;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 0;
+  background: #000a;
+  color: #fff;
+}

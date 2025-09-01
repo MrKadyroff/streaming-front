@@ -1,0 +1,60 @@
+.player {
+    position: relative;
+    background: #000;
+    border-radius: 12px;
+    overflow: hidden;
+    max-width: 960px;
+    margin: 16px auto;
+}
+
+.player-video {
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: #000;
+}
+
+.controls-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    background: rgba(20, 20, 20, 0.9);
+    color: #eee;
+}
+
+.btn {
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid #333;
+    background: #141414;
+    color: #eee;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background: #1e1e1e;
+}
+
+.stream-selector {
+    display: flex;
+    gap: 8px;
+    margin: 8px 0;
+    justify-content: center;
+}
+
+.stream-btn {
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid #333;
+    background: #222;
+    color: #eee;
+    cursor: pointer;
+}
+
+.stream-btn.active {
+    background: #0aa84f;
+    border-color: #0aa84f;
+    color: #fff;
+}
