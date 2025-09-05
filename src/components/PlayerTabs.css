@@ -1,0 +1,146 @@
+.player-tabs {
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border-color);
+}
+
+.player-tabs-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background: linear-gradient(135deg, var(--primary-color-light) 0%, transparent 100%);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.match-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-color);
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+.close-button {
+    background: var(--hover-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    color: var(--text-color);
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+}
+
+.close-button:hover {
+    background: var(--border-color);
+    transform: scale(1.05);
+}
+
+.player-container {
+    padding: 0;
+}
+
+.no-stream {
+    padding: 80px 20px;
+    text-align: center;
+    color: var(--text-secondary);
+    background: var(--bg-secondary);
+}
+
+.no-stream p {
+    font-size: 24px;
+    margin: 0 0 8px 0;
+    color: var(--text-color);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+.no-stream span {
+    font-size: 16px;
+}
+
+.match-details {
+    padding: 20px;
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--border-color);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+}
+
+.detail-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.detail-item .label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.detail-item .value {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.status.live {
+    color: #dc3545;
+}
+
+.status.upcoming {
+    color: var(--primary-color);
+}
+
+.status.finished {
+    color: var(--text-secondary);
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .player-tabs-header {
+        padding: 16px;
+    }
+
+    .match-title {
+        font-size: 18px;
+    }
+
+    .close-button {
+        width: 32px;
+        height: 32px;
+        font-size: 14px;
+    }
+
+    .match-details {
+        padding: 16px;
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .no-stream {
+        padding: 60px 16px;
+    }
+
+    .no-stream p {
+        font-size: 20px;
+    }
+
+    .no-stream span {
+        font-size: 14px;
+    }
+}

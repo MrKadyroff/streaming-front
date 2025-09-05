@@ -1,0 +1,78 @@
+import React, { useState, useEffect } from 'react';
+import { useData } from '../contexts/DataContext';
+import { Match } from '../types';
+import CategoryNavigation from '../components/CategoryNavigation';
+import MatchList from '../components/MatchList';
+import Player from '../components/Player';
+import './Home.css';
+
+const Home: React.FC = () => {
+    const {
+        categories,
+        liveMatches,
+        upcomingMatches,
+        selectedCategory,
+        setSelectedCategory,
+        filteredMatches
+    } = useData();
+
+    const [selectedMatch, setSelectedMatch] = useState<Match | null>(null);
+
+    const handleMatchClick = (match: Match) => {
+        setSelectedMatch(match);
+    };
+
+    const closePlayer = () => {
+        setSelectedMatch(null);
+    };
+
+    return (
+        <div className="home-page">
+            <CategoryNavigation
+                categories={categories}
+                selectedCategory={selectedCategory}
+                onCategoryChange={setSelectedCategory}
+            />
+
+            <main className="home-content">
+                {/* Видеоплеер */}
+                {selectedMatch && (
+                    <div className="player-section">
+                        <div className="player-header">
+                            <h2>🎬 {selectedMatch.player1} vs {selectedMatch.player2}</h2>
+                            <button className="close-player" onClick={closePlayer}>✕</button>
+                        </div>
+                        <Player
+                            primarySrc={selectedMatch.streamUrl || ''}
+                            fallbackSrc={selectedMatch.fallbackUrl}
+                            className="main-player"
+                            previewImage={selectedMatch.previewImage}
+                            matchTitle={`${selectedMatch.player1} vs ${selectedMatch.player2}`}
+                            isLive={selectedMatch.isLive && selectedMatch.status === 'live'}
+                        />
+                        <div className="match-info">
+                            <span className="tournament">� {selectedMatch.tournament}</span>
+                            <span className="live-badge">LIVE</span>
+                        </div>
+                    </div>
+                )}
+
+                {/* Прямые трансляции */}
+                <MatchList
+                    matches={liveMatches}
+                    title="🎥 ПРЯМЫЕ ТРАНСЛЯЦИИ"
+                    onMatchClick={handleMatchClick}
+                />
+
+                {/* Матчи и турниры */}
+                <MatchList
+                    matches={upcomingMatches}
+                    title="�️ РАСПИСАНИЕ МАТЧЕЙ"
+                    onMatchClick={handleMatchClick}
+                />
+            </main>
+        </div>
+    );
+};
+
+export default Home;

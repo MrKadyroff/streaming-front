@@ -1,70 +1,97 @@
-# Getting Started with Create React App
+# SportCast - Спортивные трансляции онлайн
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Современный веб-сайт для просмотра спортивных трансляций, созданный в стиле [sportcast.online](https://sportcast.online/).
 
-## Available Scripts
+## 🏆 Особенности
 
-In the project directory, you can run:
+- **Современный дизайн** в стиле sportcast.online
+- **TypeScript** для типобезопасности
+- **Адаптивный интерфейс** для всех устройств
+- **Темная и светлая темы**
+- **HLS видеоплеер** с расширенными функциями
+- **Поиск и фильтрация** матчей
+- **Категории спорта** (футбол, баскетбол, теннис, хоккей, NFL, F1)
+- **Админ панель** для управления контентом
 
-### `npm start`
+## 🚀 Технологии
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **React 19** + **TypeScript**
+- **React Router** для навигации
+- **HLS.js** для видео стриминга
+- **CSS Variables** для темизации
+- **Context API** для состояния приложения
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 📱 Компоненты
 
-### `npm test`
+### Основные страницы
+- `Home` - главная страница с трансляциями
+- `Schedule` - расписание матчей
+- `Admin` - административная панель
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Компоненты
+- `Player` - HLS видеоплеер с полным контролем
+- `MatchCard` - карточка матча
+- `CategoryNavigation` - навигация по категориям
+- `SearchBar` - поиск по матчам
+- `ThemeToggle` - переключатель темы
 
-### `npm run build`
+## 🎥 Функции плеера
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- **Автоматическое переключение** между основным и резервным потоками
+- **Управление качеством** видео (Auto, 1080p, 720p, etc.)
+- **Полноэкранный режим**
+- **Картинка в картинке (PiP)**
+- **Скриншоты** видео
+- **Регулировка скорости** воспроизведения
+- **Управление громкостью**
+- **Повторные попытки** подключения при ошибках
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 🎨 Темы
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Приложение поддерживает автоматическое переключение между светлой и темной темами с сохранением выбора в localStorage.
 
-### `npm run eject`
+## 📊 Данные
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+В данный момент используются моковые данные для демонстрации. В реальном приложении данные можно получать из API.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## 🔧 Установка и запуск
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```bash
+# Установка зависимостей
+npm install
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+# Запуск в режиме разработки
+npm start
 
-## Learn More
+# Сборка для продакшена
+npm run build
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## 🌐 Структура проекта
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```
+src/
+├── components/          # Переиспользуемые компоненты
+├── contexts/           # React контексты
+├── pages/              # Страницы приложения
+├── types/              # TypeScript типы
+├── styles/             # Глобальные стили
+└── utils/              # Утилиты
+```
 
-### Code Splitting
+## 📝 API интеграция
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Для интеграции с реальным API измените файл `src/contexts/DataContext.tsx` и замените моковые данные на запросы к вашему серверу.
 
-### Analyzing the Bundle Size
+## 🔮 Планы развития
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+- [ ] Интеграция с реальным API
+- [ ] Уведомления о начале матчей
+- [ ] Избранные матчи
+- [ ] Комментарии в реальном времени
+- [ ] Статистика матчей
+- [ ] PWA поддержка
 
-### Making a Progressive Web App
+## 📄 Лицензия
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+MIT License

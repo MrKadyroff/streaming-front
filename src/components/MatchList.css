@@ -1,0 +1,142 @@
+.match-list {
+    margin-bottom: 48px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.match-list-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text-color);
+    margin-bottom: 24px;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.match-list-title::before {
+    content: '';
+    width: 4px;
+    height: 28px;
+    background: var(--primary-color);
+}
+
+.match-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 24px;
+    padding: 0 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.no-matches {
+    padding: 48px 24px;
+    text-align: center;
+    color: var(--text-secondary);
+    background: var(--card-bg);
+    margin: 0 24px;
+    border: 1px solid var(--border-color);
+}
+
+.no-matches p {
+    font-size: 20px;
+    margin: 0 0 8px 0;
+    color: var(--text-color);
+    font-weight: 600;
+}
+
+.no-matches span {
+    font-size: 16px;
+}
+
+/* Featured match styles */
+.match-list.featured .match-grid {
+    grid-template-columns: 1fr;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* Large screen responsive */
+@media (min-width: 1201px) {
+    .match-grid {
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        max-width: 1400px;
+        gap: 30px;
+    }
+
+    .match-list {
+        max-width: 1400px;
+    }
+
+    .match-list-title {
+        padding: 0 40px;
+    }
+}
+
+.match-list.featured .match-card {
+    background: linear-gradient(135deg, var(--primary-color-light) 0%, var(--card-bg) 100%);
+    border: 2px solid var(--primary-color);
+    padding: 36px;
+}
+
+.match-list.featured .match-card .player-name {
+    font-size: 22px;
+}
+
+.match-list.featured .match-card .vs {
+    font-size: 18px;
+    padding: 14px 20px;
+}
+
+.match-list.featured .match-card .watch-btn {
+    padding: 16px 32px;
+    font-size: 16px;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .match-list-title {
+        font-size: 20px;
+        padding: 0 16px;
+    }
+
+    .match-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        padding: 0 16px;
+    }
+
+    .no-matches {
+        margin: 0 16px;
+        padding: 30px 16px;
+    }
+
+    .match-list.featured .match-card {
+        padding: 20px;
+    }
+
+    .match-list.featured .match-card .player-name {
+        font-size: 16px;
+    }
+
+    .match-list.featured .match-card .vs {
+        font-size: 14px;
+        padding: 8px 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .match-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .match-list-title {
+        font-size: 18px;
+    }
+}
