@@ -438,7 +438,8 @@
 /* Large screen responsive */
 @media (min-width: 1201px) {
     .home-content {
-        max-width: 1400px;
+        max-width: 1200px;
+        margin: 0 auto;
         padding: 0 40px 40px 40px;
     }
 

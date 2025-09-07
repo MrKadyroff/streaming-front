@@ -1279,14 +1279,30 @@ body {
 
 /* Advertisement Banners */
 .page-with-ads {
-  display: grid;
-  grid-template-columns: 200px 1fr 200px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
   gap: 32px;
   max-width: 1600px;
-  width: 100%;
   margin: 0 auto;
   padding: 32px 24px;
   min-height: calc(100vh - 136px);
+}
+
+/* планшеты — убираем боковые колонки */
+@media (max-width: 1200px) {
+  .page-with-ads {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+/* телефоны — вообще блочная верстка */
+@media (max-width: 768px) {
+  .page-with-ads {
+    display: block;
+    padding: 16px;
+  }
 }
 
 .left-ads,
@@ -1295,6 +1311,8 @@ body {
   flex-direction: column;
   gap: 24px;
   padding: 16px 0;
+  width: 200px;
+  flex-shrink: 0;
 }
 
 .main-content-ads {
@@ -1302,6 +1320,7 @@ body {
   width: 100%;
   max-width: 100%;
   overflow-x: hidden;
+  flex: 1;
 }
 
 .ad-banner {
