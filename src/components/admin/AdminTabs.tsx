@@ -13,9 +13,9 @@ const AdminTabs: React.FC<AdminTabsProps> = ({ activeTab, onTabChange }) => {
         { key: 'dashboard' as AdminTab, label: 'Панель управления' },
         { key: 'matches' as AdminTab, label: 'Матчи' },
         { key: 'ads' as AdminTab, label: 'Реклама' },
-        { key: 'users' as AdminTab, label: 'Пользователи' },
-        { key: 'reports' as AdminTab, label: 'Отчеты' },
-        { key: 'hls' as AdminTab, label: 'HLS Потоки' },
+        // { key: 'users' as AdminTab, label: 'Пользователи' },
+        // { key: 'reports' as AdminTab, label: 'Отчеты' },
+        // { key: 'hls' as AdminTab, label: 'HLS Потоки' },
     ];
 
     return (
