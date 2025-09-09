@@ -1,0 +1,237 @@
+/* Modern UI Demo Styles */
+.modern-ui-demo {
+    min-height: 100vh;
+    background:
+        linear-gradient(135deg,
+            #0f1419 0%,
+            #1a2129 25%,
+            #151b23 50%,
+            #1a2129 75%,
+            #0f1419 100%);
+    padding: 40px 0;
+}
+
+.demo-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.demo-header {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.demo-header h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: rgba(255, 255, 255, 0.95);
+    margin: 0 0 16px 0;
+    background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.95) 0%,
+            rgba(34, 197, 94, 0.8) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.demo-header p {
+    font-size: 1.125rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0;
+}
+
+.demo-section {
+    margin-bottom: 60px;
+}
+
+.demo-section h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.9);
+    margin: 0 0 24px 0;
+    padding-bottom: 12px;
+    border-bottom: 2px solid rgba(34, 197, 94, 0.3);
+    display: inline-block;
+}
+
+.demo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px;
+}
+
+.demo-grid.single {
+    grid-template-columns: 1fr;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.demo-features {
+    margin-top: 80px;
+    text-align: center;
+}
+
+.demo-features h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.95);
+    margin: 0 0 40px 0;
+    border: none;
+    display: block;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+    margin-top: 40px;
+}
+
+.feature-card {
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    padding: 32px 24px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(34, 197, 94, 0.2);
+    transform: translateY(-4px);
+}
+
+.feature-icon {
+    font-size: 2.5rem;
+    margin-bottom: 16px;
+    filter: grayscale(100%) brightness(1.2);
+}
+
+.feature-card h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+    margin: 0 0 12px 0;
+}
+
+.feature-card p {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.6);
+    margin: 0;
+    line-height: 1.5;
+}
+
+.selected-match-info {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: rgba(34, 197, 94, 0.9);
+    color: white;
+    padding: 16px 20px;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    max-width: 300px;
+    animation: slideInUp 0.3s ease-out;
+}
+
+.selected-match-info h3 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    opacity: 0.9;
+}
+
+.selected-match-info p {
+    font-size: 0.875rem;
+    margin: 0 0 4px 0;
+    line-height: 1.4;
+}
+
+.selected-match-info p:last-child {
+    margin-bottom: 0;
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(100%);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .modern-ui-demo {
+        padding: 24px 0;
+    }
+
+    .demo-container {
+        padding: 0 16px;
+    }
+
+    .demo-header {
+        margin-bottom: 40px;
+    }
+
+    .demo-header h1 {
+        font-size: 2rem;
+    }
+
+    .demo-header p {
+        font-size: 1rem;
+    }
+
+    .demo-section {
+        margin-bottom: 40px;
+    }
+
+    .demo-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .features-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .feature-card {
+        padding: 24px 20px;
+    }
+
+    .selected-match-info {
+        position: static;
+        margin-top: 40px;
+        max-width: none;
+        animation: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .demo-header h1 {
+        font-size: 1.75rem;
+    }
+
+    .demo-features h2 {
+        font-size: 1.5rem;
+    }
+
+    .feature-card {
+        padding: 20px 16px;
+    }
+
+    .feature-icon {
+        font-size: 2rem;
+    }
+}

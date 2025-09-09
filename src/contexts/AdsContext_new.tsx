@@ -69,10 +69,65 @@ export const AdsProvider: React.FC<AdsProviderProps> = ({ children }) => {
             const response = await getAds();
             // Преобразуем API данные в формат AdData
             const apiAds = response.data.ads?.map(convertApiToAd) || [];
-            setAds(apiAds);
+
+            // Моковые данные
+            const mockAds: AdData[] = [
+                {
+                    id: 'mock1',
+                    title: 'Спортивные ставки',
+                    gifUrl: 'https://media.giphy.com/media/3o7aCRloybJlXpNjSU/giphy.gif',
+                    clickUrl: '#',
+                    type: 'vertical',
+                    isActive: true,
+                },
+                {
+                    id: 'mock2',
+                    title: 'Спортивное питание',
+                    gifUrl: 'https://media.giphy.com/media/l0HlvtIPzPdt2usKs/giphy.gif',
+                    clickUrl: '#',
+                    type: 'square',
+                    isActive: true,
+                },
+                {
+                    id: 'mock3',
+                    title: 'Спортивная одежда',
+                    gifUrl: 'https://media.giphy.com/media/l0Iydl9zWjbLvLv6U/giphy.gif',
+                    clickUrl: '#',
+                    type: 'horizontal',
+                    isActive: true,
+                }
+            ];
+
+            setAds([...mockAds, ...apiAds]);
         } catch (error) {
             console.error('Ошибка загрузки рекламы с API:', error);
-            setAds([]);
+            // Используем только моковые данные при ошибке
+            setAds([
+                {
+                    id: 'mock1',
+                    title: 'Спортивные ставки',
+                    gifUrl: 'https://media.giphy.com/media/3o7aCRloybJlXpNjSU/giphy.gif',
+                    clickUrl: '#',
+                    type: 'vertical',
+                    isActive: true,
+                },
+                {
+                    id: 'mock2',
+                    title: 'Спортивное питание',
+                    gifUrl: 'https://media.giphy.com/media/l0HlvtIPzPdt2usKs/giphy.gif',
+                    clickUrl: '#',
+                    type: 'square',
+                    isActive: true,
+                },
+                {
+                    id: 'mock3',
+                    title: 'Спортивная одежда',
+                    gifUrl: 'https://media.giphy.com/media/l0Iydl9zWjbLvLv6U/giphy.gif',
+                    clickUrl: '#',
+                    type: 'horizontal',
+                    isActive: true,
+                }
+            ]);
         }
     };
 

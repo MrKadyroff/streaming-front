@@ -1,12 +1,14 @@
 .admin-page {
     min-height: 100vh;
-    background: var(--bg-primary);
+    background: linear-gradient(135deg, #232526 0%, #414345 100%);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
 }
 
 .admin-header {
-    background: linear-gradient(135deg, #6f42c1 0%, #5a32a3 100%);
-    padding: 40px 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 32px 20px;
     color: white;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
 .admin-header-content {
@@ -22,27 +24,27 @@
 }
 
 .admin-title h1 {
-    font-size: 36px;
+    font-size: 32px;
     font-weight: 700;
-    margin: 0 0 12px 0;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-    text-transform: uppercase;
-    letter-spacing: 0.02em;
+    margin: 0 0 8px 0;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    letter-spacing: -0.02em;
 }
 
 .admin-title p {
-    font-size: 18px;
+    font-size: 16px;
     margin: 0;
     opacity: 0.9;
+    font-weight: 400;
 }
 
 .logout-btn {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.15);
     color: white;
     border: 2px solid rgba(255, 255, 255, 0.3);
     border-radius: 8px;
-    padding: 12px 20px;
-    font-size: 16px;
+    padding: 12px 24px;
+    font-size: 14px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -50,95 +52,99 @@
 }
 
 .logout-btn:hover {
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.25);
     border-color: rgba(255, 255, 255, 0.5);
     transform: translateY(-2px);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 .admin-content {
-    padding: 40px 20px;
+    padding: 32px 20px;
     max-width: 1200px;
     margin: 0 auto;
 }
 
 .admin-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 24px;
-    margin-bottom: 40px;
+    margin-bottom: 32px;
 }
 
 .admin-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
+    background: #23272f;
+    border: 1px solid #343a40;
+    border-radius: 12px;
     padding: 24px;
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
 }
 
 .admin-card:hover {
     transform: translateY(-4px);
-    box-shadow: var(--shadow-hover);
-    border-color: var(--primary-color);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    border-color: #0d6efd;
 }
 
 .admin-card h3 {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 600;
-    color: var(--text-color);
-    margin: 0 0 12px 0;
-    text-transform: uppercase;
-    letter-spacing: 0.02em;
+    color: #f8f9fa;
+    margin: 0 0 8px 0;
+    letter-spacing: -0.01em;
 }
 
 .admin-card p {
-    color: var(--text-secondary);
+    color: #adb5bd;
     margin: 0 0 20px 0;
     line-height: 1.5;
+    font-size: 14px;
 }
 
 .admin-btn {
-    background: var(--primary-color);
+    background: #0d6efd;
     color: white;
     border: none;
-    border-radius: var(--border-radius);
+    border-radius: 8px;
     padding: 12px 24px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
     width: 100%;
-    text-transform: uppercase;
-    letter-spacing: 0.02em;
+    font-size: 14px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .admin-btn:hover {
-    background: var(--primary-color-dark);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
+    background: #0b5ed7;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(13, 110, 253, 0.3);
 }
 
 .admin-info {
-    background: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
+    background: #23272f;
+    border: 1px solid #343a40;
+    border-radius: 12px;
     padding: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
 }
 
 .admin-info h2 {
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 600;
-    color: var(--text-color);
+    color: #f8f9fa;
     margin: 0 0 20px 0;
-    text-transform: uppercase;
-    letter-spacing: 0.02em;
+    letter-spacing: -0.01em;
 }
 
 .info-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 16px;
 }
 
@@ -147,25 +153,29 @@
     justify-content: space-between;
     align-items: center;
     padding: 12px 16px;
-    background: var(--bg-secondary);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
+    background: #2d323b;
+    border-radius: 8px;
+    border: 1px solid #343a40;
 }
 
 .info-label {
-    color: var(--text-secondary);
     font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.02em;
+    color: #ced4da;
+    font-size: 14px;
 }
 
 .info-value {
-    color: var(--text-color);
     font-weight: 600;
+    color: #f8f9fa;
+    font-size: 14px;
 }
 
 .status-online {
-    color: #28a745;
+    color: #198754 !important;
+}
+
+.status-offline {
+    color: #dc3545 !important;
 }
 
 /* Responsive Styles */
@@ -520,4 +530,792 @@
     background: var(--danger-color);
     color: white;
     border-color: var(--danger-color);
+}
+
+/* Навигация по вкладкам */
+.tabs-nav {
+    display: flex;
+    background: #23272f;
+    border-radius: 12px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.18);
+    overflow: hidden;
+    border: 1px solid #343a40;
+    padding: 4px;
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 14px 20px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    color: #ced4da;
+    transition: all 0.3s ease;
+    position: relative;
+    border-radius: 8px;
+    margin: 2px;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.tab-btn:hover {
+    background: #343a40;
+    color: #f8f9fa;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
+}
+
+.tab-btn.active {
+    background: linear-gradient(135deg, #0d6efd 0%, #0b5ed7 100%);
+    color: #fff;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(13, 110, 253, 0.3);
+    transform: translateY(-1px);
+}
+
+.tab-btn.active:hover {
+    background: linear-gradient(135deg, #0b5ed7 0%, #0a58ca 100%);
+    color: #ffffff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(13, 110, 253, 0.4);
+}
+
+.tab-content {
+    background: #23272f;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.18);
+    overflow: hidden;
+    padding: 0;
+    border: 1px solid #343a40;
+}
+
+@media (max-width: 768px) {
+    .tabs-nav {
+        flex-direction: column;
+        padding: 8px;
+    }
+
+    .tab-btn {
+        margin: 2px 0;
+        text-align: left;
+        padding: 16px 20px;
+    }
+}
+
+/* Управление матчами */
+.matches-management {
+    padding: 24px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.section-header h2 {
+    margin: 0;
+    color: var(--text-primary);
+    font-size: 28px;
+    font-weight: 600;
+}
+
+/* Кнопки */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    gap: 8px;
+}
+
+.btn-primary {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #0b5ed7;
+    border-color: #0a58ca;
+    transform: translateY(-1px);
+}
+
+.btn-success {
+    background-color: #198754;
+    border-color: #198754;
+    color: white;
+}
+
+.btn-success:hover {
+    background-color: #157347;
+    border-color: #146c43;
+}
+
+.btn-warning {
+    background-color: #ffc107;
+    border-color: #ffc107;
+    color: #000;
+}
+
+.btn-warning:hover {
+    background-color: #ffca2c;
+    border-color: #ffc720;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #bb2d3b;
+    border-color: #b02a37;
+}
+
+.btn-outline {
+    background-color: transparent;
+    border-color: #6c757d;
+    color: #6c757d;
+}
+
+.btn-outline:hover {
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn-sm {
+    padding: 6px 12px;
+    font-size: 12px;
+}
+
+/* Disabled button styles */
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+    pointer-events: none;
+}
+
+.btn:disabled:hover {
+    transform: none !important;
+}
+
+/* Loading states */
+.form-actions button[disabled] {
+    position: relative;
+}
+
+.form-actions button[disabled]:after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 16px;
+    height: 16px;
+    border: 2px solid transparent;
+    border-top: 2px solid currentColor;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+/* Пустое состояние */
+.empty-state {
+    text-align: center;
+    padding: 80px 20px;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    border: 2px dashed #dee2e6;
+}
+
+.empty-icon {
+    font-size: 64px;
+    margin-bottom: 16px;
+    opacity: 0.5;
+}
+
+.empty-state h3 {
+    margin: 0 0 8px 0;
+    color: var(--text-primary);
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.empty-state p {
+    margin: 0 0 24px 0;
+    color: #6c757d;
+    font-size: 16px;
+}
+
+/* Таблица матчей */
+.matches-table-container {
+    background: #23272f;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+}
+
+.matches-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0;
+}
+
+.matches-table th {
+    background: #343a40;
+    color: #f8f9fa;
+    font-weight: 600;
+    text-align: left;
+    padding: 16px;
+    border-bottom: 2px solid #495057;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.matches-table td {
+    padding: 20px 16px;
+    border-bottom: 1px solid #343a40;
+    vertical-align: middle;
+    color: #f8f9fa;
+}
+
+.match-row:hover {
+    background-color: #343a40;
+}
+
+.match-row:last-child td {
+    border-bottom: none;
+}
+
+/* Ячейки таблицы */
+.teams-cell {
+    min-width: 250px;
+}
+
+.teams-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    color: #f8f9fa;
+}
+
+.team-name {
+    font-weight: 600;
+    color: #f8f9fa;
+    font-size: 15px;
+}
+
+.vs-text {
+    font-size: 12px;
+    color: #adb5bd;
+    text-transform: uppercase;
+    font-weight: 500;
+}
+
+.tournament-cell {
+    min-width: 180px;
+}
+
+.tournament-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.tournament-name {
+    font-weight: 600;
+    color: #f8f9fa;
+    font-size: 14px;
+}
+
+.sport-name {
+    font-size: 12px;
+    color: #adb5bd;
+    text-transform: capitalize;
+}
+
+.datetime-cell {
+    min-width: 140px;
+}
+
+.datetime-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.date {
+    font-weight: 500;
+    color: #f8f9fa;
+    font-size: 14px;
+}
+
+.time {
+    font-size: 12px;
+    color: #adb5bd;
+}
+
+.status-cell {
+    min-width: 120px;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-badge.live {
+    background: #ff4757;
+    color: white;
+    animation: pulse 2s infinite;
+}
+
+.status-badge.upcoming {
+    background: #ffa502;
+    color: white;
+}
+
+.status-badge.finished {
+    background: #2ed573;
+    color: white;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.7;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.actions-cell {
+    min-width: 280px;
+}
+
+.actions-group {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+/* Адаптивность */
+@media (max-width: 1200px) {
+    .matches-table-container {
+        overflow-x: auto;
+    }
+
+    .matches-table {
+        min-width: 800px;
+    }
+}
+
+@media (max-width: 768px) {
+    .matches-management {
+        padding: 16px;
+    }
+
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+
+    .matches-table th,
+    .matches-table td {
+        padding: 12px 8px;
+    }
+
+    .actions-group {
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .btn-sm {
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+}
+
+/* Устаревшие стили (удаляем) */
+.add-btn {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+.add-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(40, 167, 69, 0.4);
+}
+
+/* Ads Management Styles */
+.ads-management {
+    width: 100%;
+}
+
+.filters-section {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 24px;
+    padding: 16px;
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.filter-group label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.filter-select {
+    padding: 8px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background: var(--input-bg);
+    color: var(--text-color);
+    font-size: 0.9rem;
+    min-width: 150px;
+    transition: all 0.3s ease;
+}
+
+.filter-select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.ads-container {
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+}
+
+.ads-table-container {
+    overflow-x: auto;
+}
+
+.ads-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+}
+
+.ads-table th {
+    background: rgba(59, 130, 246, 0.05);
+    padding: 16px 12px;
+    text-align: left;
+    font-weight: 600;
+    color: var(--text-color);
+    border-bottom: 2px solid var(--border-color);
+    white-space: nowrap;
+}
+
+.ads-table td {
+    padding: 16px 12px;
+    border-bottom: 1px solid var(--border-color);
+    vertical-align: middle;
+}
+
+.ad-row:hover {
+    background: rgba(59, 130, 246, 0.02);
+}
+
+.title-cell {
+    min-width: 200px;
+}
+
+.ad-title-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.ad-title {
+    font-weight: 600;
+    color: var(--text-color);
+    font-size: 1rem;
+}
+
+.ad-preview {
+    max-width: 100px;
+}
+
+.ad-thumbnail {
+    width: 60px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+}
+
+.status-cell {
+    min-width: 120px;
+}
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.status-badge.active {
+    background: rgba(34, 197, 94, 0.1);
+    color: #16a34a;
+    border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.status-badge.inactive {
+    background: rgba(239, 68, 68, 0.1);
+    color: #dc2626;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.placement-cell {
+    min-width: 120px;
+}
+
+.placement-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.placement-type {
+    font-weight: 600;
+    color: var(--text-color);
+    text-transform: capitalize;
+}
+
+.placement-position {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    text-transform: capitalize;
+}
+
+.dates-cell {
+    min-width: 160px;
+}
+
+.dates-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.start-date,
+.end-date {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.priority-cell {
+    min-width: 80px;
+    text-align: center;
+}
+
+.priority-value {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    background: var(--primary-color);
+    color: white;
+    border-radius: 50%;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.actions-cell {
+    min-width: 140px;
+}
+
+.actions-group {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+/* Mobile Responsiveness for Ads Table */
+@media (max-width: 1024px) {
+    .filters-section {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .filter-group {
+        flex-direction: row;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .filter-select {
+        min-width: 120px;
+    }
+}
+
+@media (max-width: 768px) {
+    .ads-table-container {
+        /* На мобильных скрываем таблицу */
+        display: none !important;
+    }
+
+    .ads-cards-container {
+        display: flex !important;
+        flex-direction: column;
+        gap: 12px;
+        padding: 0;
+    }
+
+    .ad-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius);
+        padding: 16px;
+        box-shadow: var(--shadow-base);
+    }
+
+    .ad-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 12px;
+    }
+
+    .ad-card-title {
+        font-weight: 600;
+        color: var(--text-color);
+        font-size: 1.1rem;
+        margin: 0;
+        flex: 1;
+        margin-right: 8px;
+    }
+
+    .ad-card-status {
+        padding: 4px 8px;
+        border-radius: 12px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        flex-shrink: 0;
+    }
+
+    .ad-card-preview {
+        margin-bottom: 12px;
+    }
+
+    .ad-card-info {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-bottom: 16px;
+    }
+
+    .ad-card-info-item {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .ad-card-info-label {
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        font-weight: 500;
+    }
+
+    .ad-card-info-value {
+        font-size: 0.9rem;
+        color: var(--text-color);
+    }
+
+    .ad-card-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .ad-card-actions .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .filters-section {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .filter-group {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+}
+
+/* Desktop: Hide mobile cards */
+@media (min-width: 769px) {
+    .ads-cards-container {
+        display: none !important;
+    }
+
+    .ads-table-container {
+        display: block !important;
+    }
 }

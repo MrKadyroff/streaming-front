@@ -35,7 +35,7 @@ const Home: React.FC = () => {
     };
 
     // Фильтруем только реально активные эфиры
-    const activeLiveMatches = liveMatches.filter(match =>
+    const activeLiveMatches = liveMatches.filter((match: Match) =>
         match.isLive &&
         match.status === 'live' &&
         (match.streamUrl || match.previewImage)

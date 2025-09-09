@@ -195,14 +195,10 @@
     background: #c82333;
 }
 
-/* Mobile responsive */
-@media (max-width: 768px) {
+/* Оптимизированная адаптивность карточек матчей */
+@media (max-width: 1200px) {
     .match-card {
-        padding: 16px;
-    }
-
-    .players {
-        gap: 12px;
+        padding: 20px;
     }
 
     .player-name {
@@ -210,8 +206,38 @@
     }
 
     .vs {
+        font-size: 13px;
+        padding: 8px 14px;
+    }
+}
+
+@media (max-width: 768px) {
+    .match-card {
+        padding: 16px;
+        border-radius: 10px;
+    }
+
+    .match-header {
+        margin-bottom: 16px;
+    }
+
+    .players {
+        gap: 12px;
+    }
+
+    .player-name {
+        font-size: 13px;
+    }
+
+    .vs {
         font-size: 12px;
         padding: 6px 10px;
+        border-radius: 6px;
+    }
+
+    .match-footer {
+        gap: 12px;
+        padding-top: 16px;
     }
 
     .watch-btn {
@@ -219,20 +245,72 @@
         font-size: 12px;
     }
 
-    .match-footer {
-        gap: 12px;
+    .time {
+        font-size: 16px;
+    }
+
+    .date {
+        font-size: 12px;
+    }
+
+    .tournament {
+        font-size: 12px;
+    }
+
+    .live-indicator {
+        padding: 4px 8px;
+        font-size: 10px;
     }
 }
 
 @media (max-width: 480px) {
+    .match-card {
+        padding: 14px;
+        border-radius: 8px;
+    }
+
+    .match-header {
+        margin-bottom: 14px;
+    }
+
+    .players {
+        gap: 8px;
+    }
+
+    .player-name {
+        font-size: 12px;
+    }
+
+    .vs {
+        font-size: 11px;
+        padding: 5px 8px;
+    }
+
     .match-footer {
         flex-direction: column;
         align-items: stretch;
         gap: 12px;
+        padding-top: 14px;
     }
 
     .watch-btn {
         width: 100%;
+        padding: 10px;
+        font-size: 12px;
+    }
+
+    .team-with-logo {
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .player2 .team-with-logo {
+        flex-direction: column;
+    }
+
+    .team-logo-small {
+        width: 18px;
+        height: 18px;
     }
 }
 

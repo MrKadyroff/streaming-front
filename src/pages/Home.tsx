@@ -4,6 +4,8 @@ import { useData } from '../contexts/DataContext';
 import { Match } from '../types';
 import MatchPlayer from '../components/MatchPlayer';
 import FootballMatchCard from '../components/FootballMatchCard';
+import HLSPlayer from '../components/HLSPlayer';
+import { streamApi, Stream } from '../services/streamApi';
 import './Home.css';
 
 const Home: React.FC = () => {
@@ -13,6 +15,31 @@ const Home: React.FC = () => {
     } = useData();
 
     const [selectedMatch, setSelectedMatch] = useState<Match | null>(null);
+    const [activeStream, setActiveStream] = useState<Stream | null>(null);
+    const [streamLoading, setStreamLoading] = useState<boolean>(true);
+
+    // Загружаем активный поток
+    useEffect(() => {
+        const loadActiveStream = async () => {
+            setStreamLoading(true);
+            try {
+                const stream = await streamApi.getFirstActiveStream();
+                setActiveStream(stream);
+            } catch (error) {
+                console.error('Error loading active stream:', error);
+                setActiveStream(null);
+            } finally {
+                setStreamLoading(false);
+            }
+        };
+
+        loadActiveStream();
+
+        // Обновляем поток каждые 30 секунд
+        const interval = setInterval(loadActiveStream, 30000);
+
+        return () => clearInterval(interval);
+    }, []);
 
     // Автоматически выбираем первый live матч при загрузке
     useEffect(() => {
@@ -30,24 +57,36 @@ const Home: React.FC = () => {
     };
 
     // Фильтруем только футбольные матчи
-    const activeLiveMatches = liveMatches.filter(match =>
+    const activeLiveMatches = liveMatches.filter((match: Match) =>
         match.sport === 'football' &&
         match.isLive &&
         match.status === 'live'
     );
 
     // Ближайшие матчи для показа на фоне поля
-    const upcomingFootballMatches = upcomingMatches.filter(match =>
+    const upcomingFootballMatches = upcomingMatches.filter((match: Match) =>
         match.sport === 'football'
     ).slice(0, 1); // Показываем только ближайший
 
-    const otherUpcomingMatches = upcomingMatches.filter(match =>
+    const otherUpcomingMatches = upcomingMatches.filter((match: Match) =>
         match.sport === 'football'
     ).slice(1); // Остальные в карточках
 
     return (
         <div className="home-page">
             <main className="home-content">
+                {/* HLS Video Player Section */}
+                <div className="hls-player-section">
+                    <div className="section-header">
+                        <h2>
+                            <span className="soccer-emoji">⚽</span>
+                            Онлайн трансляция
+                            {streamLoading && <span className="loading-indicator">⏳</span>}
+                        </h2>
+                    </div>
+                    <HLSPlayer stream={activeStream} />
+                </div>
+
                 {/* Ближайший матч на фоне футбольного поля */}
                 {upcomingFootballMatches.length > 0 && (
                     <div className="featured-match-section">
@@ -93,7 +132,7 @@ const Home: React.FC = () => {
                         <div className="live-streams-section">
                             <h2>Прямые эфиры</h2>
                             <div className="matches-grid">
-                                {activeLiveMatches.map(match => (
+                                {activeLiveMatches.map((match: Match) => (
                                     <FootballMatchCard
                                         key={match.id}
                                         match={match}
@@ -111,7 +150,7 @@ const Home: React.FC = () => {
                     <div className="upcoming-matches-section">
                         <h2>Предстоящие матчи</h2>
                         <div className="matches-grid">
-                            {otherUpcomingMatches.map(match => (
+                            {otherUpcomingMatches.map((match: Match) => (
                                 <FootballMatchCard
                                     key={match.id}
                                     match={match}

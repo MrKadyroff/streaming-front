@@ -8,6 +8,10 @@ export interface AdData {
     clickUrl?: string;
     type: 'vertical' | 'square' | 'horizontal';
     isActive: boolean;
+    priority?: number;
+    startDate?: string;
+    endDate?: string;
+    position?: string;
 }
 
 interface AdBannerProps {

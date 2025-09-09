@@ -2,14 +2,16 @@
     background: var(--card-bg);
     backdrop-filter: blur(10px);
     border: 1px solid var(--border-color);
-    border-radius: 12px;
-    padding: 20px;
+    border-radius: 16px;
+    padding: 24px;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: hidden;
     margin-bottom: 16px;
-    box-shadow: var(--shadow);
+    box-shadow:
+        0 4px 16px rgba(0, 0, 0, 0.1),
+        0 1px 4px rgba(0, 0, 0, 0.05);
     color: var(--text-color);
 }
 
@@ -20,42 +22,49 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(135deg, rgba(34, 197, 94, 0.05) 0%, transparent 100%);
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.03) 0%, transparent 100%);
     pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
 .football-match-card:hover {
-    transform: translateY(-4px) scale(1.02);
-    box-shadow: var(--shadow-hover);
-    border-color: var(--primary-color);
-    background: var(--card-bg);
+    transform: translateY(-2px);
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.15),
+        0 2px 8px rgba(0, 0, 0, 0.08);
+    border-color: rgba(34, 197, 94, 0.3);
+}
+
+.football-match-card:hover::before {
+    opacity: 1;
 }
 
 .football-match-card.selected {
     border-color: var(--primary-color);
     box-shadow:
-        0 0 0 3px rgba(34, 197, 94, 0.3),
-        var(--shadow-hover);
-    background: var(--card-bg);
+        0 0 0 2px rgba(34, 197, 94, 0.2),
+        0 8px 32px rgba(0, 0, 0, 0.15);
 }
 
 .football-match-card.main-card {
-    padding: 50px;
+    padding: 40px;
     margin: 24px 0;
-    min-height: 450px;
+    min-height: 380px;
     background: linear-gradient(135deg,
             #0d4a1e 0%,
             #1a5c2e 25%,
             #22c55e 50%,
             #16a34a 75%,
             #15803d 100%);
-    background-size: 300% 300%;
-    animation: mainCardGradient 12s ease infinite;
+    background-size: 200% 200%;
+    animation: mainCardGradient 20s ease infinite;
     position: relative;
     border: 2px solid rgba(34, 197, 94, 0.3);
     box-shadow:
-        0 12px 48px rgba(0, 0, 0, 0.4),
+        0 16px 64px rgba(0, 0, 0, 0.3),
         inset 0 1px 0 rgba(34, 197, 94, 0.2);
+    border-radius: 20px;
 }
 
 @keyframes mainCardGradient {
@@ -311,44 +320,44 @@
 }
 
 .team-logo {
-    width: 52px;
-    height: 52px;
+    width: 48px;
+    height: 48px;
     border-radius: 12px;
     object-fit: contain;
     background: rgba(255, 255, 255, 0.95);
     padding: 6px;
     box-shadow:
-        0 4px 12px rgba(0, 0, 0, 0.1),
-        0 2px 4px rgba(0, 0, 0, 0.05);
+        0 2px 8px rgba(0, 0, 0, 0.08),
+        0 1px 2px rgba(0, 0, 0, 0.04);
     transition: all 0.3s ease;
 }
 
 .football-match-card:hover .team-logo {
-    transform: scale(1.05);
     box-shadow:
-        0 6px 16px rgba(0, 0, 0, 0.15),
-        0 3px 6px rgba(0, 0, 0, 0.08);
+        0 4px 16px rgba(0, 0, 0, 0.12),
+        0 2px 4px rgba(0, 0, 0, 0.06);
+    /* Убираем transform чтобы не выходить за границы */
 }
 
 .main-card .team-logo {
-    width: 68px;
-    height: 68px;
+    width: 64px;
+    height: 64px;
     border-radius: 16px;
     box-shadow:
-        0 6px 20px rgba(0, 0, 0, 0.3),
-        0 3px 8px rgba(0, 0, 0, 0.2);
+        0 6px 20px rgba(0, 0, 0, 0.2),
+        0 3px 8px rgba(0, 0, 0, 0.15);
 }
 
 .team-logo-placeholder {
-    width: 52px;
-    height: 52px;
+    width: 48px;
+    height: 48px;
     border-radius: 12px;
     background: linear-gradient(135deg, var(--primary-color-light) 0%, rgba(34, 197, 94, 0.2) 100%);
     border: 2px solid var(--primary-color);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: bold;
     color: var(--primary-color);
     transition: all 0.3s ease;
@@ -357,19 +366,20 @@
 .football-match-card:hover .team-logo-placeholder {
     background: linear-gradient(135deg, rgba(34, 197, 94, 0.2) 0%, rgba(34, 197, 94, 0.3) 100%);
     border-color: var(--primary-color);
-    transform: scale(1.05);
+    /* Убираем transform чтобы не выходить за границы */
 }
 
 .main-card .team-logo-placeholder {
-    width: 68px;
-    height: 68px;
+    width: 64px;
+    height: 64px;
     border-radius: 16px;
     background: rgba(255, 255, 255, 0.9);
     border-color: rgba(255, 255, 255, 0.4);
     color: rgba(13, 74, 30, 0.9);
     box-shadow:
-        0 6px 20px rgba(0, 0, 0, 0.3),
-        0 3px 8px rgba(0, 0, 0, 0.2);
+        0 6px 20px rgba(0, 0, 0, 0.2),
+        0 3px 8px rgba(0, 0, 0, 0.15);
+    font-size: 14px;
 }
 
 .team-info {
@@ -419,17 +429,18 @@
     height: 44px;
     border: 2px solid var(--primary-color);
     border-radius: 50%;
-    font-size: 13px;
-    font-weight: bold;
-    color: var(--primary-color);
     background: var(--primary-color-light);
+    position: relative;
     transition: all 0.3s ease;
+    padding: 0;
+    box-sizing: border-box;
+    overflow: hidden;
 }
 
 .football-match-card:hover .vs-separator {
     border-color: var(--primary-color);
     background: var(--primary-color-light);
-    transform: scale(1.1);
+    /* Убираем transform: scale чтобы избежать выхода за границы */
 }
 
 .main-card .vs-separator {
@@ -440,6 +451,69 @@
     height: 54px;
     font-size: 15px;
     box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+}
+
+.vs-team-logos {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    gap: 2px;
+    position: relative;
+}
+
+.vs-team-logo {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    object-fit: contain;
+    background: #fff;
+    border: 1px solid var(--primary-color);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+    z-index: 1;
+}
+
+.main-card .vs-team-logo {
+    width: 22px;
+    height: 22px;
+    border: 1.5px solid #fff;
+}
+
+.vs-team-logo-placeholder {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--primary-color-light);
+    color: var(--primary-color);
+    font-size: 10px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--primary-color);
+    z-index: 1;
+}
+
+.main-card .vs-team-logo-placeholder {
+    width: 22px;
+    height: 22px;
+    border: 1.5px solid #fff;
+    font-size: 12px;
+}
+
+.vs-text {
+    font-size: 11px;
+    font-weight: bold;
+    color: var(--primary-color);
+    margin: 0 2px;
+    z-index: 2;
+    background: transparent;
+}
+
+.main-card .vs-text {
+    color: #fff;
+    font-size: 13px;
 }
 
 .score {
@@ -544,11 +618,35 @@
     color: rgba(255, 255, 255, 0.8);
 }
 
-/* Адаптивность */
+/* Адаптивность футбольных карточек */
+@media (max-width: 1200px) {
+    .football-match-card.main-card {
+        padding: 40px 24px;
+        min-height: 380px;
+    }
+
+    .main-card .team-logo,
+    .main-card .team-logo-placeholder {
+        width: 60px;
+        height: 60px;
+    }
+
+    .main-card .team-name {
+        font-size: 16px;
+    }
+}
+
 @media (max-width: 768px) {
+    .football-match-card {
+        padding: 16px;
+        margin-bottom: 12px;
+        border-radius: 10px;
+    }
+
     .football-match-card.main-card {
         padding: 24px 16px;
-        min-height: 300px;
+        min-height: 320px;
+        border-radius: 12px;
     }
 
     .teams-section {
@@ -574,37 +672,89 @@
     .squad-preview {
         grid-template-columns: 1fr;
         gap: 16px;
+        margin-top: 20px;
     }
 
     .team-logo,
     .main-card .team-logo {
-        width: 40px;
-        height: 40px;
+        width: 36px;
+        height: 36px;
     }
 
     .team-logo-placeholder,
     .main-card .team-logo-placeholder {
+        width: 36px;
+        height: 36px;
+        font-size: 10px;
+    }
+
+    .main-card .team-name {
+        font-size: 15px;
+    }
+
+    .vs-separator,
+    .main-card .vs-separator {
         width: 40px;
         height: 40px;
-        font-size: 10px;
+        font-size: 12px;
     }
 }
 
 @media (max-width: 480px) {
     .football-match-card {
-        padding: 16px;
+        padding: 12px;
+        border-radius: 8px;
     }
 
     .football-match-card.main-card {
         padding: 20px 12px;
+        min-height: 280px;
+        border-radius: 10px;
+    }
+
+    .match-header {
+        margin-bottom: 16px;
+    }
+
+    .tournament-info {
+        gap: 8px;
+    }
+
+    .tournament {
+        font-size: 12px;
+    }
+
+    .status {
+        padding: 3px 6px;
+        font-size: 10px;
     }
 
     .main-card .team-name {
-        font-size: 16px;
+        font-size: 14px;
     }
 
     .main-card .score-value {
         font-size: 20px;
         padding: 6px 12px;
+    }
+
+    .vs-separator,
+    .main-card .vs-separator {
+        width: 36px;
+        height: 36px;
+        font-size: 11px;
+    }
+
+    .team-logo,
+    .main-card .team-logo {
+        width: 32px;
+        height: 32px;
+    }
+
+    .team-logo-placeholder,
+    .main-card .team-logo-placeholder {
+        width: 32px;
+        height: 32px;
+        font-size: 9px;
     }
 }

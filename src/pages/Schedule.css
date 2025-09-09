@@ -1170,50 +1170,57 @@
     text-align: right;
 }
 
-/* Simplified Schedule Layout */
+/* Оптимизированная разметка расписания */
 .schedule-container {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 40px 20px;
+    padding: 32px 20px;
 }
 
 .schedule-content {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 40px;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 32px;
 }
 
 .schedule-day {
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, 0.5);
     border-radius: 16px;
     padding: 24px;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(15px);
     border: 2px solid rgba(16, 185, 129, 0.2);
+    transition: all 0.3s ease;
+}
+
+.schedule-day:hover {
+    border-color: rgba(16, 185, 129, 0.4);
+    transform: translateY(-2px);
 }
 
 .day-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
     padding-bottom: 16px;
     border-bottom: 2px solid rgba(16, 185, 129, 0.3);
 }
 
 .day-title {
-    font-size: 24px;
+    font-size: 22px;
     font-weight: 700;
     color: white;
     margin: 0;
 }
 
 .day-count {
-    background: rgba(16, 185, 129, 0.2);
-    color: rgba(255, 255, 255, 0.9);
+    background: rgba(16, 185, 129, 0.3);
+    color: rgba(255, 255, 255, 0.95);
     padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 14px;
+    border-radius: 16px;
+    font-size: 13px;
     font-weight: 600;
+    border: 1px solid rgba(16, 185, 129, 0.4);
 }
 
 .matches-grid {
@@ -1228,29 +1235,128 @@
     transition: all 0.3s ease;
 }
 
-/* Responsive Design */
+/* Оптимизированная адаптивность для расписания */
+@media (max-width: 1200px) {
+    .schedule-content {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 28px;
+        padding: 20px;
+    }
+
+    .schedule-container {
+        padding: 28px 16px;
+    }
+}
+
 @media (max-width: 768px) {
+    .schedule-header {
+        padding: 32px 16px;
+    }
+
+    .schedule-header h1 {
+        font-size: 28px;
+    }
+
+    .schedule-header p {
+        font-size: 16px;
+    }
+
     .schedule-content {
         grid-template-columns: 1fr;
-        gap: 24px;
+        gap: 20px;
+        padding: 16px;
+    }
+
+    .schedule-container {
+        padding: 20px 12px;
     }
 
     .schedule-day {
-        padding: 16px;
+        padding: 20px;
+        border-radius: 12px;
+    }
+
+    .day-title {
+        font-size: 20px;
     }
 
     .day-header {
         flex-direction: column;
         gap: 8px;
         text-align: center;
+        margin-bottom: 16px;
+    }
+
+    .timeline-time {
+        position: static;
+        background: rgba(0, 0, 0, 0.8);
+        border-radius: 6px;
+        padding: 6px 10px;
+        margin-bottom: 12px;
+        display: inline-block;
+    }
+
+    .match-teams {
+        padding: 20px;
+        gap: 12px;
     }
 
     .team-info {
-        min-width: 100px;
+        min-width: 120px;
+        padding: 12px;
     }
 
     .team-name {
-        font-size: 12px;
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 480px) {
+    .schedule-header h1 {
+        font-size: 24px;
+    }
+
+    .schedule-day {
+        padding: 16px;
+        border-radius: 8px;
+    }
+
+    .day-title {
+        font-size: 18px;
+    }
+
+    .matches-grid {
+        gap: 12px;
+    }
+
+    .timeline-content {
+        border-radius: 12px;
+    }
+
+    .match-teams {
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+        padding: 16px;
+    }
+
+    .team-info {
+        min-width: auto;
+        width: 100%;
+        max-width: 200px;
+    }
+
+    .vs-separator {
+        position: static;
+        transform: none;
+        margin: 8px 0;
+    }
+
+    .match-details {
+        position: static;
+        transform: none;
+        text-align: center;
+        margin-top: 12px;
     }
 }
 

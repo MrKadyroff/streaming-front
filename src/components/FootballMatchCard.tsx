@@ -100,7 +100,23 @@ const FootballMatchCard: React.FC<FootballMatchCardProps> = ({
                     <div className="match-center">
                         {getScore() || (
                             <div className="vs-separator">
-                                <span>VS</span>
+                                <div className="vs-team-logos">
+                                    {match.homeTeam?.logo ? (
+                                        <img src={match.homeTeam.logo} alt={match.homeTeam.shortName} className="vs-team-logo vs-home-logo" />
+                                    ) : (
+                                        <div className="vs-team-logo-placeholder vs-home-logo">
+                                            {match.player1.slice(0, 2).toUpperCase()}
+                                        </div>
+                                    )}
+                                    <span className="vs-text">VS</span>
+                                    {match.awayTeam?.logo ? (
+                                        <img src={match.awayTeam.logo} alt={match.awayTeam.shortName} className="vs-team-logo vs-away-logo" />
+                                    ) : (
+                                        <div className="vs-team-logo-placeholder vs-away-logo">
+                                            {match.player2.slice(0, 2).toUpperCase()}
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                         )}
                     </div>

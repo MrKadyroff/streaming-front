@@ -26,6 +26,7 @@ import {
 } from '../api';
 import './Admin.css';
 
+// ...existing code from Admin.tsx (component logic, state, useEffect, handlers, and return JSX)...
 const Admin: React.FC = () => {
     const { addAd, updateAd, deleteAd } = useAds();
     const { matches, addMatch, updateMatch, deleteMatch } = useData();
@@ -42,7 +43,7 @@ const Admin: React.FC = () => {
     const [hlsStreams, setHlsStreams] = useState<any[]>([]);
     const [allAds, setAllAds] = useState<AdData[]>([]);
     const [filteredAds, setFilteredAds] = useState<AdData[]>([]);
-    const [adsFilter, setAdsFilter] = useState<'all' | 'active' | 'inactive'>('all');
+    const [adsFilter, setAdsFilter] = useState<'all' | 'active' | 'inactive'>('active');
     const [adsSort, setAdsSort] = useState<'priority' | 'title' | 'date'>('priority');
     const [adsLoading, setAdsLoading] = useState<boolean>(false);
     const [formData, setFormData] = useState({
@@ -261,7 +262,7 @@ const Admin: React.FC = () => {
                 const response = await createAd(dto);
                 // Добавляем в локальное состояние
                 const newAd: AdData = {
-                    id: response?.data?.id || Date.now().toString(),
+                    id: response.data.id || Date.now().toString(),
                     title: formData.title,
                     type: formData.type,
                     imageUrl: formData.imageUrl,
@@ -474,6 +475,29 @@ const Admin: React.FC = () => {
                                 >
                                     Открыть
                                 </button>
+                            </div>
+                            <div className="admin-card">
+                                <h3>Активная реклама</h3>
+                                <p>Быстрый обзор активных объявлений</p>
+                                {allAds.filter(a => a.isActive).length === 0 ? (
+                                    <div className="empty-state small">
+                                        <div className="empty-icon">📢</div>
+                                        <p>Нет активной рекламы</p>
+                                    </div>
+                                ) : (
+                                    <ul className="mini-list">
+                                        {allAds.filter(a => a.isActive).slice(0, 5).map(ad => (
+                                            <li key={ad.id} className="mini-list-item">
+                                                <span className="mini-title">{ad.title}</span>
+                                                <div className="mini-actions">
+                                                    <button className="btn btn-xs" title="Редактировать" onClick={() => { setActiveTab('ads'); handleEditAd(ad); }}>✏️</button>
+                                                    <button className="btn btn-xs" title="Выключить" onClick={() => handleToggleAd(ad)}>🔄</button>
+                                                    <button className="btn btn-xs btn-danger" title="Удалить" onClick={() => handleDeleteAd(ad.id)}>🗑️</button>
+                                                </div>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
                             </div>
                         </div>
 
@@ -740,100 +764,113 @@ const Admin: React.FC = () => {
                     <div className="tab-content">
                         <div className="ads-management">
                             <div className="section-header">
-                                <h2>Управление рекламой</h2>
-                                <button
-                                    className="btn btn-primary add-btn"
-                                    onClick={() => {
-                                        setEditingAd(null);
-                                        setFormData({ title: '', imageUrl: '', gifUrl: '', clickUrl: '', type: 'vertical' });
-                                        setShowAdForm(true);
-                                    }}
-                                >
-                                    Добавить рекламу
-                                </button>
-                            </div>
-
-                            {/* Отладочная информация */}
-                            <div style={{
-                                padding: '10px',
-                                background: '#f0f0f0',
-                                borderRadius: '4px',
-                                marginBottom: '20px',
-                                fontSize: '12px'
-                            }}>
-                                <strong>Отладка:</strong><br />
-                                Всего объявлений: {allAds.length}<br />
-                                Отфильтровано: {filteredAds.length}<br />
-                                Текущий фильтр: {adsFilter}<br />
-                                Сортировка: {adsSort}<br />
-                                Состояние загрузки: {adsLoading ? 'Загружается...' : 'Готово'}
+                                <div className="section-title-group">
+                                    <h2>Управление рекламой</h2>
+                                    <div className="section-sub">
+                                        <span>Всего: {allAds.length}</span>
+                                        <span> • Активные: {allAds.filter(a => a.isActive).length}</span>
+                                        <span> • Неактивные: {allAds.filter(a => !a.isActive).length}</span>
+                                    </div>
+                                </div>
+                                <div className="section-actions">
+                                    <button
+                                        className="btn"
+                                        onClick={() => setAdsFilter('all')}
+                                        title="Показать все"
+                                    >
+                                        Показать все
+                                    </button>
+                                    <button
+                                        className="btn"
+                                        onClick={() => setAdsFilter('active')}
+                                        title="Показать активные"
+                                    >
+                                        Активные
+                                    </button>
+                                    <button
+                                        className="btn"
+                                        onClick={() => setAdsFilter('inactive')}
+                                        title="Показать неактивные"
+                                    >
+                                        Неактивные
+                                    </button>
+                                    <button
+                                        className="btn btn-outline"
+                                        onClick={loadApiData}
+                                        disabled={adsLoading}
+                                        title="Обновить список"
+                                    >
+                                        {adsLoading ? 'Обновление...' : 'Обновить'}
+                                    </button>
+                                    <button
+                                        className="btn btn-primary add-btn"
+                                        onClick={() => {
+                                            setEditingAd(null);
+                                            setFormData({ title: '', imageUrl: '', gifUrl: '', clickUrl: '', type: 'vertical' });
+                                            setShowAdForm(true);
+                                        }}
+                                    >
+                                        Добавить рекламу
+                                    </button>
+                                </div>
                             </div>
 
                             {/* Фильтры и сортировка */}
                             <div className="filters-section">
                                 <div className="filter-group">
-                                    <label htmlFor="adsFilter">Показать:</label>
+                                    <label>Фильтр по статусу:</label>
                                     <select
-                                        id="adsFilter"
                                         value={adsFilter}
-                                        onChange={(e) => setAdsFilter(e.target.value as any)}
+                                        onChange={(e) => setAdsFilter(e.target.value as 'all' | 'active' | 'inactive')}
                                         className="filter-select"
                                     >
-                                        <option value="all">Все объявления</option>
+                                        <option value="all">Все</option>
                                         <option value="active">Активные</option>
                                         <option value="inactive">Неактивные</option>
                                     </select>
                                 </div>
-
                                 <div className="filter-group">
-                                    <label htmlFor="adsSort">Сортировка:</label>
+                                    <label>Сортировка:</label>
                                     <select
-                                        id="adsSort"
                                         value={adsSort}
-                                        onChange={(e) => setAdsSort(e.target.value as any)}
+                                        onChange={(e) => setAdsSort(e.target.value as 'priority' | 'title' | 'date')}
                                         className="filter-select"
                                     >
                                         <option value="priority">По приоритету</option>
                                         <option value="title">По названию</option>
-                                        <option value="date">По дате</option>
+                                        <option value="date">По дате создания</option>
                                     </select>
                                 </div>
                             </div>
 
-                            {/* Список рекламы */}
                             <div className="ads-container">
-                                {adsLoading ? (
-                                    <div className="loading-state">
-                                        <div className="loading-spinner"></div>
-                                        <p>Загрузка рекламных объявлений...</p>
-                                    </div>
-                                ) : filteredAds.length === 0 ? (
+                                {filteredAds.length === 0 ? (
                                     <div className="empty-state">
                                         <div className="empty-icon">📢</div>
                                         <h3>Рекламные объявления не найдены</h3>
                                         <p>
                                             {adsFilter === 'active' ? 'Нет активных объявлений' :
                                                 adsFilter === 'inactive' ? 'Нет неактивных объявлений' :
-                                                    'Создайте первое рекламное объявление для начала работы'}
+                                                'Создайте первое рекламное объявление для начала работы'}
                                         </p>
                                         <button
                                             className="btn btn-primary"
                                             onClick={() => setShowAdForm(true)}
                                         >
-                                            Создать объявление
+                                            Создать рекламу
                                         </button>
                                     </div>
                                 ) : (
                                     <>
-                                        {/* Desktop table view */}
-                                        <div className="ads-table-container desktop-only">
+                                        {/* Desktop Table */}
+                                        <div className="ads-table-container">
                                             <table className="ads-table">
                                                 <thead>
                                                     <tr>
-                                                        <th>Превью</th>
                                                         <th>Название</th>
-                                                        <th>Тип</th>
                                                         <th>Статус</th>
+                                                        <th>Плейсмент</th>
+                                                        <th>Даты действия</th>
                                                         <th>Приоритет</th>
                                                         <th>Действия</th>
                                                     </tr>
@@ -841,38 +878,40 @@ const Admin: React.FC = () => {
                                                 <tbody>
                                                     {filteredAds.map((ad: AdData) => (
                                                         <tr key={ad.id} className="ad-row">
-                                                            <td className="preview-cell">
-                                                                <div className="ad-preview">
-                                                                    {(ad.imageUrl || ad.gifUrl) ? (
-                                                                        <img
-                                                                            src={ad.gifUrl || ad.imageUrl}
-                                                                            alt={ad.title}
-                                                                            className="preview-image"
-                                                                        />
-                                                                    ) : (
-                                                                        <div className="preview-placeholder">
-                                                                            <span>Нет изображения</span>
-                                                                        </div>
-                                                                    )}
-                                                                </div>
-                                                            </td>
                                                             <td className="title-cell">
-                                                                <div className="ad-title">{ad.title}</div>
-                                                                {ad.clickUrl && (
-                                                                    <div className="ad-url">{ad.clickUrl}</div>
-                                                                )}
-                                                            </td>
-                                                            <td className="type-cell">
-                                                                <span className={`type-badge ${ad.type}`}>
-                                                                    {ad.type === 'vertical' ? 'Вертикальный' :
-                                                                        ad.type === 'square' ? 'Квадратный' :
-                                                                            ad.type === 'horizontal' ? 'Горизонтальный' : ad.type}
-                                                                </span>
+                                                                <div className="ad-title-info">
+                                                                    <span className="ad-title">{ad.title}</span>
+                                                                    <div className="ad-preview">
+                                                                        {(ad.imageUrl || ad.gifUrl) && (
+                                                                            <img
+                                                                                src={ad.imageUrl || ad.gifUrl}
+                                                                                alt={ad.title}
+                                                                                className="ad-thumbnail"
+                                                                            />
+                                                                        )}
+                                                                    </div>
+                                                                </div>
                                                             </td>
                                                             <td className="status-cell">
                                                                 <span className={`status-badge ${ad.isActive ? 'active' : 'inactive'}`}>
-                                                                    {ad.isActive ? 'Активна' : 'Неактивна'}
+                                                                    {ad.isActive ? '✅ Активна' : '❌ Неактивна'}
                                                                 </span>
+                                                            </td>
+                                                            <td className="placement-cell">
+                                                                <div className="placement-info">
+                                                                    <div className="placement-type">{ad.type}</div>
+                                                                    <div className="placement-position">{ad.position || 'Не указано'}</div>
+                                                                </div>
+                                                            </td>
+                                                            <td className="dates-cell">
+                                                                <div className="dates-info">
+                                                                    <div className="start-date">
+                                                                        С: {ad.startDate ? new Date(ad.startDate).toLocaleDateString('ru-RU') : 'Не указано'}
+                                                                    </div>
+                                                                    <div className="end-date">
+                                                                        До: {ad.endDate ? new Date(ad.endDate).toLocaleDateString('ru-RU') : 'Не указано'}
+                                                                    </div>
+                                                                </div>
                                                             </td>
                                                             <td className="priority-cell">
                                                                 <span className="priority-value">{ad.priority || 1}</span>
@@ -882,26 +921,26 @@ const Admin: React.FC = () => {
                                                                     <button
                                                                         className="btn btn-outline btn-sm"
                                                                         onClick={() => handleEditAd(ad)}
+                                                                        title="Редактировать рекламу"
                                                                         disabled={adsLoading}
-                                                                        title="Редактировать объявление"
                                                                     >
-                                                                        Изменить
+                                                                        ✏️
                                                                     </button>
                                                                     <button
                                                                         className={`btn btn-sm ${ad.isActive ? 'btn-warning' : 'btn-success'}`}
                                                                         onClick={() => handleToggleAd(ad)}
+                                                                        title={ad.isActive ? "Деактивировать" : "Активировать"}
                                                                         disabled={adsLoading}
-                                                                        title={ad.isActive ? 'Деактивировать' : 'Активировать'}
                                                                     >
-                                                                        {ad.isActive ? 'Отключить' : 'Включить'}
+                                                                        🔄
                                                                     </button>
                                                                     <button
                                                                         className="btn btn-danger btn-sm"
                                                                         onClick={() => handleDeleteAd(ad.id)}
+                                                                        title="Удалить рекламу"
                                                                         disabled={adsLoading}
-                                                                        title="Удалить объявление"
                                                                     >
-                                                                        Удалить
+                                                                        ❌
                                                                     </button>
                                                                 </div>
                                                             </td>
@@ -911,51 +950,47 @@ const Admin: React.FC = () => {
                                             </table>
                                         </div>
 
-                                        {/* Mobile card view */}
+                                        {/* Mobile Cards */}
                                         <div className="ads-cards-container mobile-only">
                                             {filteredAds.map((ad: AdData) => (
                                                 <div key={ad.id} className="ad-card">
                                                     <div className="ad-card-header">
-                                                        <div className="ad-card-title">{ad.title}</div>
-                                                        <span className={`status-badge ${ad.isActive ? 'active' : 'inactive'}`}>
-                                                            {ad.isActive ? 'Активна' : 'Неактивна'}
+                                                        <h4 className="ad-card-title">{ad.title}</h4>
+                                                        <span className={`ad-card-status status-badge ${ad.isActive ? 'active' : 'inactive'}`}>
+                                                            {ad.isActive ? '✅' : '❌'}
                                                         </span>
                                                     </div>
 
-                                                    <div className="ad-card-content">
+                                                    {(ad.imageUrl || ad.gifUrl) && (
                                                         <div className="ad-card-preview">
-                                                            {(ad.imageUrl || ad.gifUrl) ? (
-                                                                <img
-                                                                    src={ad.gifUrl || ad.imageUrl}
-                                                                    alt={ad.title}
-                                                                    className="preview-image"
-                                                                />
-                                                            ) : (
-                                                                <div className="preview-placeholder">
-                                                                    <span>Нет изображения</span>
-                                                                </div>
-                                                            )}
+                                                            <img
+                                                                src={ad.imageUrl || ad.gifUrl}
+                                                                alt={ad.title}
+                                                                className="ad-thumbnail"
+                                                            />
                                                         </div>
+                                                    )}
 
-                                                        <div className="ad-card-info">
-                                                            <div className="info-row">
-                                                                <span className="info-label">Тип:</span>
-                                                                <span className={`type-badge ${ad.type}`}>
-                                                                    {ad.type === 'vertical' ? 'Вертикальный' :
-                                                                        ad.type === 'square' ? 'Квадратный' :
-                                                                            ad.type === 'horizontal' ? 'Горизонтальный' : ad.type}
-                                                                </span>
-                                                            </div>
-                                                            <div className="info-row">
-                                                                <span className="info-label">Приоритет:</span>
-                                                                <span className="priority-value">{ad.priority || 1}</span>
-                                                            </div>
-                                                            {ad.clickUrl && (
-                                                                <div className="info-row">
-                                                                    <span className="info-label">Ссылка:</span>
-                                                                    <span className="ad-url">{ad.clickUrl}</span>
-                                                                </div>
-                                                            )}
+                                                    <div className="ad-card-info">
+                                                        <div className="ad-card-info-item">
+                                                            <span className="ad-card-info-label">Тип:</span>
+                                                            <span className="ad-card-info-value">{ad.type}</span>
+                                                        </div>
+                                                        <div className="ad-card-info-item">
+                                                            <span className="ad-card-info-label">Приоритет:</span>
+                                                            <span className="ad-card-info-value">{ad.priority || 1}</span>
+                                                        </div>
+                                                        <div className="ad-card-info-item">
+                                                            <span className="ad-card-info-label">Период:</span>
+                                                            <span className="ad-card-info-value">
+                                                                {ad.startDate ? new Date(ad.startDate).toLocaleDateString('ru-RU') : 'Не указано'}
+                                                                {' - '}
+                                                                {ad.endDate ? new Date(ad.endDate).toLocaleDateString('ru-RU') : 'Не указано'}
+                                                            </span>
+                                                        </div>
+                                                        <div className="ad-card-info-item">
+                                                            <span className="ad-card-info-label">Плейсмент:</span>
+                                                            <span className="ad-card-info-value">{ad.position || 'Не указано'}</span>
                                                         </div>
                                                     </div>
 
@@ -965,21 +1000,21 @@ const Admin: React.FC = () => {
                                                             onClick={() => handleEditAd(ad)}
                                                             disabled={adsLoading}
                                                         >
-                                                            Изменить
+                                                            ✏️ Изменить
                                                         </button>
                                                         <button
                                                             className={`btn btn-sm ${ad.isActive ? 'btn-warning' : 'btn-success'}`}
                                                             onClick={() => handleToggleAd(ad)}
                                                             disabled={adsLoading}
                                                         >
-                                                            {ad.isActive ? 'Отключить' : 'Включить'}
+                                                            🔄 {ad.isActive ? 'Деактивировать' : 'Активировать'}
                                                         </button>
                                                         <button
                                                             className="btn btn-danger btn-sm"
                                                             onClick={() => handleDeleteAd(ad.id)}
                                                             disabled={adsLoading}
                                                         >
-                                                            Удалить
+                                                            ❌ Удалить
                                                         </button>
                                                     </div>
                                                 </div>
@@ -992,7 +1027,7 @@ const Admin: React.FC = () => {
                     </div>
                 )}
 
-                {/* Остальные вкладки */}
+                {/* Вкладка управления пользователями */}
                 {activeTab === 'users' && (
                     <div className="tab-content">
                         <div className="users-management">
@@ -1020,6 +1055,7 @@ const Admin: React.FC = () => {
                     </div>
                 )}
 
+                {/* Вкладка управления отчетами */}
                 {activeTab === 'reports' && (
                     <div className="tab-content">
                         <div className="reports-management">
@@ -1045,6 +1081,7 @@ const Admin: React.FC = () => {
                     </div>
                 )}
 
+                {/* Вкладка управления HLS потоками */}
                 {activeTab === 'hls' && (
                     <div className="tab-content">
                         <div className="hls-management">

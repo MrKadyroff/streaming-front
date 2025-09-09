@@ -1,92 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useData } from '../contexts/DataContext';
 import { Match } from '../types';
 import MatchViewModal from '../components/MatchViewModal';
-import { footballTeams } from '../data/footballTeams';
 import './Schedule.css';
 
 const Schedule: React.FC = () => {
     const { matches } = useData();
     const [modalMatch, setModalMatch] = useState<Match | null>(null);
 
-    // Генерируем дополнительные матчи для демонстрации
-    const generateAdditionalMatches = (): Match[] => {
-        const additionalMatches: Match[] = [];
-        const sports = ['football', 'tennis', 'basketball', 'hockey'];
-        const tournaments = {
-            football: ['Премьер-лига', 'Лига чемпионов', 'Кубок России', 'Лига Европы'],
-            tennis: ['ATP Tour', 'WTA Tour', 'Кубок Дэвиса', 'Fed Cup'],
-            basketball: ['НБА', 'Евролига', 'ВТБ лига', 'NCAA'],
-            hockey: ['НХЛ', 'КХЛ', 'Чемпионат мира', 'Евротур']
-        };
-
-        // Генерируем матчи на следующие 3 дня
-        for (let i = 0; i < 3; i++) {
-            const date = new Date();
-            date.setDate(date.getDate() + i);
-            const dateString = date.toISOString().split('T')[0];
-
-            // 3-5 матчей в день
-            const matchesPerDay = Math.floor(Math.random() * 3) + 3;
-
-            for (let j = 0; j < matchesPerDay; j++) {
-                const sport = sports[Math.floor(Math.random() * sports.length)];
-                const tournamentsList = tournaments[sport as keyof typeof tournaments];
-                const tournament = tournamentsList[Math.floor(Math.random() * tournamentsList.length)];
-
-                let player1 = '', player2 = '', homeTeam, awayTeam;
-
-                if (sport === 'football') {
-                    const team1 = footballTeams[Math.floor(Math.random() * footballTeams.length)];
-                    const team2 = footballTeams[Math.floor(Math.random() * footballTeams.length)];
-                    if (team1.id !== team2.id) {
-                        player1 = team1.name;
-                        player2 = team2.name;
-                        homeTeam = team1;
-                        awayTeam = team2;
-                    }
-                } else {
-                    const players = {
-                        tennis: ['Новак Джокович', 'Рафаэль Надаль', 'Роджер Федерер', 'Энди Маррей', 'Арина Соболенко', 'Ига Свентек'],
-                        basketball: ['Lakers', 'Warriors', 'Celtics', 'Heat', 'Nuggets', 'Suns'],
-                        hockey: ['Rangers', 'Bruins', 'Penguins', 'Capitals', 'Lightning', 'Avalanche']
-                    };
-                    const playersList = players[sport as keyof typeof players];
-                    player1 = playersList[Math.floor(Math.random() * playersList.length)];
-                    do {
-                        player2 = playersList[Math.floor(Math.random() * playersList.length)];
-                    } while (player2 === player1);
-                }
-
-                const hour = Math.floor(Math.random() * 12) + 10; // 10:00 - 21:00
-                const minute = Math.random() > 0.5 ? '00' : '30';
-                const time = `${hour.toString().padStart(2, '0')}:${minute}`;
-
-                additionalMatches.push({
-                    id: `generated-${i}-${j}`,
-                    player1,
-                    player2,
-                    date: dateString,
-                    time,
-                    tournament,
-                    sport,
-                    isLive: false,
-                    status: 'upcoming',
-                    homeTeam,
-                    awayTeam,
-                    venue: sport === 'football' ? (homeTeam?.venue || 'Стадион') : undefined
-                });
-            }
-        }
-
-        return additionalMatches;
-    };
-
-    // Объединяем реальные и сгенерированные матчи
-    const allMatches = [...matches, ...generateAdditionalMatches()];
-
     // Фильтруем только запланированные матчи (не в эфире)
-    const scheduledMatches = allMatches.filter(match => !match.isLive);
+    const scheduledMatches = matches.filter(match => !match.isLive);
 
     const handleMatchClick = (match: Match) => {
         if (match.isLive) {

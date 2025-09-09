@@ -10,6 +10,7 @@ import Admin from './pages/Admin';
 import Login from './components/Login';
 import ProtectedRoute from './components/ProtectedRoute';
 import PageWithAds from './components/PageWithAds';
+import StreamApiTest from './components/StreamApiTest';
 import './App.css';
 
 const Navigation: React.FC = () => {
@@ -114,6 +115,7 @@ const AppContent: React.FC = () => {
                 <Routes>
                     <Route path="/" element={<PageWithAds><Home /></PageWithAds>} />
                     <Route path="/schedule" element={<PageWithAds><Schedule /></PageWithAds>} />
+                    <Route path="/test-api" element={<StreamApiTest />} />
                     <Route path="/admin" element={
                         <ProtectedRoute>
                             <Admin />
