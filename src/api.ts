@@ -42,7 +42,7 @@ export const getUsers = () => api.get('/api/admin/users');
 export const getAds = () => api.get('/api/admin/ads');
 export const getMatches = () => api.get('/api/admin/schedule');
 export const getReports = () => api.get('/api/admin/reports');
-export const getHealth = () => api.get('/api/health');
+export const getHealth = () => api.get('/health');
 
 // Управление рекламой
 export const createAd = (data: CreateAdDto) => api.post('/api/admin/ads', data);

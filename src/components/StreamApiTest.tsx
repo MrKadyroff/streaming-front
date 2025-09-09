@@ -16,7 +16,7 @@ const StreamApiTest: React.FC = () => {
         setError(null);
 
         try {
-            console.log('Testing API connection...');
+
 
             // Тестируем получение всех потоков
             const response = await streamApi.getStreams(1, 10);

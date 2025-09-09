@@ -13,8 +13,8 @@ const api = axios.create({
 // TypeScript interfaces based on Swagger documentation
 export interface CreateAdDto {
     title: string;
-    type: string;
-    position: string;
+    type: 'vertical' | 'horizontal' | 'square';
+    position: 'header' | 'sidebar' | 'content' | 'footer';
     imageUrl: string;
     clickUrl: string;
     startDate: string;
@@ -58,8 +58,8 @@ export const getAd = (id: string | number) => api.get(`/api/admin/ads/${id}`);
 export const createAd = (data: CreateAdDto) => api.post('/api/admin/ads', data);
 export const updateAd = (id: string | number, data: CreateAdDto) => api.put(`/api/admin/ads/${id}`, data);
 export const deleteAd = (id: string | number) => api.delete(`/api/admin/ads/${id}`);
-export const activateAd = (id: string | number) => api.put(`/api/admin/ads/${id}/activate`);
-export const deactivateAd = (id: string | number) => api.put(`/api/admin/ads/${id}/deactivate`);
+export const activateAd = (id: string | number) => api.post(`/api/admin/ads/${id}/activate`);
+export const deactivateAd = (id: string | number) => api.post(`/api/admin/ads/${id}/deactivate`);
 export const getAdStats = (id: string | number) => api.get(`/api/admin/ads/${id}/stats`);
 
 // Matches

@@ -34,6 +34,7 @@ export const AdsProvider: React.FC<AdsProviderProps> = ({ children }) => {
     // Загружаем рекламу с API при запуске
     useEffect(() => {
         loadAds();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // Вспомогательная функция для преобразования AdData в CreateAdDto
@@ -57,18 +58,26 @@ export const AdsProvider: React.FC<AdsProviderProps> = ({ children }) => {
             id: apiAd.id.toString(),
             title: apiAd.title,
             type: apiAd.type || 'vertical',
-            imageUrl: apiAd.imageUrl,
-            gifUrl: apiAd.imageUrl,
-            clickUrl: apiAd.clickUrl,
-            isActive: apiAd.status === 'active' || apiAd.status === 'pending'
+            imageUrl: apiAd.imageUrl || '',
+            gifUrl: apiAd.imageUrl || '',
+            clickUrl: apiAd.clickUrl || '',
+            isActive: apiAd.status === 'active',
+            priority: apiAd.priority || 1,
+            startDate: apiAd.startDate,
+            endDate: apiAd.endDate,
+            position: apiAd.position || (apiAd.type === 'horizontal' ? 'header' : 'sidebar')
         };
     };
 
     const loadAds = async () => {
         try {
             const response = await getAds();
-            // Преобразуем API данные в формат AdData
-            const apiAds = response.data.ads?.map(convertApiToAd) || [];
+            console.log('📥 Ответ API для загрузки рекламы:', response.data);
+
+            // API возвращает данные в формате {"ads": [...], "total": 6}
+            const apiAds = response.data?.ads?.map(convertApiToAd) || [];
+            console.log('✅ Обработанные объявления:', apiAds);
+
             setAds(apiAds);
         } catch (error) {
             console.error('Ошибка загрузки рекламы с API:', error);
@@ -85,14 +94,22 @@ export const AdsProvider: React.FC<AdsProviderProps> = ({ children }) => {
         try {
             // Преобразуем данные для API
             const dto = convertAdToDto(adData);
+            console.log('🔄 Отправляем данные для создания рекламы:', dto);
+
             // Сначала добавляем через API
             const response = await apiCreateAd(dto);
+            console.log('✅ Ответ API при создании:', response.data);
+
             // Затем добавляем в локальное состояние
             const newAd: AdData = {
                 ...adData,
-                id: response.data.ad?.id?.toString() || Date.now().toString(),
+                id: (response.data?.ad?.id || response.data?.id || Date.now()).toString(),
+                isActive: false // Новая реклама создается как неактивная
             };
             setAds(prev => [...prev, newAd]);
+
+            // Перезагружаем данные для синхронизации
+            await loadAds();
         } catch (error) {
             console.error('Ошибка создания рекламы через API:', error);
             // Если API недоступно, добавляем только локально
