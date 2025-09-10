@@ -188,11 +188,11 @@ const Schedule: React.FC = () => {
                                                     )}
                                                 </div>
                                             </div>
-                                            <div className="match-details">
+                                            {/* <div className="match-details">
                                                 <span className="tournament-name">
                                                     {match.tournament}
                                                 </span>
-                                            </div>
+                                            </div> */}
                                         </div>
                                     </div>
                                 ))}

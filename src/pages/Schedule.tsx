@@ -68,7 +68,7 @@ const Schedule: React.FC = () => {
                         <div key={date} className="schedule-day">
                             <div className="day-header">
                                 <h2 className="day-title">{formatDateHeader(date)}</h2>
-                                <span className="day-count">{dayMatches.length} матчей</span>
+                                {/* <span className="day-count">{dayMatches.length} матчей</span> */}
                             </div>
                             <div className="matches-grid">
                                 {dayMatches.map(match => (
@@ -111,11 +111,11 @@ const Schedule: React.FC = () => {
                                                     )}
                                                 </div>
                                             </div>
-                                            <div className="match-details">
+                                            {/* <div className="match-details">
                                                 <span className="tournament-name">
                                                     {match.tournament}
                                                 </span>
-                                            </div>
+                                            </div> */}
                                         </div>
                                     </div>
                                 ))}
