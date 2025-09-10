@@ -578,7 +578,7 @@
     font-size: 2rem;
     font-weight: 700;
     color: #ffffff;
-    margin: 0;
+    margin: 0 0 20px 0;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     background: linear-gradient(135deg, #22c55e 0%, #16a34a 50%, #15803d 100%);
     background-clip: text;
@@ -596,6 +596,98 @@
     font-size: 1.5rem;
     animation: pulse 1.5s infinite;
     margin-left: 8px;
+}
+
+.stream-count {
+    font-size: 1rem;
+    opacity: 0.7;
+    margin-left: 8px;
+}
+
+/* Stream Selector */
+.stream-selector {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 16px;
+}
+
+.stream-btn {
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(34, 197, 94, 0.3);
+    border-radius: 20px;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.stream-btn:hover {
+    background: rgba(34, 197, 94, 0.2);
+    border-color: rgba(34, 197, 94, 0.5);
+    color: white;
+    transform: translateY(-1px);
+}
+
+.stream-btn.active {
+    background: rgba(34, 197, 94, 0.3);
+    border-color: #22c55e;
+    color: white;
+    box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+}
+
+/* Stream Info Panel */
+.stream-info-panel {
+    background: rgba(33, 38, 45, 0.6);
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 20px;
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stream-info-panel h3 {
+    color: #ffffff;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 0 0 12px 0;
+    text-align: center;
+}
+
+.stream-details {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    font-size: 14px;
+}
+
+.stream-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #22c55e;
+    font-weight: 600;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    background: #22c55e;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+.stream-viewers,
+.stream-quality {
+    color: rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: center;
+    gap: 4px;
 }
 
 @keyframes pulse {
@@ -646,15 +738,49 @@
     .soccer-emoji {
         font-size: 1.7rem;
     }
+
+    .stream-selector {
+        gap: 6px;
+        flex-wrap: wrap;
+    }
+
+    .stream-btn {
+        padding: 6px 12px;
+        font-size: 13px;
+    }
+
+    .stream-info-panel {
+        padding: 16px;
+    }
+
+    .stream-details {
+        flex-direction: column;
+        gap: 8px;
+    }
 }
 
 @media (max-width: 480px) {
     .section-header h2 {
         font-size: 1.25rem;
         gap: 8px;
+        flex-direction: column;
     }
 
     .soccer-emoji {
         font-size: 1.5rem;
+    }
+
+    .stream-count {
+        font-size: 0.9rem;
+        margin-left: 0;
+    }
+
+    .stream-btn {
+        padding: 8px 16px;
+        min-width: 80px;
+    }
+
+    .stream-info-panel h3 {
+        font-size: 1rem;
     }
 }

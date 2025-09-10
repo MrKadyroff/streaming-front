@@ -17,27 +17,41 @@ const Home: React.FC = () => {
 
     const [selectedMatch, setSelectedMatch] = useState<Match | null>(null);
     const [activeStream, setActiveStream] = useState<Stream | null>(null);
+    const [allStreams, setAllStreams] = useState<Stream[]>([]);
     const [streamLoading, setStreamLoading] = useState<boolean>(true);
 
-    // Загружаем активный поток
+    // Загружаем активные потоки
     useEffect(() => {
-        const loadActiveStream = async () => {
+        const loadActiveStreams = async () => {
             setStreamLoading(true);
             try {
-                const stream = await streamApi.getFirstActiveStream();
-                setActiveStream(stream);
+                console.log('Загружаем активные стримы...');
+                const streams = await streamApi.getActiveStreams();
+                console.log('Загруженные стримы:', streams);
+                
+                setAllStreams(streams);
+                
+                // Выбираем первый доступный стрим
+                if (streams.length > 0) {
+                    setActiveStream(streams[0]);
+                    console.log('Выбран активный стрим:', streams[0]);
+                } else {
+                    setActiveStream(null);
+                    console.log('Нет доступных стримов');
+                }
             } catch (error) {
-                console.error('Error loading active stream:', error);
+                console.error('Error loading active streams:', error);
                 setActiveStream(null);
+                setAllStreams([]);
             } finally {
                 setStreamLoading(false);
             }
         };
 
-        loadActiveStream();
+        loadActiveStreams();
 
-        // Обновляем поток каждые 30 секунд
-        const interval = setInterval(loadActiveStream, 30000);
+        // Обновляем потоки каждые 30 секунд
+        const interval = setInterval(loadActiveStreams, 30000);
 
         return () => clearInterval(interval);
     }, []);
@@ -84,9 +98,53 @@ const Home: React.FC = () => {
                             <span className="soccer-emoji">⚽</span>
                             Онлайн трансляция
                             {streamLoading && <span className="loading-indicator">⏳</span>}
+                            {activeStream && (
+                                <span className="stream-count">
+                                    ({allStreams.findIndex(s => s.id === activeStream.id) + 1} из {allStreams.length})
+                                </span>
+                            )}
                         </h2>
+                        
+                        {/* Переключатель стримов */}
+                        {allStreams.length > 1 && (
+                            <div className="stream-selector">
+                                {allStreams.map((stream, index) => (
+                                    <button
+                                        key={stream.id}
+                                        className={`stream-btn ${activeStream?.id === stream.id ? 'active' : ''}`}
+                                        onClick={() => setActiveStream(stream)}
+                                        title={stream.title}
+                                    >
+                                        Поток {index + 1}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
                     </div>
                     <HLSPlayer stream={activeStream} />
+                    
+                    {/* Информация о текущем стриме */}
+                    {activeStream && (
+                        <div className="stream-info-panel">
+                            <h3>{activeStream.title}</h3>
+                            <div className="stream-details">
+                                <span className="stream-status">
+                                    <span className="status-dot"></span>
+                                    {activeStream.status === 'live' ? 'В эфире' : 'Доступен'}
+                                </span>
+                                {activeStream.viewers > 0 && (
+                                    <span className="stream-viewers">
+                                        👥 {activeStream.viewers} зрителей
+                                    </span>
+                                )}
+                                {activeStream.quality && activeStream.quality.length > 0 && (
+                                    <span className="stream-quality">
+                                        📺 {activeStream.quality.join(', ')}
+                                    </span>
+                                )}
+                            </div>
+                        </div>
+                    )}
                 </div>
 
                 {/* Ближайший матч на фоне футбольного поля */}

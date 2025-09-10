@@ -99,7 +99,8 @@ const StreamApiTest: React.FC = () => {
                     }}>
                         <h4>✅ API подключение успешно</h4>
                         <p>Найдено потоков: {streams.length}</p>
-                        <p>Активных потоков: {streams.filter(s => s.isActive).length}</p>
+                        <p>Активных потоков: {streams.filter(s => s.status === 'live').length}</p>
+                        <p>Готовых к запуску: {streams.filter(s => s.status === 'upcoming').length}</p>
                     </div>
 
                     {activeStream && (

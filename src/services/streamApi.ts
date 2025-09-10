@@ -3,14 +3,20 @@ import axios from 'axios';
 const API_BASE_URL = 'http://185.4.180.54:5001/api';
 
 export interface Stream {
-    id: string;
+    id: number;
     title: string;
+    status: 'upcoming' | 'live' | 'ended' | 'offline';
+    viewers: number;
     streamUrl: string;
-    isActive: boolean;
+    fallbackUrl: string;
+    startTime: string | null;
+    quality: string[];
     thumbnail?: string;
     description?: string;
-    createdAt: string;
-    updatedAt: string;
+    createdAt?: string;
+    updatedAt?: string;
+    // Для обратной совместимости
+    isActive?: boolean;
 }
 
 export interface StreamsResponse {
@@ -42,11 +48,17 @@ class StreamApiService {
     async getActiveStreams(): Promise<Stream[]> {
         try {
             const response = await this.getStreams(1, 50);
-            return response.streams.filter(stream =>
-                stream.isActive &&
-                stream.streamUrl &&
-                stream.streamUrl.includes('.m3u8')
-            );
+            console.log('Полученные стримы:', response.streams);
+            
+            // Фильтруем стримы - берем все, у которых есть streamUrl
+            const activeStreams = response.streams.filter(stream => {
+                const hasStreamUrl = stream.streamUrl && stream.streamUrl.trim() !== '';
+                console.log(`Стрим ${stream.title}: streamUrl=${stream.streamUrl}, hasUrl=${hasStreamUrl}`);
+                return hasStreamUrl;
+            });
+            
+            console.log('Активные стримы:', activeStreams);
+            return activeStreams;
         } catch (error) {
             console.error('Error fetching active streams:', error);
             return [];
