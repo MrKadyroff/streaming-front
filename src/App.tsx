@@ -60,7 +60,7 @@ const Footer: React.FC = () => {
     return (
         <footer className="main-footer">
             <div className="footer-container">
-                <div className="footer-content">
+                {/* <div className="footer-content">
                     <div className="footer-section">
                         <h3>SportCast</h3>
                         <p>Лучшие спортивные трансляции онлайн</p>
@@ -88,7 +88,7 @@ const Footer: React.FC = () => {
 
                 <div className="footer-bottom">
                     <p>&copy; 2024 SportCast. Все права защищены.</p>
-                </div>
+                </div> */}
             </div>
         </footer>
     );
