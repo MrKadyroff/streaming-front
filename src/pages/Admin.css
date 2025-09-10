@@ -217,14 +217,14 @@
     }
 
     .match-item,
-    .ad-item {
+    .banner-item {
         flex-direction: column;
         gap: 12px;
         align-items: flex-start;
     }
 
     .match-actions,
-    .ad-actions {
+    .banner-actions {
         width: 100%;
         justify-content: space-between;
     }
@@ -302,7 +302,7 @@
     color: var(--text-color);
 }
 
-.ad-form {
+.banner-form {
     padding: 24px;
 }
 
@@ -373,7 +373,7 @@
     background: var(--border-color);
 }
 
-.ads-list {
+.banners-list {
     display: flex;
     flex-direction: column;
     gap: 12px;
@@ -454,13 +454,13 @@
     align-items: center;
 }
 
-.ads-list {
+.banners-list {
     display: flex;
     flex-direction: column;
     gap: 12px;
 }
 
-.ad-item {
+.banner-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -471,28 +471,28 @@
     transition: all 0.2s ease;
 }
 
-.ad-item:hover {
+.banner-item:hover {
     border-color: var(--primary-color);
 }
 
-.ad-info {
+.banner-info {
     flex: 1;
 }
 
-.ad-title {
+.banner-title {
     font-weight: 600;
     color: var(--text-color);
     margin-bottom: 4px;
 }
 
-.ad-type {
+.banner-type {
     font-size: 12px;
     color: var(--text-secondary);
     text-transform: uppercase;
     letter-spacing: 0.02em;
 }
 
-.ad-actions {
+.banner-actions {
     display: flex;
     gap: 8px;
 }
@@ -994,7 +994,7 @@
 }
 
 /* Ads Management Styles */
-.ads-management {
+.banners-management {
     width: 100%;
 }
 
@@ -1037,24 +1037,24 @@
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
-.ads-container {
+.banners-container {
     background: var(--card-bg);
     border-radius: var(--border-radius);
     border: 1px solid var(--border-color);
     overflow: hidden;
 }
 
-.ads-table-container {
+.banners-table-container {
     overflow-x: auto;
 }
 
-.ads-table {
+.banners-table {
     width: 100%;
     border-collapse: collapse;
     font-size: 0.95rem;
 }
 
-.ads-table th {
+.banners-table th {
     background: rgba(59, 130, 246, 0.05);
     padding: 16px 12px;
     text-align: left;
@@ -1064,13 +1064,13 @@
     white-space: nowrap;
 }
 
-.ads-table td {
+.banners-table td {
     padding: 16px 12px;
     border-bottom: 1px solid var(--border-color);
     vertical-align: middle;
 }
 
-.ad-row:hover {
+.banner-row:hover {
     background: rgba(59, 130, 246, 0.02);
 }
 
@@ -1078,23 +1078,23 @@
     min-width: 200px;
 }
 
-.ad-title-info {
+.banner-title-info {
     display: flex;
     flex-direction: column;
     gap: 8px;
 }
 
-.ad-title {
+.banner-title {
     font-weight: 600;
     color: var(--text-color);
     font-size: 1rem;
 }
 
-.ad-preview {
+.banner-preview {
     max-width: 100px;
 }
 
-.ad-thumbnail {
+.banner-thumbnail {
     width: 60px;
     height: 40px;
     object-fit: cover;
@@ -1214,19 +1214,19 @@
 }
 
 @media (max-width: 768px) {
-    .ads-table-container {
+    .banners-table-container {
         /* На мобильных скрываем таблицу */
         display: none !important;
     }
 
-    .ads-cards-container {
+    .banners-cards-container {
         display: flex !important;
         flex-direction: column;
         gap: 12px;
         padding: 0;
     }
 
-    .ad-card {
+    .banner-card {
         background: var(--card-bg);
         border: 1px solid var(--border-color);
         border-radius: var(--border-radius);
@@ -1234,14 +1234,14 @@
         box-shadow: var(--shadow-base);
     }
 
-    .ad-card-header {
+    .banner-card-header {
         display: flex;
         justify-content: space-between;
         align-items: flex-start;
         margin-bottom: 12px;
     }
 
-    .ad-card-title {
+    .banner-card-title {
         font-weight: 600;
         color: var(--text-color);
         font-size: 1.1rem;
@@ -1250,7 +1250,7 @@
         margin-right: 8px;
     }
 
-    .ad-card-status {
+    .banner-card-status {
         padding: 4px 8px;
         border-radius: 12px;
         font-size: 0.8rem;
@@ -1258,41 +1258,41 @@
         flex-shrink: 0;
     }
 
-    .ad-card-preview {
+    .banner-card-preview {
         margin-bottom: 12px;
     }
 
-    .ad-card-info {
+    .banner-card-info {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 12px;
         margin-bottom: 16px;
     }
 
-    .ad-card-info-item {
+    .banner-card-info-item {
         display: flex;
         flex-direction: column;
         gap: 4px;
     }
 
-    .ad-card-info-label {
+    .banner-card-info-label {
         font-size: 0.85rem;
         color: var(--text-secondary);
         font-weight: 500;
     }
 
-    .ad-card-info-value {
+    .banner-card-info-value {
         font-size: 0.9rem;
         color: var(--text-color);
     }
 
-    .ad-card-actions {
+    .banner-card-actions {
         display: flex;
         flex-direction: column;
         gap: 8px;
     }
 
-    .ad-card-actions .btn {
+    .banner-card-actions .btn {
         width: 100%;
         justify-content: center;
     }
@@ -1311,11 +1311,11 @@
 
 /* Desktop: Hide mobile cards */
 @media (min-width: 769px) {
-    .ads-cards-container {
+    .banners-cards-container {
         display: none !important;
     }
 
-    .ads-table-container {
+    .banners-table-container {
         display: block !important;
     }
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { AdData } from '../AdBanner';
+import { BannerData } from '../PromoBanner';
 import { Match } from '../../types';
 
 interface SystemInfoProps {
@@ -8,7 +8,7 @@ interface SystemInfoProps {
     apiUsers: any[];
     apiReports: any[];
     hlsStreams: any[];
-    allAds: AdData[];
+    allAds: BannerData[];
 }
 
 const SystemInfo: React.FC<SystemInfoProps> = ({

@@ -1,17 +1,17 @@
 import React from 'react';
-import { AdData } from '../AdBanner';
+import { BannerData } from '../PromoBanner';
 import './AdsManagement.css';
 
 interface AdsManagementProps {
-    allAds: AdData[];
-    filteredAds: AdData[];
+    allAds: BannerData[];
+    filteredAds: BannerData[];
     adsFilter: 'all' | 'active' | 'inactive';
     adsSort: 'priority' | 'title' | 'date';
     adsLoading: boolean;
     onAddAd: () => void;
-    onEditAd: (ad: AdData) => void;
+    onEditAd: (banner: BannerData) => void;
     onDeleteAd: (id: string) => void;
-    onToggleAd: (ad: AdData) => void;
+    onToggleAd: (banner: BannerData) => void;
     onFilterChange: (filter: 'all' | 'active' | 'inactive') => void;
     onSortChange: (sort: 'priority' | 'title' | 'date') => void;
 }
@@ -31,7 +31,7 @@ const AdsManagement: React.FC<AdsManagementProps> = ({
 }) => {
     return (
         <div className="tab-content">
-            <div className="ads-management">
+            <div className="banners-management">
                 <div className="section-header">
                     <h2>Управление рекламой</h2>
                     <button
@@ -92,7 +92,7 @@ const AdsManagement: React.FC<AdsManagementProps> = ({
                 </div>
 
                 {/* Список рекламы */}
-                <div className="ads-container">
+                <div className="banners-container">
                     {adsLoading ? (
                         <div className="loading-state">
                             <div className="loading-spinner"></div>
@@ -117,8 +117,8 @@ const AdsManagement: React.FC<AdsManagementProps> = ({
                     ) : (
                         <>
                             {/* Desktop table view */}
-                            <div className="ads-table-container desktop-only">
-                                <table className="ads-table">
+                            <div className="banners-table-container desktop-only">
+                                <table className="banners-table">
                                     <thead>
                                         <tr>
                                             <th>Превью</th>
@@ -130,10 +130,10 @@ const AdsManagement: React.FC<AdsManagementProps> = ({
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {filteredAds.map((ad: AdData) => (
-                                            <tr key={ad.id} className="ad-row">
+                                        {filteredAds.map((ad: BannerData) => (
+                                            <tr key={ad.id} className="banner-row">
                                                 <td className="preview-cell">
-                                                    <div className="ad-preview">
+                                                    <div className="banner-preview">
                                                         {(ad.imageUrl || ad.gifUrl) ? (
                                                             <img
                                                                 src={ad.gifUrl || ad.imageUrl}
@@ -148,9 +148,9 @@ const AdsManagement: React.FC<AdsManagementProps> = ({
                                                     </div>
                                                 </td>
                                                 <td className="title-cell">
-                                                    <div className="ad-title">{ad.title}</div>
+                                                    <div className="banner-title">{ad.title}</div>
                                                     {ad.clickUrl && (
-                                                        <div className="ad-url" title={ad.clickUrl}>
+                                                        <div className="banner-url" title={ad.clickUrl}>
                                                             {ad.clickUrl.length > 50 ?
                                                                 `${ad.clickUrl.substring(0, 50)}...` :
                                                                 ad.clickUrl
@@ -208,18 +208,18 @@ const AdsManagement: React.FC<AdsManagementProps> = ({
                             </div>
 
                             {/* Mobile card view */}
-                            <div className="ads-cards-container mobile-only">
-                                {filteredAds.map((ad: AdData) => (
-                                    <div key={ad.id} className="ad-card">
-                                        <div className="ad-card-header">
-                                            <div className="ad-card-title">{ad.title}</div>
+                            <div className="banners-cards-container mobile-only">
+                                {filteredAds.map((ad: BannerData) => (
+                                    <div key={ad.id} className="banner-card">
+                                        <div className="banner-card-header">
+                                            <div className="banner-card-title">{ad.title}</div>
                                             <span className={`status-badge ${ad.isActive ? 'active' : 'inactive'}`}>
                                                 {ad.isActive ? 'Активна' : 'Неактивна'}
                                             </span>
                                         </div>
 
-                                        <div className="ad-card-content">
-                                            <div className="ad-card-preview">
+                                        <div className="banner-card-content">
+                                            <div className="banner-card-preview">
                                                 {(ad.imageUrl || ad.gifUrl) ? (
                                                     <img
                                                         src={ad.gifUrl || ad.imageUrl}
@@ -233,7 +233,7 @@ const AdsManagement: React.FC<AdsManagementProps> = ({
                                                 )}
                                             </div>
 
-                                            <div className="ad-card-info">
+                                            <div className="banner-card-info">
                                                 <div className="info-row">
                                                     <span className="info-label">Тип:</span>
                                                     <span className={`type-badge ${ad.type}`}>
@@ -249,13 +249,13 @@ const AdsManagement: React.FC<AdsManagementProps> = ({
                                                 {ad.clickUrl && (
                                                     <div className="info-row">
                                                         <span className="info-label">Ссылка:</span>
-                                                        <span className="ad-url">{ad.clickUrl}</span>
+                                                        <span className="banner-url">{ad.clickUrl}</span>
                                                     </div>
                                                 )}
                                             </div>
                                         </div>
 
-                                        <div className="ad-card-actions">
+                                        <div className="banner-card-actions">
                                             <button
                                                 className="btn btn-outline btn-sm"
                                                 onClick={() => onEditAd(ad)}

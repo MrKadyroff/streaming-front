@@ -1,5 +1,5 @@
 import React from 'react';
-import { AdData } from '../AdBanner';
+import { BannerData } from '../PromoBanner';
 import './AdForm.css';
 
 interface AdFormData {
@@ -12,7 +12,7 @@ interface AdFormData {
 
 interface AdFormProps {
     isOpen: boolean;
-    editingAd: AdData | null;
+    editingAd: BannerData | null;
     formData: AdFormData;
     isLoading: boolean;
     onClose: () => void;

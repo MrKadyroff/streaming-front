@@ -1337,7 +1337,7 @@ body {
 }
 
 /* Advertisement Banners */
-.page-with-ads {
+.page-with-banners {
   display: flex;
   align-items: flex-start;
   justify-content: center;
@@ -1350,7 +1350,7 @@ body {
 
 /* планшеты — убираем боковые колонки */
 @media (max-width: 1200px) {
-  .page-with-ads {
+  .page-with-banners {
     flex-direction: column;
     align-items: center;
   }
@@ -1358,14 +1358,14 @@ body {
 
 /* телефоны — вообще блочная верстка */
 @media (max-width: 768px) {
-  .page-with-ads {
+  .page-with-banners {
     display: block;
     padding: 16px;
   }
 }
 
-.left-ads,
-.right-ads {
+.left-banners,
+.right-banners {
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -1374,7 +1374,7 @@ body {
   flex-shrink: 0;
 }
 
-.main-content-ads {
+.main-content-banners {
   padding: 0 16px;
   width: 100%;
   max-width: 100%;
@@ -1382,7 +1382,7 @@ body {
   flex: 1;
 }
 
-.ad-banner {
+.promo-banner {
   background: var(--card-bg);
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius);
@@ -1391,28 +1391,28 @@ body {
   transition: all 0.3s ease;
 }
 
-.ad-banner:hover {
+.promo-banner:hover {
   box-shadow: var(--shadow-hover);
   transform: translateY(-2px);
 }
 
-.ad-banner.vertical {
+.promo-banner.vertical {
   width: 200px;
   height: 600px;
 }
 
-.ad-banner.square {
+.promo-banner.square {
   width: 200px;
   height: 200px;
 }
 
-.ad-banner.horizontal {
+.promo-banner.horizontal {
   width: 100%;
   height: 100px;
   margin: 24px 0;
 }
 
-.ad-content {
+.banner-content {
   width: 100%;
   height: 100%;
   display: flex;
@@ -1422,14 +1422,14 @@ body {
   overflow: hidden;
 }
 
-.ad-gif {
+.banner-gif {
   width: 100%;
   height: 100%;
   object-fit: cover;
   border-radius: var(--border-radius);
 }
 
-.ad-placeholder {
+.banner-placeholder {
   width: 100%;
   height: 100%;
   background: linear-gradient(135deg, var(--primary-color-light), var(--hover-bg));
@@ -1443,7 +1443,7 @@ body {
   padding: 10px;
 }
 
-.ad-label {
+.promo-label {
   position: absolute;
   top: 4px;
   right: 4px;
@@ -1455,26 +1455,122 @@ body {
 }
 
 /* Mobile responsive */
+/* Mobile responsive - улучшенная адаптивность */
 @media (max-width: 1200px) {
-  .page-with-ads {
-    grid-template-columns: 1fr;
+  .page-with-banners {
+    flex-direction: column;
+    align-items: center;
     padding: 24px 16px;
     gap: 24px;
   }
 
-  .left-ads,
-  .right-ads {
-    display: none;
+  .left-banners,
+  .right-banners {
+    flex-direction: row;
+    width: 100%;
+    max-width: 800px;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 16px 0;
   }
 
-  .main-content-ads {
+  .promo-banner.vertical {
+    width: 180px;
+    height: 180px;
+  }
+
+  .promo-banner.square {
+    width: 160px;
+    height: 160px;
+  }
+
+  .main-content-banners {
     padding: 0;
+    width: 100%;
+    max-width: 800px;
   }
 }
 
 @media (max-width: 768px) {
-  .ad-banner.horizontal {
-    height: 80px;
+  .page-with-banners {
+    display: flex;
+    flex-direction: column;
+    padding: 16px 12px;
+    gap: 20px;
+  }
+
+  /* Мобильные баннеры - размещаем сверху и снизу контента */
+  .left-banners {
+    order: 1;
+    /* Показываем сверху */
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 12px;
     margin: 16px 0;
+  }
+
+  .main-content-banners {
+    order: 2;
+    /* Контент в середине */
+    padding: 0;
+    width: 100%;
+  }
+
+  .right-banners {
+    order: 3;
+    /* Показываем снизу */
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 16px 0;
+  }
+
+  .promo-banner.vertical,
+  .promo-banner.square {
+    width: 140px;
+    height: 140px;
+    flex: 0 0 140px;
+  }
+
+  .promo-banner.horizontal {
+    width: 100%;
+    height: 100px;
+    margin: 16px 0;
+    flex: 1 1 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-with-banners {
+    padding: 12px 8px;
+    gap: 16px;
+  }
+
+  .left-banners,
+  .right-banners {
+    gap: 8px;
+    margin: 12px 0;
+  }
+
+  .promo-banner.vertical,
+  .promo-banner.square {
+    width: 120px;
+    height: 120px;
+    flex: 0 0 120px;
+  }
+
+  .promo-banner.horizontal {
+    height: 80px;
+    margin: 12px 0;
+  }
+
+  .banner-placeholder {
+    font-size: 11px;
+    padding: 8px;
   }
 }

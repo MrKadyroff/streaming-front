@@ -1,6 +1,6 @@
 import React from 'react';
 import SystemInfo from './SystemInfo';
-import { AdData } from '../AdBanner';
+import { BannerData } from '../PromoBanner';
 import { Match } from '../../types';
 import './AdminDashboard.css';
 
@@ -10,7 +10,7 @@ interface AdminDashboardProps {
     apiUsers: any[];
     apiReports: any[];
     hlsStreams: any[];
-    allAds: AdData[];
+    allAds: BannerData[];
     onOpenMatchModal: () => void;
     onOpenAdForm: () => void;
 }

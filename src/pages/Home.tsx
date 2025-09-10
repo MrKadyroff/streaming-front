@@ -5,6 +5,7 @@ import { Match } from '../types';
 import MatchPlayer from '../components/MatchPlayer';
 import FootballMatchCard from '../components/FootballMatchCard';
 import HLSPlayer from '../components/HLSPlayer';
+import BannersDebug from '../components/BannersDebug';
 import { streamApi, Stream } from '../services/streamApi';
 import './Home.css';
 
@@ -74,6 +75,7 @@ const Home: React.FC = () => {
 
     return (
         <div className="home-page">
+            {/* <BannersDebug /> */}
             <main className="home-content">
                 {/* HLS Video Player Section */}
                 <div className="hls-player-section">
@@ -88,7 +90,7 @@ const Home: React.FC = () => {
                 </div>
 
                 {/* Ближайший матч на фоне футбольного поля */}
-                {upcomingFootballMatches.length > 0 && (
+                {/* {upcomingFootballMatches.length > 0 && (
                     <div className="featured-match-section">
                         <h2>Ближайший матч</h2>
                         <FootballMatchCard
@@ -98,7 +100,7 @@ const Home: React.FC = () => {
                             isMainCard={true}
                         />
                     </div>
-                )}
+                )} */}
 
                 {/* Активные эфиры */}
                 {activeLiveMatches.length > 0 && (
@@ -146,7 +148,7 @@ const Home: React.FC = () => {
                 )}
 
                 {/* Предстоящие матчи */}
-                {otherUpcomingMatches.length > 0 && (
+                {/* {otherUpcomingMatches.length > 0 && (
                     <div className="upcoming-matches-section">
                         <h2>Предстоящие матчи</h2>
                         <div className="matches-grid">
@@ -160,7 +162,7 @@ const Home: React.FC = () => {
                             ))}
                         </div>
                     </div>
-                )}
+                )} */}
 
                 {/* Сообщение если нет матчей */}
                 {activeLiveMatches.length === 0 && upcomingFootballMatches.length === 0 && (

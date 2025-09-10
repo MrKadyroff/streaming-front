@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { DataProvider } from './contexts/DataContext';
-import { AdsProvider } from './contexts/AdsContext';
+import { AdsProvider } from './contexts/BannerContext';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import Home from './pages/Home';
 import Schedule from './pages/Schedule';
 import Admin from './pages/Admin';
 import Login from './components/Login';
 import ProtectedRoute from './components/ProtectedRoute';
-import PageWithAds from './components/PageWithAds';
+import PageWithBanners from './components/PageWithAds';
 import StreamApiTest from './components/StreamApiTest';
 import './App.css';
 
@@ -113,8 +113,8 @@ const AppContent: React.FC = () => {
             <Navigation />
             <main className="main-content">
                 <Routes>
-                    <Route path="/" element={<PageWithAds><Home /></PageWithAds>} />
-                    <Route path="/schedule" element={<PageWithAds><Schedule /></PageWithAds>} />
+                    <Route path="/" element={<PageWithBanners><Home /></PageWithBanners>} />
+                    <Route path="/schedule" element={<PageWithBanners><Schedule /></PageWithBanners>} />
                     <Route path="/test-api" element={<StreamApiTest />} />
                     <Route path="/admin" element={
                         <ProtectedRoute>

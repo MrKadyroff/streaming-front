@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { AdData } from '../AdBanner';
+import { BannerData } from '../PromoBanner';
 import { Match } from '../../types';
 import {
     getStreams,
@@ -20,8 +20,8 @@ export const useAdminData = () => {
     const [apiUsers, setApiUsers] = useState<any[]>([]);
     const [apiReports, setApiReports] = useState<any[]>([]);
     const [hlsStreams, setHlsStreams] = useState<any[]>([]);
-    const [allAds, setAllAds] = useState<AdData[]>([]);
-    const [filteredAds, setFilteredAds] = useState<AdData[]>([]);
+    const [allAds, setAllAds] = useState<BannerData[]>([]);
+    const [filteredAds, setFilteredAds] = useState<BannerData[]>([]);
     const [adsFilter, setAdsFilter] = useState<'all' | 'active' | 'inactive'>('all');
     const [adsSort, setAdsSort] = useState<'priority' | 'title' | 'date'>('priority');
     const [adsLoading, setAdsLoading] = useState<boolean>(false);
@@ -195,7 +195,7 @@ export const useAdminData = () => {
         }
     };
 
-    const handleToggleAd = async (ad: AdData) => {
+    const handleToggleAd = async (ad: BannerData) => {
         setAdsLoading(true);
         try {
             // Переключаем активность через API
@@ -221,7 +221,7 @@ export const useAdminData = () => {
         }
     };
 
-    const createAdFromForm = async (formData: any, editingAd: AdData | null) => {
+    const createAdFromForm = async (formData: any, editingAd: BannerData | null) => {
         setAdsLoading(true);
         try {
             const dto: CreateAdDto = {
@@ -241,7 +241,7 @@ export const useAdminData = () => {
                 // Обновляем существующую рекламу через API
                 await apiUpdateAd(editingAd.id, dto);
                 // Обновляем локальное состояние
-                const updatedAd: AdData = {
+                const updatedAd: BannerData = {
                     ...editingAd,
                     title: formData.title,
                     type: formData.type,
@@ -259,7 +259,7 @@ export const useAdminData = () => {
                 const response = await createAd(dto);
 
                 // Добавляем в локальное состояние
-                const newAd: AdData = {
+                const newAd: BannerData = {
                     id: (response.data?.ad?.id || response.data?.id || Date.now()).toString(),
                     title: formData.title,
                     type: formData.type,

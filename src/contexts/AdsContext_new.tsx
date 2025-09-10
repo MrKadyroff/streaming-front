@@ -1,14 +1,15 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { AdData } from '../components/AdBanner';
+
 import { getAds, createAd as apiCreateAd, updateAd as apiUpdateAd, deleteAd as apiDeleteAd, activateAd, deactivateAd, CreateAdDto } from '../api';
+import { BannerData } from '../components/PromoBanner';
 
 interface AdsContextType {
-    ads: AdData[];
-    leftSideAds: AdData[];
-    rightSideAds: AdData[];
-    horizontalAds: AdData[];
-    addAd: (ad: Omit<AdData, 'id'>) => void;
-    updateAd: (id: string, updates: Partial<AdData>) => void;
+    ads: BannerData[];
+    leftSideAds: BannerData[];
+    rightSideAds: BannerData[];
+    horizontalAds: BannerData[];
+    addAd: (ad: Omit<BannerData, 'id'>) => void;
+    updateAd: (id: string, updates: Partial<BannerData>) => void;
     deleteAd: (id: string) => void;
     toggleAdStatus: (id: string) => void;
     loadAds: () => Promise<void>;
@@ -29,15 +30,15 @@ interface AdsProviderProps {
 }
 
 export const AdsProvider: React.FC<AdsProviderProps> = ({ children }) => {
-    const [ads, setAds] = useState<AdData[]>([]);
+    const [ads, setAds] = useState<BannerData[]>([]);
 
     // Загружаем рекламу с API при запуске
     useEffect(() => {
         loadAds();
     }, []);
 
-    // Вспомогательная функция для преобразования AdData в CreateAdDto
-    const convertAdToDto = (ad: Omit<AdData, 'id'> | Partial<AdData>): CreateAdDto => {
+    // Вспомогательная функция для преобразования BannerData в CreateAdDto
+    const convertAdToDto = (ad: Omit<BannerData, 'id'> | Partial<BannerData>): CreateAdDto => {
         return {
             title: ad.title || '',
             type: ad.type || 'vertical',
@@ -51,8 +52,8 @@ export const AdsProvider: React.FC<AdsProviderProps> = ({ children }) => {
         };
     };
 
-    // Вспомогательная функция для преобразования API данных в AdData
-    const convertApiToAd = (apiAd: any): AdData => {
+    // Вспомогательная функция для преобразования API данных в BannerData
+    const convertApiToAd = (apiAd: any): BannerData => {
         return {
             id: apiAd.id.toString(),
             title: apiAd.title,
@@ -67,11 +68,11 @@ export const AdsProvider: React.FC<AdsProviderProps> = ({ children }) => {
     const loadAds = async () => {
         try {
             const response = await getAds();
-            // Преобразуем API данные в формат AdData
+            // Преобразуем API данные в формат BannerData
             const apiAds = response.data.ads?.map(convertApiToAd) || [];
 
             // Моковые данные
-            const mockAds: AdData[] = [
+            const mockAds: BannerData[] = [
                 {
                     id: 'mock1',
                     title: 'Спортивные ставки',
@@ -136,14 +137,14 @@ export const AdsProvider: React.FC<AdsProviderProps> = ({ children }) => {
     const rightSideAds = ads.filter(ad => ad.isActive && (ad.type === 'vertical' || ad.type === 'square'));
     const horizontalAds = ads.filter(ad => ad.isActive && ad.type === 'horizontal');
 
-    const addAd = async (adData: Omit<AdData, 'id'>) => {
+    const addAd = async (adData: Omit<BannerData, 'id'>) => {
         try {
             // Преобразуем данные для API
             const dto = convertAdToDto(adData);
             // Сначала добавляем через API
             const response = await apiCreateAd(dto);
             // Затем добавляем в локальное состояние
-            const newAd: AdData = {
+            const newAd: BannerData = {
                 ...adData,
                 id: response.data.ad?.id?.toString() || Date.now().toString(),
             };
@@ -151,7 +152,7 @@ export const AdsProvider: React.FC<AdsProviderProps> = ({ children }) => {
         } catch (error) {
             console.error('Ошибка создания рекламы через API:', error);
             // Если API недоступно, добавляем только локально
-            const newAd: AdData = {
+            const newAd: BannerData = {
                 ...adData,
                 id: Date.now().toString(),
             };
@@ -159,7 +160,7 @@ export const AdsProvider: React.FC<AdsProviderProps> = ({ children }) => {
         }
     };
 
-    const updateAd = async (id: string, updates: Partial<AdData>) => {
+    const updateAd = async (id: string, updates: Partial<BannerData>) => {
         try {
             // Преобразуем данные для API
             const dto = convertAdToDto(updates);

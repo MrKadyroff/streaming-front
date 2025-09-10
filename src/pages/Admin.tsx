@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useData } from '../contexts/DataContext';
 import { useAuth } from '../contexts/AuthContext';
-import { AdData } from '../components/AdBanner';
+import { BannerData } from '../components/PromoBanner';
 import { Match } from '../types';
 import {
     createMatch,
@@ -50,7 +50,7 @@ const Admin: React.FC = () => {
     const [activeTab, setActiveTab] = useState<AdminTab>('dashboard');
     const [showAdForm, setShowAdForm] = useState(false);
     const [showMatchModal, setShowMatchModal] = useState(false);
-    const [editingAd, setEditingAd] = useState<AdData | null>(null);
+    const [editingAd, setEditingAd] = useState<BannerData | null>(null);
     const [editingMatch, setEditingMatch] = useState<Match | null>(null);
 
     // Состояние формы рекламы
@@ -80,19 +80,10 @@ const Admin: React.FC = () => {
         setFormData({ title: '', imageUrl: '', gifUrl: '', clickUrl: '', type: 'vertical' });
     };
 
-    const handleEditAd = (ad: AdData) => {
-        setEditingAd(ad);
-        setFormData({
-            title: ad.title,
-            imageUrl: ad.imageUrl || '',
-            gifUrl: ad.gifUrl || '',
-            clickUrl: ad.clickUrl || '',
-            type: ad.type
-        });
+    const handleEditAd = (banner: BannerData) => {
+        setEditingAd(banner);
         setShowAdForm(true);
-    };
-
-    const handleFormDataChange = (field: keyof typeof formData, value: string) => {
+    }; const handleFormDataChange = (field: keyof typeof formData, value: string) => {
         setFormData(prev => ({ ...prev, [field]: value }));
     };
 
