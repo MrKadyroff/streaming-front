@@ -22,9 +22,9 @@
 }
 
 .add-btn {
-    background: white;
+    background: #23272f;
     color: #4CAF50;
-    border: none;
+    border: 2px solid #4CAF50;
     padding: 10px 20px;
     border-radius: 5px;
     cursor: pointer;
@@ -33,7 +33,8 @@
 }
 
 .add-btn:hover {
-    background: #f0f0f0;
+    background: #4CAF50;
+    color: #23272f;
     transform: translateY(-2px);
 }
 
@@ -51,7 +52,7 @@
 }
 
 .modal-content {
-    background: white;
+    background: #23272f;
     padding: 0;
     border-radius: 10px;
     width: 90%;
@@ -108,18 +109,20 @@
     display: block;
     margin-bottom: 5px;
     font-weight: bold;
-    color: #333;
+    color: #f8f9fa;
 }
 
 .form-group input,
 .form-group select {
     width: 100%;
     padding: 10px;
-    border: 2px solid #ddd;
+    border: 2px solid #495057;
     border-radius: 5px;
     font-size: 14px;
     transition: border-color 0.3s ease;
     box-sizing: border-box;
+    background: #343a40;
+    color: #f8f9fa;
 }
 
 .form-group input:focus,
@@ -181,7 +184,7 @@
 .users-table {
     width: 100%;
     border-collapse: collapse;
-    background: white;
+    background: #23272f;
     border-radius: 10px;
     overflow: hidden;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -197,11 +200,12 @@
 
 .users-table td {
     padding: 12px 10px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #495057;
+    color: #f8f9fa;
 }
 
 .users-table tr:hover {
-    background: #f8f9fa;
+    background: #343a40;
 }
 
 .users-table tr:last-child td {
@@ -244,11 +248,12 @@
 }
 
 .edit-btn:hover {
-    background: #e3f2fd;
+    background: #495057;
 }
 
 .delete-btn:hover {
-    background: #ffebee;
+    background: #dc3545;
+    color: white;
 }
 
 @media (max-width: 768px) {

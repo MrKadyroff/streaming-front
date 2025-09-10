@@ -49,14 +49,14 @@ class StreamApiService {
         try {
             const response = await this.getStreams(1, 50);
             console.log('Полученные стримы:', response.streams);
-            
+
             // Фильтруем стримы - берем все, у которых есть streamUrl
             const activeStreams = response.streams.filter(stream => {
                 const hasStreamUrl = stream.streamUrl && stream.streamUrl.trim() !== '';
                 console.log(`Стрим ${stream.title}: streamUrl=${stream.streamUrl}, hasUrl=${hasStreamUrl}`);
                 return hasStreamUrl;
             });
-            
+
             console.log('Активные стримы:', activeStreams);
             return activeStreams;
         } catch (error) {

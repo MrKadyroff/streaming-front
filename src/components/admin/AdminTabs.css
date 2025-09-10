@@ -1,8 +1,8 @@
 .tabs-nav {
     display: flex;
     gap: 0;
-    background: white;
-    border-bottom: 1px solid #e5e7eb;
+    background: #23272f;
+    border-bottom: 1px solid #343a40;
     padding: 0 2rem;
     max-width: 1400px;
     margin: 0 auto;
@@ -14,7 +14,7 @@
     padding: 1rem 1.5rem;
     border: none;
     background: none;
-    color: #6b7280;
+    color: #adb5bd;
     font-weight: 600;
     font-size: 0.9rem;
     cursor: pointer;
@@ -25,8 +25,8 @@
 }
 
 .tab-btn:hover {
-    color: #374151;
-    background: #f9fafb;
+    color: #f8f9fa;
+    background: #343a40;
 }
 
 .tab-btn.active {
@@ -71,14 +71,14 @@
 }
 
 .tabs-nav::-webkit-scrollbar-track {
-    background: #f1f5f9;
+    background: #343a40;
 }
 
 .tabs-nav::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
+    background: #495057;
     border-radius: 2px;
 }
 
 .tabs-nav::-webkit-scrollbar-thumb:hover {
-    background: #94a3b8;
+    background: #6c757d;
 }

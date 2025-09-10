@@ -94,16 +94,6 @@ const MatchesManagement: React.FC<MatchesManagementProps> = ({
                                                         Изменить
                                                     </button>
                                                     <button
-                                                        className={`btn btn-sm ${match.status === 'live' ? 'btn-warning' : 'btn-success'}`}
-                                                        onClick={() => {
-                                                            const newStatus = match.status === 'live' ? 'upcoming' : 'live';
-                                                            onUpdateMatch(match.id, { ...match, status: newStatus, isLive: newStatus === 'live' });
-                                                        }}
-                                                        title={match.status === 'live' ? "Остановить трансляцию" : "Начать трансляцию"}
-                                                    >
-                                                        {match.status === 'live' ? 'Остановить' : 'Запустить'}
-                                                    </button>
-                                                    <button
                                                         className="btn btn-danger btn-sm"
                                                         onClick={() => onDeleteMatch(match.id)}
                                                         title="Удалить матч"

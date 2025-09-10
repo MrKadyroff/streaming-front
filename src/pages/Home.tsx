@@ -28,9 +28,9 @@ const Home: React.FC = () => {
                 console.log('Загружаем активные стримы...');
                 const streams = await streamApi.getActiveStreams();
                 console.log('Загруженные стримы:', streams);
-                
+
                 setAllStreams(streams);
-                
+
                 // Выбираем первый доступный стрим
                 if (streams.length > 0) {
                     setActiveStream(streams[0]);
@@ -104,7 +104,7 @@ const Home: React.FC = () => {
                                 </span>
                             )}
                         </h2>
-                        
+
                         {/* Переключатель стримов */}
                         {allStreams.length > 1 && (
                             <div className="stream-selector">
@@ -122,7 +122,7 @@ const Home: React.FC = () => {
                         )}
                     </div>
                     <HLSPlayer stream={activeStream} />
-                    
+
                     {/* Информация о текущем стриме */}
                     {activeStream && (
                         <div className="stream-info-panel">

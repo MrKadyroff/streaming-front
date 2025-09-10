@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { BannerData } from '../PromoBanner';
 import { Match } from '../../types';
+import { Stream } from './StreamsManagement';
 import {
     getStreams,
     getUsers,
@@ -20,11 +21,13 @@ export const useAdminData = () => {
     const [apiUsers, setApiUsers] = useState<any[]>([]);
     const [apiReports, setApiReports] = useState<any[]>([]);
     const [hlsStreams, setHlsStreams] = useState<any[]>([]);
+    const [allStreams, setAllStreams] = useState<Stream[]>([]);
     const [allAds, setAllAds] = useState<BannerData[]>([]);
     const [filteredAds, setFilteredAds] = useState<BannerData[]>([]);
     const [adsFilter, setAdsFilter] = useState<'all' | 'active' | 'inactive'>('all');
     const [adsSort, setAdsSort] = useState<'priority' | 'title' | 'date'>('priority');
     const [adsLoading, setAdsLoading] = useState<boolean>(false);
+    const [streamsLoading, setStreamsLoading] = useState<boolean>(false);
 
     // Загружаем данные с API при запуске компонента
     useEffect(() => {
@@ -80,7 +83,7 @@ export const useAdminData = () => {
             const [streamsRes, usersRes, reportsRes, adsRes] = await Promise.all([
                 getStreams().catch(err => {
                     console.error('❌ Ошибка загрузки стримов:', err);
-                    return { data: [] };
+                    return { data: { streams: [] } };
                 }),
                 getUsers().catch(err => {
                     console.error('❌ Ошибка загрузки пользователей:', err);
@@ -95,6 +98,13 @@ export const useAdminData = () => {
                     return { data: [] };
                 })
             ]);
+
+            // Обрабатываем стримы
+            if (streamsRes?.data?.streams && Array.isArray(streamsRes.data.streams)) {
+                setAllStreams(streamsRes.data.streams);
+            } else {
+                setAllStreams([]);
+            }
 
             setApiUsers(usersRes?.data || []);
             setApiReports(reportsRes?.data || []);
@@ -286,11 +296,30 @@ export const useAdminData = () => {
         }
     };
 
+    const loadStreams = async () => {
+        setStreamsLoading(true);
+        try {
+            const streamsRes = await getStreams();
+            if (streamsRes?.data?.streams && Array.isArray(streamsRes.data.streams)) {
+                setAllStreams(streamsRes.data.streams);
+            } else {
+                setAllStreams([]);
+            }
+        } catch (error) {
+            console.error('Ошибка загрузки стримов:', error);
+            setAllStreams([]);
+        } finally {
+            setStreamsLoading(false);
+        }
+    };
+
     return {
         serverHealth,
         apiUsers,
         apiReports,
         hlsStreams,
+        allStreams,
+        streamsLoading,
         allAds,
         filteredAds,
         adsFilter,
@@ -299,6 +328,7 @@ export const useAdminData = () => {
         setAdsFilter,
         setAdsSort,
         loadApiData,
+        loadStreams,
         handleDeleteAd,
         handleToggleAd,
         createAdFromForm

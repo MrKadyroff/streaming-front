@@ -15,6 +15,7 @@ import AdminTabs, { AdminTab } from '../components/admin/AdminTabs';
 import AdminDashboard from '../components/admin/AdminDashboard';
 import MatchesManagement from '../components/admin/MatchesManagement';
 import AdsManagement from '../components/admin/AdsManagement';
+import StreamsManagement from '../components/admin/StreamsManagement';
 import UsersManagement from '../components/admin/UsersManagement';
 import ReportsManagement from '../components/admin/ReportsManagement';
 import HlsManagement from '../components/admin/HlsManagement';
@@ -34,6 +35,8 @@ const Admin: React.FC = () => {
         apiUsers,
         apiReports,
         hlsStreams,
+        allStreams,
+        streamsLoading,
         allAds,
         filteredAds,
         adsFilter,
@@ -41,6 +44,7 @@ const Admin: React.FC = () => {
         adsLoading,
         setAdsFilter,
         setAdsSort,
+        loadStreams,
         handleDeleteAd,
         handleToggleAd,
         createAdFromForm
@@ -165,9 +169,11 @@ const Admin: React.FC = () => {
                         apiUsers={apiUsers}
                         apiReports={apiReports}
                         hlsStreams={hlsStreams}
+                        allStreams={allStreams}
                         allAds={allAds}
                         onOpenMatchModal={handleOpenMatchModal}
                         onOpenAdForm={handleOpenAdForm}
+                        onOpenStreamsTab={() => setActiveTab('streams')}
                     />
                 );
             case 'matches':
@@ -178,6 +184,13 @@ const Admin: React.FC = () => {
                         onEditMatch={handleEditMatch}
                         onDeleteMatch={handleDeleteMatch}
                         onUpdateMatch={handleUpdateMatch}
+                    />
+                );
+            case 'streams':
+                return (
+                    <StreamsManagement
+                        streams={allStreams}
+                        onRefresh={loadStreams}
                     />
                 );
             case 'ads':

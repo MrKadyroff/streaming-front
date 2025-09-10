@@ -1,7 +1,7 @@
 import React from 'react';
 import './AdminTabs.css';
 
-export type AdminTab = 'dashboard' | 'matches' | 'ads' | 'users' | 'reports' | 'hls';
+export type AdminTab = 'dashboard' | 'matches' | 'ads' | 'streams' | 'users' | 'reports' | 'hls';
 
 interface AdminTabsProps {
     activeTab: AdminTab;
@@ -12,6 +12,7 @@ const AdminTabs: React.FC<AdminTabsProps> = ({ activeTab, onTabChange }) => {
     const tabs = [
         { key: 'dashboard' as AdminTab, label: 'Панель управления' },
         { key: 'matches' as AdminTab, label: 'Матчи' },
+        { key: 'streams' as AdminTab, label: 'Эфиры' },
         { key: 'ads' as AdminTab, label: 'Реклама' },
         // { key: 'users' as AdminTab, label: 'Пользователи' },
         // { key: 'reports' as AdminTab, label: 'Отчеты' },

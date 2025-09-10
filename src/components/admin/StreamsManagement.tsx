@@ -1,0 +1,371 @@
+import React, { useState } from 'react';
+import './StreamsManagement.css';
+
+export interface Stream {
+    id: number;
+    title: string;
+    status: 'active' | 'upcoming' | 'ended';
+    viewers: number;
+    streamUrl: string;
+    fallbackUrl?: string;
+    startTime?: string;
+    quality: string[];
+}
+
+interface StreamsManagementProps {
+    streams: Stream[];
+    onRefresh: () => void;
+}
+
+const StreamsManagement: React.FC<StreamsManagementProps> = ({
+    streams,
+    onRefresh
+}) => {
+    const [showModal, setShowModal] = useState(false);
+    const [editingStream, setEditingStream] = useState<Stream | null>(null);
+    const [loading, setLoading] = useState(false);
+
+    const [formData, setFormData] = useState({
+        title: '',
+        streamUrl: 'http://185.4.180.54/hls/stream1/index.m3u8',
+        fallbackUrl: '',
+        status: 'upcoming' as Stream['status'],
+        quality: ['1080p', '720p', '480p']
+    });
+
+    // API методы для управления стримами
+    const createStream = async (streamData: Omit<Stream, 'id' | 'viewers'>) => {
+        try {
+            const response = await fetch('http://185.4.180.54:5001/api/admin/streams', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(streamData)
+            });
+
+            if (!response.ok) {
+                throw new Error('Ошибка при создании стрима');
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error('Ошибка создания стрима:', error);
+            throw error;
+        }
+    };
+
+    const updateStream = async (id: number, streamData: Partial<Stream>) => {
+        try {
+            const response = await fetch(`http://185.4.180.54:5001/api/admin/streams/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(streamData)
+            });
+
+            if (!response.ok) {
+                throw new Error('Ошибка при обновлении стрима');
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error('Ошибка обновления стрима:', error);
+            throw error;
+        }
+    };
+
+    const deleteStream = async (id: number) => {
+        try {
+            const response = await fetch(`http://185.4.180.54:5001/api/admin/streams/${id}`, {
+                method: 'DELETE'
+            });
+
+            if (!response.ok) {
+                throw new Error('Ошибка при удалении стрима');
+            }
+
+            return true;
+        } catch (error) {
+            console.error('Ошибка удаления стрима:', error);
+            throw error;
+        }
+    };
+
+    const handleOpenModal = (stream?: Stream) => {
+        if (stream) {
+            setEditingStream(stream);
+            setFormData({
+                title: stream.title,
+                streamUrl: stream.streamUrl,
+                fallbackUrl: stream.fallbackUrl || '',
+                status: stream.status,
+                quality: stream.quality
+            });
+        } else {
+            setEditingStream(null);
+            setFormData({
+                title: '',
+                streamUrl: 'http://185.4.180.54/hls/stream1/index.m3u8',
+                fallbackUrl: '',
+                status: 'upcoming',
+                quality: ['1080p', '720p', '480p']
+            });
+        }
+        setShowModal(true);
+    };
+
+    const handleCloseModal = () => {
+        setShowModal(false);
+        setEditingStream(null);
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setLoading(true);
+
+        try {
+            if (editingStream) {
+                await updateStream(editingStream.id, formData);
+            } else {
+                await createStream({
+                    ...formData,
+                    startTime: formData.status === 'active' ? new Date().toISOString() : undefined
+                });
+            }
+
+            onRefresh();
+            handleCloseModal();
+        } catch (error) {
+            alert('Ошибка при сохранении стрима');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleDelete = async (id: number) => {
+        if (window.confirm('Вы уверены, что хотите удалить этот стрим?')) {
+            try {
+                await deleteStream(id);
+                onRefresh();
+            } catch (error) {
+                alert('Ошибка при удалении стрима');
+            }
+        }
+    };
+
+    const handleStatusChange = async (id: number, newStatus: Stream['status']) => {
+        try {
+            const updateData: Partial<Stream> = {
+                status: newStatus,
+                startTime: newStatus === 'active' ? new Date().toISOString() : undefined
+            };
+
+            await updateStream(id, updateData);
+            onRefresh();
+        } catch (error) {
+            alert('Ошибка при изменении статуса стрима');
+        }
+    };
+
+    const getStatusColor = (status: Stream['status']) => {
+        switch (status) {
+            case 'active': return '#22c55e';
+            case 'upcoming': return '#f59e0b';
+            case 'ended': return '#ef4444';
+            default: return '#6b7280';
+        }
+    };
+
+    const getStatusText = (status: Stream['status']) => {
+        switch (status) {
+            case 'active': return 'В эфире';
+            case 'upcoming': return 'Ожидает';
+            case 'ended': return 'Завершен';
+            default: return 'Неизвестно';
+        }
+    };
+
+    return (
+        <div className="streams-management">
+            <div className="management-header">
+                <h2>Управление эфирами</h2>
+                <div className="header-actions">
+                    <button
+                        className="refresh-btn"
+                        onClick={onRefresh}
+                        title="Обновить список"
+                    >
+                        🔄 Обновить
+                    </button>
+                    <button
+                        className="add-btn"
+                        onClick={() => handleOpenModal()}
+                    >
+                        ➕ Добавить эфир
+                    </button>
+                </div>
+            </div>
+
+            <div className="streams-grid">
+                {streams.length === 0 ? (
+                    <div className="no-streams">
+                        <div className="no-streams-icon">📺</div>
+                        <h3>Нет активных эфиров</h3>
+                        <p>Создайте первый эфир, чтобы начать трансляцию</p>
+                        <button
+                            className="create-first-btn"
+                            onClick={() => handleOpenModal()}
+                        >
+                            Создать эфир
+                        </button>
+                    </div>
+                ) : (
+                    streams.map(stream => (
+                        <div key={stream.id} className="stream-card">
+                            <div className="stream-header">
+                                <div className="stream-status">
+                                    <span
+                                        className="status-indicator"
+                                        style={{ backgroundColor: getStatusColor(stream.status) }}
+                                    />
+                                    <span className="status-text">
+                                        {getStatusText(stream.status)}
+                                    </span>
+                                </div>
+                                <div className="stream-actions">
+                                    <button
+                                        className="edit-btn"
+                                        onClick={() => handleOpenModal(stream)}
+                                        title="Редактировать"
+                                    >
+                                        ✏️
+                                    </button>
+                                    <button
+                                        className="delete-btn"
+                                        onClick={() => handleDelete(stream.id)}
+                                        title="Удалить"
+                                    >
+                                        🗑️
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div className="stream-content">
+                                <h3 className="stream-title">{stream.title}</h3>
+
+                                <div className="stream-info">
+                                    <div className="info-item">
+                                        <span className="info-label">Зрители:</span>
+                                        <span className="info-value">{stream.viewers.toLocaleString()}</span>
+                                    </div>
+
+                                    <div className="info-item">
+                                        <span className="info-label">Качество:</span>
+                                        <span className="info-value">{stream.quality.join(', ')}</span>
+                                    </div>
+                                </div>
+
+                                <div className="stream-url">
+                                    <span className="url-label">Stream URL:</span>
+                                    <code className="url-value">{stream.streamUrl}</code>
+                                </div>
+
+                                <div className="stream-controls">
+                                    {stream.status === 'upcoming' && (
+                                        <button
+                                            className="start-btn"
+                                            onClick={() => handleStatusChange(stream.id, 'active')}
+                                        >
+                                            🔴 Запустить эфир
+                                        </button>
+                                    )}
+
+                                    {stream.status === 'active' && (
+                                        <button
+                                            className="stop-btn"
+                                            onClick={() => handleStatusChange(stream.id, 'ended')}
+                                        >
+                                            ⏹️ Завершить эфир
+                                        </button>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    ))
+                )}
+            </div>
+
+            {/* Модальное окно для создания/редактирования стрима */}
+            {showModal && (
+                <div className="modal-overlay" onClick={handleCloseModal}>
+                    <div className="modal-content" onClick={e => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h3>{editingStream ? 'Редактировать эфир' : 'Создать новый эфир'}</h3>
+                            <button className="close-btn" onClick={handleCloseModal}>✕</button>
+                        </div>
+
+                        <form className="stream-form" onSubmit={handleSubmit}>
+                            <div className="form-group">
+                                <label>Название эфира</label>
+                                <input
+                                    type="text"
+                                    value={formData.title}
+                                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                                    placeholder="Например: Эль Класико: Реал vs Барселона"
+                                    required
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label>Stream URL</label>
+                                <input
+                                    type="url"
+                                    value={formData.streamUrl}
+                                    onChange={(e) => setFormData({ ...formData, streamUrl: e.target.value })}
+                                    placeholder="http://185.4.180.54/hls/stream1/index.m3u8"
+                                    required
+                                />
+                                <small>Базовый URL: http://185.4.180.54/hls/</small>
+                            </div>
+
+                            <div className="form-group">
+                                <label>Fallback URL (опционально)</label>
+                                <input
+                                    type="url"
+                                    value={formData.fallbackUrl}
+                                    onChange={(e) => setFormData({ ...formData, fallbackUrl: e.target.value })}
+                                    placeholder="https://backup.example.com/stream"
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label>Статус</label>
+                                <select
+                                    value={formData.status}
+                                    onChange={(e) => setFormData({ ...formData, status: e.target.value as Stream['status'] })}
+                                >
+                                    <option value="upcoming">Ожидает</option>
+                                    <option value="active">В эфире</option>
+                                    <option value="ended">Завершен</option>
+                                </select>
+                            </div>
+
+                            <div className="form-actions">
+                                <button type="button" onClick={handleCloseModal}>
+                                    Отмена
+                                </button>
+                                <button type="submit" disabled={loading}>
+                                    {loading ? 'Сохранение...' : editingStream ? 'Обновить' : 'Создать'}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+};
+
+export default StreamsManagement;

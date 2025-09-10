@@ -10,9 +10,11 @@ interface AdminDashboardProps {
     apiUsers: any[];
     apiReports: any[];
     hlsStreams: any[];
+    allStreams?: any[];
     allAds: BannerData[];
     onOpenMatchModal: () => void;
     onOpenAdForm: () => void;
+    onOpenStreamsTab?: () => void;
 }
 
 const AdminDashboard: React.FC<AdminDashboardProps> = ({
@@ -21,29 +23,53 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
     apiUsers,
     apiReports,
     hlsStreams,
+    allStreams = [],
     allAds,
     onOpenMatchModal,
-    onOpenAdForm
+    onOpenAdForm,
+    onOpenStreamsTab
 }) => {
     return (
         <div className="tab-content">
-            <div className="admin-grid">
-                <div className="admin-card">
+            <div className="dashboard-grid">
+                <div className="dashboard-card">
                     <h3>Управление матчами</h3>
                     <p>Добавление и редактирование спортивных событий</p>
+                    <div className="card-stats">
+                        <span>Всего матчей: {matches.length}</span>
+                    </div>
                     <button
-                        className="admin-btn"
+                        className="dashboard-btn"
                         onClick={onOpenMatchModal}
                     >
                         Открыть
                     </button>
                 </div>
 
-                <div className="admin-card">
+                <div className="dashboard-card">
+                    <h3>Управление эфирами</h3>
+                    <p>Запуск и контроль трансляций</p>
+                    <div className="card-stats">
+                        <span>Активных эфиров: {allStreams.filter(s => s.status === 'active').length}</span>
+                        <span>Всего эфиров: {allStreams.length}</span>
+                    </div>
+                    <button
+                        className="dashboard-btn"
+                        onClick={onOpenStreamsTab}
+                    >
+                        Открыть
+                    </button>
+                </div>
+
+                <div className="dashboard-card">
                     <h3>Управление рекламой</h3>
                     <p>Добавление и настройка рекламных баннеров</p>
+                    <div className="card-stats">
+                        <span>Активной рекламы: {allAds.filter(ad => ad.isActive).length}</span>
+                        <span>Всего баннеров: {allAds.length}</span>
+                    </div>
                     <button
-                        className="admin-btn"
+                        className="dashboard-btn"
                         onClick={onOpenAdForm}
                     >
                         Открыть
