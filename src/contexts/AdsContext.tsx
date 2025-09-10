@@ -54,7 +54,7 @@ export const AdsProvider: React.FC<AdsProviderProps> = ({ children }) => {
 
     // Вспомогательная функция для преобразования API данных в AdData
     const convertApiToAd = (apiAd: any): AdData => {
-        return {
+        const converted = {
             id: apiAd.id.toString(),
             title: apiAd.title,
             type: apiAd.type || 'vertical',
@@ -67,6 +67,8 @@ export const AdsProvider: React.FC<AdsProviderProps> = ({ children }) => {
             endDate: apiAd.endDate,
             position: apiAd.position || (apiAd.type === 'horizontal' ? 'header' : 'sidebar')
         };
+        console.log('🔄 Конвертируем API данные:', apiAd, '➡️', converted);
+        return converted;
     };
 
     const loadAds = async () => {
@@ -89,6 +91,12 @@ export const AdsProvider: React.FC<AdsProviderProps> = ({ children }) => {
     const leftSideAds = ads.filter(ad => ad.isActive && (ad.type === 'vertical' || ad.type === 'square'));
     const rightSideAds = ads.filter(ad => ad.isActive && (ad.type === 'vertical' || ad.type === 'square'));
     const horizontalAds = ads.filter(ad => ad.isActive && ad.type === 'horizontal');
+
+    // Дебаг информация
+    console.log('🔍 Текущие объявления в контексте:', ads);
+    console.log('🔍 Активные левые объявления:', leftSideAds);
+    console.log('🔍 Активные правые объявления:', rightSideAds);
+    console.log('🔍 Активные горизонтальные объявления:', horizontalAds);
 
     const addAd = async (adData: Omit<AdData, 'id'>) => {
         try {
