@@ -1,6 +1,6 @@
 .match-list {
-    margin-bottom: 48px;
-    max-width: 1200px;
+    margin-bottom: var(--spacing-4xl);
+    max-width: var(--content-max-width);
     margin-left: auto;
     margin-right: auto;
 }
@@ -9,11 +9,11 @@
     font-size: 28px;
     font-weight: 700;
     color: var(--text-color);
-    margin-bottom: 24px;
-    padding: 0 24px;
+    margin-bottom: var(--spacing-xl);
+    padding: 0 var(--spacing-xl);
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: var(--spacing-md);
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
@@ -28,19 +28,20 @@
 .match-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-    gap: 24px;
-    padding: 0 24px;
-    max-width: 1200px;
+    gap: var(--grid-gap-xl);
+    padding: 0 var(--spacing-xl);
+    max-width: var(--content-max-width);
     margin: 0 auto;
 }
 
 .no-matches {
-    padding: 48px 24px;
+    padding: var(--spacing-4xl) var(--spacing-xl);
     text-align: center;
     color: var(--text-secondary);
     background: var(--card-bg);
-    margin: 0 24px;
+    margin: 0 var(--spacing-xl);
     border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
 }
 
 .no-matches p {
@@ -65,23 +66,24 @@
 @media (min-width: 1201px) {
     .match-grid {
         grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-        max-width: 1400px;
-        gap: 30px;
+        max-width: var(--container-max-width);
+        gap: var(--grid-gap-2xl);
+        padding: 0 var(--spacing-3xl);
     }
 
     .match-list {
-        max-width: 1400px;
+        max-width: var(--container-max-width);
     }
 
     .match-list-title {
-        padding: 0 40px;
+        padding: 0 var(--spacing-3xl);
     }
 }
 
 .match-list.featured .match-card {
     background: linear-gradient(135deg, var(--primary-color-light) 0%, var(--card-bg) 100%);
     border: 2px solid var(--primary-color);
-    padding: 36px;
+    padding: var(--spacing-2xl);
 }
 
 .match-list.featured .match-card .player-name {
@@ -90,11 +92,11 @@
 
 .match-list.featured .match-card .vs {
     font-size: 18px;
-    padding: 14px 20px;
+    padding: var(--spacing-sm) var(--spacing-lg);
 }
 
 .match-list.featured .match-card .watch-btn {
-    padding: 16px 32px;
+    padding: var(--spacing-md) var(--spacing-2xl);
     font-size: 16px;
 }
 
@@ -102,22 +104,22 @@
 @media (max-width: 768px) {
     .match-list-title {
         font-size: 20px;
-        padding: 0 16px;
+        padding: 0 var(--spacing-md);
     }
 
     .match-grid {
         grid-template-columns: 1fr;
-        gap: 16px;
-        padding: 0 16px;
+        gap: var(--grid-gap-md);
+        padding: 0 var(--spacing-md);
     }
 
     .no-matches {
-        margin: 0 16px;
-        padding: 30px 16px;
+        margin: 0 var(--spacing-md);
+        padding: var(--spacing-2xl) var(--spacing-md);
     }
 
     .match-list.featured .match-card {
-        padding: 20px;
+        padding: var(--spacing-lg);
     }
 
     .match-list.featured .match-card .player-name {
@@ -126,14 +128,24 @@
 
     .match-list.featured .match-card .vs {
         font-size: 14px;
-        padding: 8px 12px;
+        padding: var(--spacing-xs) var(--spacing-sm);
     }
 }
 
 @media (max-width: 480px) {
+    .match-list-title {
+        padding: 0 var(--spacing-sm);
+    }
+
     .match-grid {
         grid-template-columns: 1fr;
-        gap: 12px;
+        gap: var(--grid-gap-sm);
+        padding: 0 var(--spacing-sm);
+    }
+
+    .no-matches {
+        margin: 0 var(--spacing-sm);
+        padding: var(--spacing-xl) var(--spacing-sm);
     }
 
     .match-list-title {

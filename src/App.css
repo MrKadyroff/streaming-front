@@ -1,4 +1,6 @@
 /* CSS Variables for dark theme only */
+@import url('./styles/layout-standards.css');
+
 :root {
   /* Dark theme colors - slightly lighter version of #0d1117 with green accent */
   --bg-primary: #151b23;
@@ -115,9 +117,9 @@ body {
 }
 
 .nav-container {
-  max-width: 1400px;
+  max-width: var(--container-max-width);
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 var(--spacing-xl);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -253,14 +255,14 @@ body {
   gap: 16px;
 }
 
-/* Основной контент с оптимизированными отступами */
+/* Основной контент - использует единые стандарты */
 .main-content {
   flex: 1;
   min-height: calc(100vh - 120px);
-  max-width: 1400px;
+  max-width: var(--container-max-width);
   width: 100%;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 var(--spacing-lg);
   overflow-x: hidden;
   position: relative;
   background: transparent;
@@ -278,23 +280,23 @@ body {
 }
 
 /* Адаптивные отступы для основного контента */
-@media (max-width: 1200px) {
+@media (max-width: 1024px) {
   .main-content {
-    padding: 0 16px;
+    padding: 0 var(--spacing-md);
     min-height: calc(100vh - 100px);
   }
 }
 
 @media (max-width: 768px) {
   .main-content {
-    padding: 0 12px;
+    padding: 0 var(--spacing-md);
     min-height: calc(100vh - 80px);
   }
 }
 
 @media (max-width: 480px) {
   .main-content {
-    padding: 0 8px;
+    padding: 0 var(--spacing-sm);
     min-height: calc(100vh - 70px);
   }
 }
@@ -307,16 +309,16 @@ body {
 }
 
 .footer-container {
-  max-width: 1400px;
+  max-width: var(--container-max-width);
   margin: 0 auto;
-  padding: 40px 24px 20px;
+  padding: var(--spacing-3xl) var(--spacing-xl) var(--spacing-lg);
 }
 
 .footer-content {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 32px;
-  margin-bottom: 32px;
+  gap: var(--spacing-2xl);
+  margin-bottom: var(--spacing-2xl);
 }
 
 .footer-section h3,
@@ -531,27 +533,27 @@ body {
   background: var(--text-secondary);
 }
 
-/* Утилитарные классы для адаптивности */
+/* Утилитарные классы для адаптивности - используют единые стандарты */
 .container-fluid {
   width: 100%;
-  padding: 0 16px;
+  padding: 0 var(--spacing-md);
 }
 
 .container {
-  max-width: 1400px;
+  max-width: var(--container-max-width);
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 var(--spacing-lg);
 }
 
 .row {
   display: flex;
   flex-wrap: wrap;
-  margin: 0 -12px;
+  margin: 0 calc(-1 * var(--spacing-sm));
 }
 
 .col {
   flex: 1;
-  padding: 0 12px;
+  padding: 0 var(--spacing-sm);
 }
 
 .text-center {
@@ -574,7 +576,7 @@ body {
   display: none;
 }
 
-/* Скрытие элементов на мобильных */
+/* Скрытие элементов на мобильных - используют единые брейкпоинты */
 @media (max-width: 768px) {
   .hidden-mobile {
     display: none;
@@ -585,56 +587,56 @@ body {
   }
 
   .container {
-    padding: 0 16px;
+    padding: 0 var(--spacing-md);
   }
 
   .row {
-    margin: 0 -8px;
+    margin: 0 calc(-1 * var(--spacing-xs));
   }
 
   .col {
-    padding: 0 8px;
+    padding: 0 var(--spacing-xs);
   }
 }
 
 @media (max-width: 480px) {
   .container {
-    padding: 0 12px;
+    padding: 0 var(--spacing-sm);
   }
 
   .container-fluid {
-    padding: 0 12px;
+    padding: 0 var(--spacing-sm);
   }
 
   .row {
-    margin: 0 -6px;
+    margin: 0 calc(-1 * var(--spacing-xs) / 2);
   }
 
   .col {
-    padding: 0 6px;
+    padding: 0 calc(var(--spacing-xs) / 2);
   }
 }
 
-/* Улучшенная мобильная адаптивность навигации */
-@media (max-width: 1200px) {
+/* Улучшенная мобильная адаптивность навигации - единые стандарты */
+@media (max-width: 1024px) {
   .nav-container {
-    padding: 0 20px;
+    padding: 0 var(--spacing-lg);
     height: 80px;
   }
 
   .nav-center {
-    gap: 16px;
+    gap: var(--spacing-md);
   }
 
   .nav-right {
-    right: 20px;
-    gap: 12px;
+    right: var(--spacing-lg);
+    gap: var(--spacing-sm);
   }
 
   .brand-logo {
     width: 70px;
     height: 70px;
-    border-radius: 50%;
+    border-radius: var(--radius-full);
     border: 3px solid var(--primary-color);
     background: linear-gradient(135deg, var(--primary-color-light), var(--primary-color));
     padding: 6px;
@@ -642,14 +644,14 @@ body {
   }
 
   .nav-link {
-    padding: 8px 16px;
+    padding: var(--spacing-xs) var(--spacing-md);
     font-size: 13px;
   }
 }
 
 @media (max-width: 768px) {
   .nav-container {
-    padding: 8px 16px;
+    padding: var(--spacing-xs) var(--spacing-md);
     height: auto;
     min-height: 50px;
     display: flex;
@@ -658,12 +660,12 @@ body {
   }
 
   .nav-center {
-    gap: 12px;
+    gap: var(--spacing-sm);
   }
 
   .nav-right {
-    right: 16px;
-    gap: 8px;
+    right: var(--spacing-md);
+    gap: var(--spacing-xs);
   }
 
   .mobile-text {
@@ -676,7 +678,7 @@ body {
 
   .nav-brand {
     order: 0;
-    margin: 0 8px;
+    margin: 0 var(--spacing-xs);
     padding: 0;
     border: none;
     flex: 0 0 auto;
@@ -691,7 +693,7 @@ body {
     position: absolute;
     width: 48px;
     height: 48px;
-    border-radius: 50%;
+    border-radius: var(--radius-full);
     border: 1px solid rgba(59, 130, 246, 0.2);
     animation: pulse 2s infinite;
     z-index: -1;
@@ -700,7 +702,7 @@ body {
   .brand-logo {
     width: 40px;
     height: 40px;
-    border-radius: 50%;
+    border-radius: var(--radius-full);
     border: 2px solid var(--primary-color);
     background: linear-gradient(135deg, var(--primary-color-light), var(--primary-color));
     padding: 4px;
@@ -718,7 +720,7 @@ body {
     right: -2px;
     bottom: -2px;
     background: linear-gradient(45deg, var(--primary-color), #10b981, var(--primary-color));
-    border-radius: 50%;
+    border-radius: var(--radius-full);
     z-index: -1;
     animation: rotate 3s linear infinite;
     opacity: 0.8;
@@ -734,11 +736,11 @@ body {
     flex: 0 0 auto;
     max-width: none;
     justify-content: center;
-    padding: 6px 12px;
+    padding: var(--spacing-xs) var(--spacing-sm);
     margin: 0;
     background: var(--card-bg);
     border: 1px solid var(--border-color);
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     font-size: 11px;
     min-height: 32px;
     position: relative;
@@ -793,8 +795,8 @@ body {
     min-width: 32px !important;
     max-width: 32px !important;
     min-height: 32px !important;
-    padding: 6px !important;
-    border-radius: 50% !important;
+    padding: var(--spacing-xs) !important;
+    border-radius: var(--radius-full) !important;
     flex: 0 0 32px !important;
   }
 
@@ -811,24 +813,24 @@ body {
 
 @media (max-width: 480px) {
   .nav-container {
-    padding: 6px 12px;
+    padding: var(--spacing-xs) var(--spacing-sm);
     min-height: 45px;
   }
 
   .nav-center {
-    gap: 8px;
+    gap: var(--spacing-xs);
   }
 
   .nav-right {
-    right: 12px;
-    gap: 6px;
+    right: var(--spacing-sm);
+    gap: var(--spacing-xs);
   }
 
   .nav-link {
-    padding: 10px 20px;
+    padding: 10px var(--spacing-lg);
     font-size: 10px;
     min-height: 30px;
-    border-radius: 4px;
+    border-radius: var(--radius-xs);
   }
 
   .nav-text {

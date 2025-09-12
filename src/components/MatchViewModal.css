@@ -14,10 +14,10 @@
 
 .match-view-modal {
     background: var(--bg-color);
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     max-width: 90vw;
     max-height: 90vh;
-    width: 800px;
+    width: var(--container-lg);
     overflow: hidden;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
     border: 1px solid var(--border-color);
@@ -27,7 +27,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px;
+    padding: var(--spacing-lg);
     background: var(--accent-color);
     color: white;
 }
@@ -44,8 +44,8 @@
     color: white;
     font-size: 1.5rem;
     cursor: pointer;
-    padding: 5px;
-    border-radius: 50%;
+    padding: var(--spacing-xs);
+    border-radius: var(--radius-full);
     width: 30px;
     height: 30px;
     display: flex;
@@ -59,20 +59,20 @@
 }
 
 .modal-content {
-    padding: 20px;
+    padding: var(--spacing-lg);
 }
 
 .match-details {
-    margin-top: 20px;
+    margin-top: var(--spacing-lg);
     display: grid;
-    gap: 12px;
+    gap: var(--spacing-sm);
 }
 
 .match-info {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 8px 0;
+    padding: var(--spacing-xs) 0;
     border-bottom: 1px solid var(--border-color);
 }
 
@@ -93,7 +93,7 @@
 
 .match-preview {
     position: relative;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     overflow: hidden;
     background: var(--bg-secondary);
 }
@@ -111,27 +111,27 @@
     left: 0;
     right: 0;
     background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
-    padding: 20px;
+    padding: var(--spacing-lg);
     color: white;
 }
 
 .preview-info h3 {
-    margin: 0 0 8px 0;
+    margin: 0 0 var(--spacing-xs) 0;
     font-size: 1.2rem;
     font-weight: 600;
 }
 
 .preview-info p {
-    margin: 4px 0;
+    margin: var(--spacing-xs) 0;
     font-size: 0.9rem;
     opacity: 0.9;
 }
 
 .preview-status {
-    margin-top: 12px;
-    padding: 6px 12px;
+    margin-top: var(--spacing-sm);
+    padding: var(--spacing-xs) var(--spacing-sm);
     background: var(--accent-color);
-    border-radius: 20px;
+    border-radius: var(--radius-full);
     font-size: 0.8rem;
     font-weight: 600;
     display: inline-block;
@@ -143,7 +143,7 @@
     justify-content: center;
     height: 300px;
     background: var(--bg-secondary);
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     color: var(--text-secondary);
     font-size: 1.1rem;
 }
@@ -151,11 +151,11 @@
 @media (max-width: 768px) {
     .match-view-modal {
         width: 95vw;
-        margin: 20px;
+        margin: var(--spacing-lg);
     }
 
     .modal-header {
-        padding: 15px;
+        padding: var(--spacing-md);
     }
 
     .modal-header h2 {
@@ -163,7 +163,7 @@
     }
 
     .modal-content {
-        padding: 15px;
+        padding: var(--spacing-md);
     }
 
     .preview-image {
@@ -173,6 +173,6 @@
     .match-info {
         flex-direction: column;
         align-items: flex-start;
-        gap: 4px;
+        gap: var(--spacing-xs);
     }
 }

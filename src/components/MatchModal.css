@@ -9,14 +9,14 @@
     align-items: center;
     justify-content: center;
     z-index: 1000;
-    padding: 20px;
+    padding: var(--spacing-lg);
 }
 
 .modal-content {
     background: var(--bg-color);
-    border-radius: 4px;
+    border-radius: var(--radius-md);
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-    max-width: 600px;
+    max-width: var(--container-md);
     width: 100%;
     max-height: 90vh;
     overflow-y: auto;
@@ -27,7 +27,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 24px;
+    padding: var(--spacing-lg) var(--spacing-xl);
     border-bottom: 1px solid var(--border-color);
 }
 
@@ -44,8 +44,8 @@
     font-size: 1.5rem;
     color: var(--text-secondary);
     cursor: pointer;
-    padding: 4px;
-    border-radius: 4px;
+    padding: var(--spacing-xs);
+    border-radius: var(--radius-xs);
     transition: all 0.2s ease;
 }
 
@@ -55,13 +55,13 @@
 }
 
 .match-form {
-    padding: 24px;
+    padding: var(--spacing-xl);
 }
 
 .form-row {
     display: flex;
-    gap: 16px;
-    margin-bottom: 16px;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
 }
 
 .form-group {
@@ -71,7 +71,7 @@
 }
 
 .form-group label {
-    margin-bottom: 6px;
+    margin-bottom: var(--spacing-xs);
     color: var(--text-color);
     font-weight: 500;
     font-size: 0.9rem;
@@ -79,9 +79,9 @@
 
 .form-group input,
 .form-group select {
-    padding: 10px 12px;
+    padding: var(--spacing-sm) var(--spacing-md);
     border: 1px solid var(--border-color);
-    border-radius: 4px;
+    border-radius: var(--radius-xs);
     background: var(--input-bg);
     color: var(--text-color);
     font-size: 0.95rem;
@@ -103,7 +103,7 @@
 .checkbox-group label {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: var(--spacing-xs);
     cursor: pointer;
     margin: 0;
 }
@@ -115,18 +115,18 @@
 
 .form-actions {
     display: flex;
-    gap: 12px;
+    gap: var(--spacing-sm);
     justify-content: flex-end;
-    margin-top: 24px;
-    padding-top: 20px;
+    margin-top: var(--spacing-xl);
+    padding-top: var(--spacing-lg);
     border-top: 1px solid var(--border-color);
 }
 
 .btn-cancel,
 .btn-submit {
-    padding: 10px 20px;
+    padding: var(--spacing-sm) var(--spacing-lg);
     border: none;
-    border-radius: 4px;
+    border-radius: var(--radius-xs);
     font-size: 0.95rem;
     font-weight: 500;
     cursor: pointer;
@@ -158,7 +158,7 @@
 /* Responsive */
 @media (max-width: 768px) {
     .modal-overlay {
-        padding: 10px;
+        padding: var(--spacing-sm);
     }
 
     .modal-content {
@@ -166,7 +166,7 @@
     }
 
     .modal-header {
-        padding: 16px 20px;
+        padding: var(--spacing-md) var(--spacing-lg);
     }
 
     .modal-header h2 {
@@ -174,12 +174,12 @@
     }
 
     .match-form {
-        padding: 20px;
+        padding: var(--spacing-lg);
     }
 
     .form-row {
         flex-direction: column;
-        gap: 12px;
+        gap: var(--spacing-sm);
     }
 
     .form-actions {
@@ -194,8 +194,8 @@
 
 /* Preview thumbnail styles */
 .preview-thumbnail {
-    margin-top: 10px;
-    border-radius: 8px;
+    margin-top: var(--spacing-sm);
+    border-radius: var(--radius-md);
     overflow: hidden;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     max-width: 200px;
@@ -205,7 +205,7 @@
     width: 100%;
     height: auto;
     display: block;
-    border-radius: 8px;
+    border-radius: var(--radius-md);
 }
 
 /* Form section title */
@@ -213,12 +213,12 @@
     font-size: 1.1rem;
     font-weight: 600;
     color: var(--primary-color);
-    margin: 20px 0 16px 0;
-    padding-bottom: 8px;
+    margin: var(--spacing-lg) 0 var(--spacing-md) 0;
+    padding-bottom: var(--spacing-xs);
     border-bottom: 2px solid var(--primary-color-20);
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: var(--spacing-xs);
 }
 
 .form-section-title::before {

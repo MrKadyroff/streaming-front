@@ -1,16 +1,18 @@
-/* Modern Match Card Styles */
+/* Modern Match Card Styles - единые стандарты */
 .modern-match-card {
     position: relative;
     background: rgba(255, 255, 255, 0.02);
     backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 20px;
-    padding: 20px;
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
     cursor: pointer;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     overflow: hidden;
-    margin-bottom: 16px;
+    margin-bottom: 0;
     isolation: isolate;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .modern-match-card::before {
@@ -64,14 +66,14 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: var(--spacing-lg);
 }
 
 .tournament-badge {
     background: rgba(255, 255, 255, 0.04);
     color: rgba(255, 255, 255, 0.7);
-    padding: 6px 12px;
-    border-radius: 12px;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--radius-lg);
     font-size: 12px;
     font-weight: 600;
     text-transform: uppercase;
@@ -82,9 +84,9 @@
 .status-badge {
     display: flex;
     align-items: center;
-    gap: 6px;
-    padding: 6px 12px;
-    border-radius: 12px;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--radius-lg);
     font-size: 12px;
     font-weight: 600;
     text-transform: uppercase;
@@ -143,13 +145,13 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 16px;
+    gap: var(--spacing-md);
 }
 
 .team {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: var(--spacing-sm);
     flex: 1;
     min-width: 0;
 }
@@ -166,10 +168,10 @@
 .team-logo {
     width: 40px;
     height: 40px;
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     object-fit: contain;
     background: rgba(255, 255, 255, 0.95);
-    padding: 4px;
+    padding: var(--spacing-xs);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
 }
@@ -177,7 +179,7 @@
 .team-logo-placeholder {
     width: 40px;
     height: 40px;
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.1));
     border: 2px solid rgba(34, 197, 94, 0.3);
     display: flex;
@@ -215,7 +217,7 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    margin: 0 8px;
+    margin: 0 var(--spacing-xs);
 }
 
 .vs-container {
@@ -226,7 +228,7 @@
     height: 36px;
     background: rgba(255, 255, 255, 0.04);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 50%;
+    border-radius: var(--radius-full);
     transition: all 0.3s ease;
 }
 
@@ -245,13 +247,13 @@
 .match-score {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: var(--spacing-xs);
     font-size: 18px;
     font-weight: 700;
     color: rgba(34, 197, 94, 0.9);
     background: rgba(34, 197, 94, 0.1);
-    padding: 8px 12px;
-    border-radius: 12px;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--radius-lg);
     border: 1px solid rgba(34, 197, 94, 0.2);
 }
 
@@ -264,9 +266,9 @@
 .match-venue {
     display: flex;
     align-items: center;
-    gap: 6px;
-    margin-top: 16px;
-    padding-top: 16px;
+    gap: var(--spacing-xs);
+    margin-top: var(--spacing-md);
+    padding-top: var(--spacing-md);
     border-top: 1px solid rgba(255, 255, 255, 0.06);
     color: rgba(255, 255, 255, 0.5);
     font-size: 12px;
@@ -281,12 +283,12 @@
 
 /* Variants */
 .modern-match-card.compact {
-    padding: 16px;
-    border-radius: 16px;
+    padding: var(--spacing-md);
+    border-radius: var(--radius-xl);
 }
 
 .modern-match-card.compact .card-header {
-    margin-bottom: 16px;
+    margin-bottom: var(--spacing-md);
 }
 
 .modern-match-card.compact .team-logo,
@@ -309,8 +311,8 @@
 }
 
 .modern-match-card.featured {
-    padding: 28px;
-    border-radius: 24px;
+    padding: var(--spacing-2xl);
+    border-radius: var(--radius-2xl);
     background: rgba(255, 255, 255, 0.03);
 }
 
@@ -344,7 +346,7 @@
             transparent 0%,
             #ff6b6b 50%,
             transparent 100%);
-    animation: liveFlow 3s linear infinite;
+    /* animation: liveFlow 3s linear infinite; */
     z-index: 10;
 }
 
@@ -361,12 +363,12 @@
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
     .modern-match-card {
-        padding: 16px;
-        border-radius: 16px;
+        padding: var(--spacing-md);
+        border-radius: var(--radius-md);
     }
 
     .teams-container {
-        gap: 12px;
+        gap: var(--spacing-sm);
     }
 
     .team-logo,
@@ -390,29 +392,29 @@
 
     .match-score {
         font-size: 16px;
-        padding: 6px 10px;
+        padding: var(--spacing-xs) var(--spacing-sm);
     }
 }
 
 @media (max-width: 480px) {
     .modern-match-card {
-        padding: 12px;
-        border-radius: 12px;
+        padding: var(--spacing-sm);
+        border-radius: var(--radius-lg);
     }
 
     .card-header {
-        margin-bottom: 16px;
+        margin-bottom: var(--spacing-md);
     }
 
     .teams-container {
         flex-direction: column;
-        gap: 16px;
+        gap: var(--spacing-md);
         text-align: center;
     }
 
     .team {
         flex-direction: column;
-        gap: 8px;
+        gap: var(--spacing-xs);
         text-align: center;
     }
 

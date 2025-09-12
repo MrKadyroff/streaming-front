@@ -17,7 +17,7 @@
             #1a2129 75%,
             #151b23 100%);
     background-size: 120px 120px, 120px 120px, 400px 400px, 200px 200px, 200px 200px, 100% 100%;
-    animation: gradientShift 25s ease infinite, fieldPattern 50s linear infinite;
+    /* animation: gradientShift 25s ease infinite, fieldPattern 50s linear infinite; */
     padding: 40px 0;
     position: relative;
     overflow-x: hidden;
@@ -98,15 +98,15 @@
         radial-gradient(circle at 80% 20%, rgba(34, 197, 94, 0.008) 1px, transparent 1px),
         radial-gradient(circle at 40% 40%, rgba(34, 197, 94, 0.006) 1px, transparent 1px);
     background-size: 200px 200px, 300px 300px, 150px 150px;
-    animation: floatingElements 30s linear infinite;
+    /* animation: floatingElements 30s linear infinite; */
     pointer-events: none;
 
 }
 
 .home-content {
-    max-width: 1200px;
+    max-width: var(--content-max-width);
     margin: 0 auto;
-    padding: 0 20px 40px 20px;
+    padding: 0 var(--spacing-lg) var(--spacing-3xl) var(--spacing-lg);
     position: relative;
     z-index: 1;
 }
@@ -115,10 +115,10 @@
 .featured-match-section,
 .live-streams-section,
 .upcoming-matches-section {
-    margin-bottom: 48px;
+    margin-bottom: var(--spacing-4xl);
     background: rgba(33, 38, 45, 0.4);
-    border-radius: 16px;
-    padding: 32px;
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-2xl);
     backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.08);
     transition: all 0.3s ease;
@@ -145,11 +145,11 @@
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', sans-serif;
     font-size: 1.5rem;
     font-weight: 600;
-    margin: 0 0 25px 0;
+    margin: 0 0 var(--spacing-xl) 0;
     color: var(--text-color);
     text-align: left;
     position: relative;
-    padding-bottom: 12px;
+    padding-bottom: var(--spacing-sm);
 }
 
 .featured-match-section h2::after,
@@ -165,49 +165,49 @@
     border-radius: 1px;
 }
 
-/* Сетка матчей - улучшенная адаптивность */
+/* Сетка матчей - улучшенная адаптивность используют единые стандарты */
 .matches-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 24px;
-    margin-top: 20px;
+    gap: var(--grid-gap-lg);
+    margin-top: var(--spacing-lg);
 }
 
-/* Оптимизированные брейкпоинты */
-@media (max-width: 1200px) {
+/* Оптимизированные брейкпоинты - единые стандарты */
+@media (max-width: 1024px) {
     .matches-grid {
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 20px;
+        gap: var(--grid-gap-md);
     }
 }
 
 @media (max-width: 768px) {
     .matches-grid {
         grid-template-columns: 1fr;
-        gap: 16px;
+        gap: var(--grid-gap-sm);
     }
 }
 
 @media (max-width: 480px) {
     .matches-grid {
-        gap: 12px;
+        gap: var(--grid-gap-xs);
     }
 }
 
-/* Сообщение об отсутствии матчей */
+/* Сообщение об отсутствии матчей - единые стандарты */
 .no-matches {
     text-align: center;
-    padding: 60px 20px;
+    padding: var(--spacing-5xl) var(--spacing-lg);
     background: rgba(33, 38, 45, 0.6);
-    border-radius: 16px;
+    border-radius: var(--radius-xl);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    margin: 20px auto;
-    max-width: 600px;
+    margin: var(--spacing-lg) auto;
+    max-width: var(--narrow-max-width);
     backdrop-filter: blur(8px);
 }
 
 .no-matches-content h3 {
-    margin: 0 0 12px 0;
+    margin: 0 0 var(--spacing-sm) 0;
     color: var(--text-color);
     font-size: 1.3rem;
     font-weight: 600;
@@ -215,7 +215,7 @@
 }
 
 .no-matches-content p {
-    margin: 0 0 16px 0;
+    margin: 0 0 var(--spacing-md) 0;
     color: var(--text-secondary);
     font-size: 1rem;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', sans-serif;
@@ -232,92 +232,92 @@
     text-decoration: underline;
 }
 
-/* Адаптивность - оптимизированные отступы */
-@media (max-width: 1200px) {
+/* Адаптивность - единые стандарты отступов */
+@media (max-width: 1024px) {
     .home-page {
-        padding: 30px 0;
+        padding: var(--spacing-2xl) 0;
     }
 
     .home-content {
-        padding: 0 24px 40px 24px;
+        padding: 0 var(--spacing-xl) var(--spacing-3xl) var(--spacing-xl);
     }
 
     .featured-match-section,
     .live-streams-section,
     .upcoming-matches-section {
-        padding: 24px;
-        margin-bottom: 40px;
+        padding: var(--spacing-xl);
+        margin-bottom: var(--spacing-3xl);
     }
 }
 
 @media (max-width: 768px) {
     .home-page {
-        padding: 20px 0;
+        padding: var(--spacing-lg) 0;
     }
 
     .home-content {
-        padding: 0 16px 32px 16px;
+        padding: 0 var(--spacing-md) var(--spacing-2xl) var(--spacing-md);
     }
 
     .featured-match-section,
     .live-streams-section,
     .upcoming-matches-section {
-        padding: 20px;
-        margin-bottom: 30px;
-        border-radius: 12px;
+        padding: var(--spacing-lg);
+        margin-bottom: var(--spacing-2xl);
+        border-radius: var(--radius-lg);
     }
 
     .featured-match-section h2,
     .live-streams-section h2,
     .upcoming-matches-section h2 {
         font-size: 1.3rem;
-        margin-bottom: 20px;
+        margin-bottom: var(--spacing-lg);
     }
 }
 
 @media (max-width: 480px) {
     .home-page {
-        padding: 16px 0;
+        padding: var(--spacing-md) 0;
     }
 
     .home-content {
-        padding: 0 12px 24px 12px;
+        padding: 0 var(--spacing-sm) var(--spacing-xl) var(--spacing-sm);
     }
 
     .featured-match-section,
     .live-streams-section,
     .upcoming-matches-section {
-        padding: 16px;
-        margin-bottom: 24px;
-        border-radius: 8px;
+        padding: var(--spacing-md);
+        margin-bottom: var(--spacing-xl);
+        border-radius: var(--radius-md);
     }
 
     .featured-match-section h2,
     .live-streams-section h2,
     .upcoming-matches-section h2 {
         font-size: 1.2rem;
-        margin-bottom: 16px;
+        margin-bottom: var(--spacing-md);
     }
 
     .no-matches {
-        padding: 32px 16px;
-        margin: 16px;
-        border-radius: 12px;
+        padding: var(--spacing-2xl) var(--spacing-md);
+        margin: var(--spacing-md);
+        border-radius: var(--radius-lg);
     }
 
     .player-section {
-        margin: 16px 0;
-        padding: 16px;
-        border-radius: 12px;
+        margin: var(--spacing-md) 0;
+        padding: var(--spacing-md);
+        border-radius: var(--radius-lg);
     }
 }
 
 .player-section {
     background: rgba(33, 38, 45, 0.8);
-    margin: 30px auto;
-    max-width: 1000px;
-    border-radius: 16px;
-    padding: 24px;
+    margin: var(--spacing-2xl) auto;
+    max-width: var(--content-max-width);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-xl);
     border: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(12px);
@@ -327,7 +327,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: var(--spacing-lg);
 }
 
 .player-header h2 {
@@ -344,9 +344,9 @@
 .close-player {
     background: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     color: var(--text-color);
-    padding: 8px 12px;
+    padding: var(--spacing-xs) var(--spacing-sm);
     cursor: pointer;
     font-size: 16px;
     transition: all 0.2s ease;
@@ -360,14 +360,14 @@
 }
 
 .main-player {
-    margin-bottom: 16px;
+    margin-bottom: var(--spacing-md);
 }
 
 .match-info {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 16px 0;
+    padding: var(--spacing-md) 0;
     border-top: 1px solid var(--border-color);
 }
 
@@ -381,8 +381,8 @@
 .live-badge {
     background: var(--danger-color);
     color: white;
-    padding: 6px 12px;
-    border-radius: 6px;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--radius-sm);
     font-size: 11px;
     font-weight: 600;
     text-transform: uppercase;
@@ -391,13 +391,13 @@
     box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
 }
 
-/* Hero section styles */
+/* Hero section styles - единые стандарты */
 .hero-section {
     background: linear-gradient(135deg, rgba(52, 152, 219, 0.1) 0%, var(--primary-color) 100%);
-    padding: 70px 20px;
+    padding: var(--spacing-5xl) var(--spacing-lg);
     text-align: center;
     color: white;
-    margin-bottom: 40px;
+    margin-bottom: var(--spacing-3xl);
     position: relative;
     overflow: hidden;
 }
@@ -405,7 +405,7 @@
 .hero-title {
     font-size: 48px;
     font-weight: 800;
-    margin-bottom: 16px;
+    margin-bottom: var(--spacing-md);
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
     text-transform: uppercase;
     letter-spacing: 0.02em;
@@ -414,14 +414,14 @@
 .hero-subtitle {
     font-size: 20px;
     opacity: 0.9;
-    margin-bottom: 32px;
+    margin-bottom: var(--spacing-2xl);
 }
 
 .hero-stats {
     display: flex;
     justify-content: center;
-    gap: 40px;
-    margin-top: 32px;
+    gap: var(--spacing-3xl);
+    margin-top: var(--spacing-2xl);
 }
 
 .stat-item {
@@ -441,17 +441,17 @@
     letter-spacing: 0.02em;
 }
 
-/* Mobile responsive */
+/* Mobile responsive - единые брейкпоинты */
 @media (max-width: 768px) {
     .player-section {
-        margin: 16px;
-        padding: 16px;
+        margin: var(--spacing-md);
+        padding: var(--spacing-md);
     }
 
     .player-header {
         flex-direction: column;
         align-items: flex-start;
-        gap: 12px;
+        gap: var(--spacing-sm);
     }
 
     .player-header h2 {
@@ -460,18 +460,18 @@
 
     .close-player {
         align-self: flex-end;
-        padding: 6px 10px;
+        padding: var(--spacing-xs) 10px;
         font-size: 14px;
     }
 
     .match-info {
         flex-direction: column;
         align-items: flex-start;
-        gap: 8px;
+        gap: var(--spacing-xs);
     }
 
     .hero-section {
-        padding: 40px 16px;
+        padding: var(--spacing-3xl) var(--spacing-md);
     }
 
     .hero-title {
@@ -484,7 +484,7 @@
 
     .hero-stats {
         flex-direction: column;
-        gap: 20px;
+        gap: var(--spacing-lg);
     }
 
     .stat-number {
@@ -502,31 +502,31 @@
     }
 }
 
-/* Large screen responsive */
+/* Large screen responsive - единые стандарты */
 @media (min-width: 1201px) {
     .home-content {
-        max-width: 1200px;
+        max-width: var(--content-max-width);
         margin: 0 auto;
-        padding: 0 40px 40px 40px;
+        padding: 0 var(--spacing-3xl) var(--spacing-3xl) var(--spacing-3xl);
     }
 
     .player-section {
-        max-width: 1200px;
+        max-width: var(--content-max-width);
     }
 
     .no-live-streams {
-        max-width: 1000px;
+        max-width: var(--content-max-width);
     }
 }
 
 .no-live-streams {
     text-align: center;
-    padding: 80px 20px;
+    padding: var(--spacing-6xl) var(--spacing-lg);
     background: var(--card-bg);
-    border-radius: var(--border-radius);
+    border-radius: var(--radius-md);
     border: 1px solid var(--border-color);
-    margin: 20px auto;
-    max-width: 800px;
+    margin: var(--spacing-lg) auto;
+    max-width: var(--narrow-max-width);
 }
 
 .no-live-streams h2 {

@@ -1,0 +1,760 @@
+/* 
+ * ЕДИНЫЙ СТАНДАРТ РАЗМЕТКИ И КОНТЕЙНЕРОВ
+ * Используется во всем приложении для обеспечения консистентности
+ */
+
+/* =====================================================
+   ЕДИНЫЕ РАЗМЕРЫ И ОТСТУПЫ
+   ===================================================== */
+
+:root {
+    /* Максимальные ширины контейнеров */
+    --container-max-width: 1400px;
+    --content-max-width: 1200px;
+    --narrow-max-width: 800px;
+    --wide-max-width: 1600px;
+
+    /* Единая система отступов */
+    --spacing-xs: 8px;
+    --spacing-sm: 12px;
+    --spacing-md: 16px;
+    --spacing-lg: 20px;
+    --spacing-xl: 24px;
+    --spacing-2xl: 32px;
+    --spacing-3xl: 40px;
+    --spacing-4xl: 48px;
+    --spacing-5xl: 64px;
+    --spacing-6xl: 80px;
+
+    /* Единые border-radius */
+    --radius-xs: 4px;
+    --radius-sm: 6px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+    --radius-2xl: 20px;
+    --radius-full: 50%;
+
+    /* Единые grid gaps */
+    --grid-gap-xs: 12px;
+    --grid-gap-sm: 16px;
+    --grid-gap-md: 20px;
+    --grid-gap-lg: 24px;
+    --grid-gap-xl: 32px;
+
+    /* Единые брейкпоинты */
+    --mobile: 480px;
+    --tablet: 768px;
+    --laptop: 1024px;
+    --desktop: 1200px;
+    --large: 1400px;
+    --xlarge: 1600px;
+}
+
+/* =====================================================
+   ЕДИНЫЕ КОНТЕЙНЕРЫ
+   ===================================================== */
+
+.container {
+    max-width: var(--container-max-width);
+    margin: 0 auto;
+    padding: 0 var(--spacing-lg);
+}
+
+.container-content {
+    max-width: var(--content-max-width);
+    margin: 0 auto;
+    padding: 0 var(--spacing-lg);
+}
+
+.container-narrow {
+    max-width: var(--narrow-max-width);
+    margin: 0 auto;
+    padding: 0 var(--spacing-lg);
+}
+
+.container-wide {
+    max-width: var(--wide-max-width);
+    margin: 0 auto;
+    padding: 0 var(--spacing-lg);
+}
+
+.container-fluid {
+    width: 100%;
+    padding: 0 var(--spacing-lg);
+}
+
+/* =====================================================
+   ЕДИНЫЕ СЕКЦИИ СТРАНИЦ
+   ===================================================== */
+
+.page-section {
+    margin-bottom: var(--spacing-4xl);
+    background: rgba(33, 38, 45, 0.4);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-2xl);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.page-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.02) 0%, transparent 100%);
+    pointer-events: none;
+}
+
+.section-header {
+    margin-bottom: var(--spacing-xl);
+}
+
+.section-title {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0 0 var(--spacing-md) 0;
+    color: var(--text-color);
+    position: relative;
+    padding-bottom: var(--spacing-sm);
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 40px;
+    height: 2px;
+    background: var(--primary-color);
+    border-radius: 1px;
+}
+
+/* =====================================================
+   ЕДИНЫЕ СЕТКИ
+   ===================================================== */
+
+.grid {
+    display: grid;
+    gap: var(--grid-gap-md);
+}
+
+.grid-auto {
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+}
+
+.grid-auto-sm {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.grid-auto-lg {
+    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+}
+
+.grid-1 {
+    grid-template-columns: 1fr;
+}
+
+.grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.grid-4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+/* =====================================================
+   ЕДИНЫЕ КАРТОЧКИ
+   ===================================================== */
+
+.card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    color: var(--text-color);
+}
+
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-hover);
+    border-color: var(--primary-color);
+}
+
+.card-compact {
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+}
+
+.card-large {
+    padding: var(--spacing-3xl);
+    border-radius: var(--radius-xl);
+}
+
+/* =====================================================
+   ЕДИНЫЕ СОСТОЯНИЯ КАРТОЧЕК
+   ===================================================== */
+
+.card-live {
+    border-color: var(--danger-color);
+    border-width: 2px;
+    background: linear-gradient(135deg, var(--card-bg) 0%, rgba(239, 68, 68, 0.08) 100%);
+    box-shadow: 0 2px 12px rgba(239, 68, 68, 0.15);
+}
+
+.card-selected {
+    border-color: var(--primary-color);
+    border-width: 2px;
+    background: linear-gradient(135deg, var(--card-bg) 0%, rgba(34, 197, 94, 0.1) 100%);
+    box-shadow: 0 4px 20px rgba(34, 197, 94, 0.2);
+    transform: translateY(-2px);
+}
+
+.card-featured {
+    border-color: #fbbf24;
+    border-width: 2px;
+    background: linear-gradient(135deg, var(--card-bg) 0%, rgba(251, 191, 36, 0.05) 100%);
+    box-shadow: 0 4px 20px rgba(251, 191, 36, 0.15);
+}
+
+/* =====================================================
+   ЕДИНЫЕ АДАПТИВНЫЕ БРЕЙКПОИНТЫ
+   ===================================================== */
+
+/* Большие экраны */
+@media (min-width: 1401px) {
+
+    .container,
+    .container-content,
+    .container-narrow,
+    .container-wide,
+    .container-fluid {
+        padding: 0 var(--spacing-3xl);
+    }
+
+    .page-section {
+        padding: var(--spacing-3xl);
+    }
+}
+
+/* Средние экраны (планшеты) */
+@media (max-width: 1024px) {
+
+    .container,
+    .container-content,
+    .container-narrow,
+    .container-wide,
+    .container-fluid {
+        padding: 0 var(--spacing-lg);
+    }
+
+    .page-section {
+        padding: var(--spacing-xl);
+        margin-bottom: var(--spacing-2xl);
+    }
+
+    .grid-auto {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+
+    .grid-auto-sm {
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    }
+
+    .grid-auto-lg {
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    }
+}
+
+/* Мобильные устройства */
+@media (max-width: 768px) {
+
+    .container,
+    .container-content,
+    .container-narrow,
+    .container-wide,
+    .container-fluid {
+        padding: 0 var(--spacing-md);
+    }
+
+    .page-section {
+        padding: var(--spacing-lg);
+        margin-bottom: var(--spacing-xl);
+        border-radius: var(--radius-lg);
+    }
+
+    .section-title {
+        font-size: 1.3rem;
+        margin-bottom: var(--spacing-lg);
+    }
+
+    .grid {
+        gap: var(--grid-gap-sm);
+    }
+
+    .grid-auto,
+    .grid-auto-sm,
+    .grid-auto-lg {
+        grid-template-columns: 1fr;
+    }
+
+    .grid-2,
+    .grid-3,
+    .grid-4 {
+        grid-template-columns: 1fr;
+    }
+
+    .card {
+        padding: var(--spacing-md);
+        border-radius: var(--radius-md);
+        margin-bottom: 0;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .card-compact {
+        padding: var(--spacing-sm);
+    }
+
+    .card-large {
+        padding: var(--spacing-lg);
+    }
+
+    /* Унификация всех карточек матчей в мобильной версии */
+    .match-card,
+    .modern-match-card,
+    .football-match-card {
+        padding: var(--spacing-md);
+        border-radius: var(--radius-md);
+        margin-bottom: 0;
+        width: 100%;
+        box-sizing: border-box;
+    }
+}
+
+/* Маленькие мобильные устройства */
+@media (max-width: 480px) {
+
+    .container,
+    .container-content,
+    .container-narrow,
+    .container-wide,
+    .container-fluid {
+        padding: 0 var(--spacing-sm);
+    }
+
+    .page-section {
+        padding: var(--spacing-md);
+        margin-bottom: var(--spacing-lg);
+        border-radius: var(--radius-md);
+    }
+
+    .section-title {
+        font-size: 1.2rem;
+        margin-bottom: var(--spacing-md);
+    }
+
+    .grid {
+        gap: var(--grid-gap-xs);
+    }
+
+    .card {
+        padding: var(--spacing-sm);
+        border-radius: var(--radius-sm);
+        margin-bottom: 0;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .card-compact {
+        padding: var(--spacing-xs);
+    }
+
+    .card-large {
+        padding: var(--spacing-md);
+    }
+
+    /* Унификация всех карточек матчей на малых мобильных */
+    .match-card,
+    .modern-match-card,
+    .football-match-card {
+        padding: var(--spacing-sm);
+        border-radius: var(--radius-sm);
+        margin-bottom: 0;
+        width: 100%;
+        box-sizing: border-box;
+    }
+}
+
+/* =====================================================
+   UTILITY КЛАССЫ
+   ===================================================== */
+
+/* Отступы */
+.mt-xs {
+    margin-top: var(--spacing-xs);
+}
+
+.mt-sm {
+    margin-top: var(--spacing-sm);
+}
+
+.mt-md {
+    margin-top: var(--spacing-md);
+}
+
+.mt-lg {
+    margin-top: var(--spacing-lg);
+}
+
+.mt-xl {
+    margin-top: var(--spacing-xl);
+}
+
+.mt-2xl {
+    margin-top: var(--spacing-2xl);
+}
+
+.mb-xs {
+    margin-bottom: var(--spacing-xs);
+}
+
+.mb-sm {
+    margin-bottom: var(--spacing-sm);
+}
+
+.mb-md {
+    margin-bottom: var(--spacing-md);
+}
+
+.mb-lg {
+    margin-bottom: var(--spacing-lg);
+}
+
+.mb-xl {
+    margin-bottom: var(--spacing-xl);
+}
+
+.mb-2xl {
+    margin-bottom: var(--spacing-2xl);
+}
+
+.p-xs {
+    padding: var(--spacing-xs);
+}
+
+.p-sm {
+    padding: var(--spacing-sm);
+}
+
+.p-md {
+    padding: var(--spacing-md);
+}
+
+.p-lg {
+    padding: var(--spacing-lg);
+}
+
+.p-xl {
+    padding: var(--spacing-xl);
+}
+
+.p-2xl {
+    padding: var(--spacing-2xl);
+}
+
+/* Специфические стили для карточек матчей */
+.match-cards-container {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.match-cards-container>* {
+    width: 100%;
+    box-sizing: border-box;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+/* Сетки матчей - единые стили */
+.matches-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: var(--grid-gap-lg);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.matches-grid>* {
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+}
+
+/* Обеспечиваем равномерные отступы в мобильной версии */
+@media (max-width: 768px) {
+    .match-cards-container {
+        padding: 0 var(--spacing-md);
+    }
+
+    .match-cards-container>* {
+        margin-bottom: var(--grid-gap-sm);
+    }
+
+    .match-cards-container>*:last-child {
+        margin-bottom: 0;
+    }
+
+    .matches-grid {
+        grid-template-columns: 1fr;
+        gap: var(--grid-gap-md);
+    }
+}
+
+@media (max-width: 480px) {
+    .match-cards-container {
+        padding: 0 var(--spacing-sm);
+    }
+
+    .match-cards-container>* {
+        margin-bottom: var(--grid-gap-xs);
+    }
+
+    .matches-grid {
+        gap: var(--grid-gap-sm);
+    }
+}
+
+/* Скрытие элементов */
+.hidden-mobile {
+    display: block;
+}
+
+.visible-mobile {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .hidden-mobile {
+        display: none;
+    }
+
+    .visible-mobile {
+        display: block;
+    }
+}
+
+/* Выравнивание */
+.text-center {
+    text-align: center;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.flex {
+    display: flex;
+}
+
+.flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.flex-between {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.flex-col {
+    display: flex;
+    flex-direction: column;
+}
+
+.flex-wrap {
+    flex-wrap: wrap;
+}
+
+.gap-xs {
+    gap: var(--spacing-xs);
+}
+
+.gap-sm {
+    gap: var(--spacing-sm);
+}
+
+.gap-md {
+    gap: var(--spacing-md);
+}
+
+.gap-lg {
+    gap: var(--spacing-lg);
+}
+
+.gap-xl {
+    gap: var(--spacing-xl);
+}
+
+/* Позиционирование */
+.relative {
+    position: relative;
+}
+
+.absolute {
+    position: absolute;
+}
+
+.fixed {
+    position: fixed;
+}
+
+.sticky {
+    position: sticky;
+}
+
+/* Радиусы */
+.rounded-xs {
+    border-radius: var(--radius-xs);
+}
+
+.rounded-sm {
+    border-radius: var(--radius-sm);
+}
+
+.rounded-md {
+    border-radius: var(--radius-md);
+}
+
+.rounded-lg {
+    border-radius: var(--radius-lg);
+}
+
+.rounded-xl {
+    border-radius: var(--radius-xl);
+}
+
+.rounded-full {
+    border-radius: var(--radius-full);
+}
+
+/* =====================================================
+   ИСПРАВЛЕНИЯ ДЛЯ МОБИЛЬНОЙ ВЕРСИИ
+   ===================================================== */
+
+/* Принудительное выравнивание всех карточек матчей */
+.match-card,
+.modern-match-card,
+.football-match-card {
+    display: block;
+    float: none;
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 0;
+}
+
+/* Принудительное выравнивание контейнеров сеток */
+.matches-grid,
+.match-grid {
+    display: grid;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* Принудительное выравнивание в мобильной версии */
+@media (max-width: 768px) {
+
+    .match-card,
+    .modern-match-card,
+    .football-match-card {
+        width: 100%;
+        max-width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+        float: none;
+        display: block;
+        box-sizing: border-box;
+    }
+
+    .matches-grid,
+    .match-grid {
+        grid-template-columns: 1fr;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+    }
+
+    /* Секции с карточками */
+    .featured-match-section,
+    .live-streams-section,
+    .upcoming-matches-section {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        overflow-x: hidden;
+    }
+
+    /* Плеер и связанные секции */
+    .player-section,
+    .hls-player,
+    .player {
+        width: 100%;
+        max-width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+        box-sizing: border-box;
+        float: none;
+        display: block;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .match-card,
+    .modern-match-card,
+    .football-match-card {
+        width: 100%;
+        max-width: 100%;
+        margin: 0;
+        padding: var(--spacing-sm);
+        box-sizing: border-box;
+    }
+
+    /* Плеер и связанные секции для мобильных */
+    .player-section,
+    .hls-player,
+    .player {
+        width: 100%;
+        max-width: 100%;
+        margin: 0;
+        padding: var(--spacing-sm);
+        box-sizing: border-box;
+        float: none;
+        display: block;
+    }
+}
