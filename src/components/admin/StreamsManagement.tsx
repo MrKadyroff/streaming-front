@@ -36,7 +36,7 @@ const StreamsManagement: React.FC<StreamsManagementProps> = ({
     // API методы для управления стримами
     const createStream = async (streamData: Omit<Stream, 'id' | 'viewers'>) => {
         try {
-            const response = await fetch('https://f4u.online:5001/api/admin/streams', {
+            const response = await fetch('https://f4u.online/api/admin/streams', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -57,7 +57,7 @@ const StreamsManagement: React.FC<StreamsManagementProps> = ({
 
     const updateStream = async (id: number, streamData: Partial<Stream>) => {
         try {
-            const response = await fetch(`https://f4u.online:5001/api/admin/streams/${id}`, {
+            const response = await fetch(`https://f4u.online/api/admin/streams/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -78,7 +78,7 @@ const StreamsManagement: React.FC<StreamsManagementProps> = ({
 
     const deleteStream = async (id: number) => {
         try {
-            const response = await fetch(`https://f4u.online:5001/api/admin/streams/${id}`, {
+            const response = await fetch(`https://f4u.online/api/admin/streams/${id}`, {
                 method: 'DELETE'
             });
 

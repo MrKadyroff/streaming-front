@@ -14,8 +14,8 @@ interface AuthProviderProps {
 
 // Учетные данные администратора
 const ADMIN_CREDENTIALS = {
-    username: 'admin',
-    password: 'admin'
+    username: 'chibissovdaniil@gmail.com',
+    password: 'Daniil2025!',
 };
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {

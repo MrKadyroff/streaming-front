@@ -9,7 +9,7 @@ export default function PlayerTabs() {
     const HLS_ORIGIN = 'https://f4u.online';
 
     useEffect(() => {
-        fetch('https://f4u.online:5001/streams')
+        fetch('https://f4u.online/streams')
             .then(r => r.json())
             .then(data => {
                 setStreams(data);

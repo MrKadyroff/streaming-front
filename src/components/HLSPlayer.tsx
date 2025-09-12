@@ -3,6 +3,19 @@ import Hls from 'hls.js';
 import { Stream } from '../services/streamApi';
 import './HLSPlayer.css';
 
+// Проверка доступности HLS потока (например, на 404)
+async function checkHlsExists(url: string, timeoutMs = 3000): Promise<boolean> {
+    try {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), timeoutMs);
+        const res = await fetch(url, { method: 'GET', signal: controller.signal });
+        clearTimeout(timeout);
+        return res.ok && (await res.text()).includes('#EXTM3U');
+    } catch {
+        return false;
+    }
+}
+
 interface HLSPlayerProps {
     stream: Stream | null;
     onError?: () => void;
@@ -23,69 +36,95 @@ const HLSPlayer: React.FC<HLSPlayerProps> = ({
     const [isLoading, setIsLoading] = useState(false);
     const [isFullscreen, setIsFullscreen] = useState(false);
 
-    // Инициализация плеера
+    // Инициализация плеера с проверкой 404 для HLS
     useEffect(() => {
-        if (!videoRef.current || !stream?.streamUrl) return;
+        let cancelled = false;
 
-        const video = videoRef.current;
-        setError(null);
-        setIsLoading(true);
+        async function setupPlayer() {
+            if (!videoRef.current || !stream?.streamUrl) return;
 
-        // Проверяем поддержку HLS
-        if (video.canPlayType('application/vnd.apple.mpegurl')) {
-            // Native HLS support (Safari, iOS)
-            video.src = stream.streamUrl;
-            video.load();
-        } else if (Hls.isSupported()) {
-            // HLS.js для других браузеров
-            const hls = new Hls({
-                enableWorker: false,
-                lowLatencyMode: true,
-                backBufferLength: 90
-            });
+            setError(null);
+            setIsLoading(true);
 
-            hlsRef.current = hls;
-            hls.loadSource(stream.streamUrl);
-            hls.attachMedia(video);
+            // Проверяем, существует ли поток (например, 404)
+            const exists = await checkHlsExists(stream.streamUrl, 3000);
+            if (cancelled) return;
 
-            hls.on(Hls.Events.MANIFEST_PARSED, () => {
+            if (!exists) {
+                setError('Нет активных трансляций');
                 setIsLoading(false);
-            });
+                onError?.();
+                return;
+            }
 
-            hls.on(Hls.Events.ERROR, (event, data) => {
-                console.error('HLS Error:', data);
-                if (data.fatal) {
-                    setError('Ошибка воспроизведения потока');
+            const video = videoRef.current;
+
+            // Проверяем поддержку HLS
+            if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                // Native HLS support (Safari, iOS)
+                video.src = stream.streamUrl;
+                video.load();
+            } else if (Hls.isSupported()) {
+                // HLS.js для других браузеров
+                const hls = new Hls({
+                    enableWorker: false,
+                    lowLatencyMode: true,
+                    backBufferLength: 90
+                });
+
+                hlsRef.current = hls;
+                hls.loadSource(stream.streamUrl);
+                hls.attachMedia(video);
+
+                hls.on(Hls.Events.MANIFEST_PARSED, () => {
                     setIsLoading(false);
-                    onError?.();
+                });
+
+                hls.on(Hls.Events.ERROR, (event, data) => {
+                    console.error('HLS Error:', data);
+                    if (data.fatal) {
+                        setError('Нет активных трансляций');
+                        setIsLoading(false);
+                        onError?.();
+                    }
+                });
+            } else {
+                setError('Ваш браузер не поддерживает воспроизведение HLS');
+                setIsLoading(false);
+            }
+
+            // Событие загрузки
+            const handleLoadStart = () => setIsLoading(true);
+            const handleCanPlay = () => setIsLoading(false);
+            const handleError = () => {
+                setError('Нет активных трансляций');
+                setIsLoading(false);
+                onError?.();
+            };
+
+            video.addEventListener('loadstart', handleLoadStart);
+            video.addEventListener('canplay', handleCanPlay);
+            video.addEventListener('error', handleError);
+
+            return () => {
+                if (hlsRef.current) {
+                    hlsRef.current.destroy();
+                    hlsRef.current = null;
                 }
-            });
-        } else {
-            setError('Ваш браузер не поддерживает воспроизведение HLS');
-            setIsLoading(false);
+                video.removeEventListener('loadstart', handleLoadStart);
+                video.removeEventListener('canplay', handleCanPlay);
+                video.removeEventListener('error', handleError);
+            };
         }
 
-        // Событие загрузки
-        const handleLoadStart = () => setIsLoading(true);
-        const handleCanPlay = () => setIsLoading(false);
-        const handleError = () => {
-            setError('Ошибка загрузки видео');
-            setIsLoading(false);
-            onError?.();
-        };
-
-        video.addEventListener('loadstart', handleLoadStart);
-        video.addEventListener('canplay', handleCanPlay);
-        video.addEventListener('error', handleError);
+        setupPlayer();
 
         return () => {
+            cancelled = true;
             if (hlsRef.current) {
                 hlsRef.current.destroy();
                 hlsRef.current = null;
             }
-            video.removeEventListener('loadstart', handleLoadStart);
-            video.removeEventListener('canplay', handleCanPlay);
-            video.removeEventListener('error', handleError);
         };
     }, [stream?.streamUrl, onError]);
 
@@ -103,7 +142,7 @@ const HLSPlayer: React.FC<HLSPlayerProps> = ({
             }
         } catch (error) {
             console.error('Error playing video:', error);
-            setError('Ошибка воспроизведения');
+            // setError('Ошибка воспроизведения');
         }
     };
 
@@ -170,13 +209,22 @@ const HLSPlayer: React.FC<HLSPlayerProps> = ({
     const handleVideoPause = () => setIsPlaying(false);
     const handleVideoEnded = () => setIsPlaying(false);
 
-    if (!stream) {
+    // Показываем экран "нет активных трансляций" если нет потока или есть ошибка
+    if (!stream || error) {
         return (
             <div className={`hls-player no-stream ${className}`}>
                 <div className="no-stream-content">
                     <div className="no-stream-icon">📺</div>
                     <h3>Нет активных трансляций</h3>
-                    <p>В данный момент нет доступных потоков для воспроизведения</p>
+                    <p>{error || 'В данный момент нет доступных потоков для воспроизведения'}</p>
+                    {/* {stream && (
+                        <button
+                            className="refresh-button"
+                            onClick={handleRefresh}
+                        >
+                            🔄 Попробовать снова
+                        </button>
+                    )} */}
                 </div>
             </div>
         );
@@ -204,23 +252,6 @@ const HLSPlayer: React.FC<HLSPlayerProps> = ({
                             <div className="loading-spinner">
                                 <div className="spinner"></div>
                                 <span>Загрузка трансляции...</span>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* Сообщение об ошибке */}
-                    {error && (
-                        <div className="error-overlay">
-                            <div className="error-content">
-                                <div className="error-icon">⚠️</div>
-                                <h4>Ошибка воспроизведения</h4>
-                                <p>{error}</p>
-                                <button
-                                    className="refresh-button"
-                                    onClick={handleRefresh}
-                                >
-                                    🔄 Обновить
-                                </button>
                             </div>
                         </div>
                     )}

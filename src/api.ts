@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE = 'http://13.62.12.103/';
+const API_BASE = 'https://f4u.online/';
 
 const api = axios.create({
     baseURL: API_BASE,
@@ -42,7 +42,7 @@ export const getUsers = () => api.get('/api/admin/users');
 export const getAds = () => api.get('/api/admin/ads');
 export const getMatches = () => api.get('/api/admin/schedule');
 export const getReports = () => api.get('/api/admin/reports');
-export const getHealth = () => api.get('/health');
+export const getHealth = () => api.get('/Health');
 
 // Управление рекламой
 export const createAd = (data: CreateAdDto) => api.post('/api/admin/ads', data);

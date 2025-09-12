@@ -28,9 +28,7 @@ const PageWithBanners: React.FC<PageWithBannersProps> = ({ children }) => {
                         return <PromoBanner key={banner.id} banner={banner} />;
                     })
                 ) : (
-                    <div style={{ color: 'red', border: '1px solid red', padding: '10px' }}>
-                        Нет левых объявлений
-                    </div>
+                    <></>
                 )}
             </div>
 
@@ -67,9 +65,7 @@ const PageWithBanners: React.FC<PageWithBannersProps> = ({ children }) => {
                         return <PromoBanner key={banner.id} banner={banner} />;
                     })
                 ) : (
-                    <div style={{ color: 'red', border: '1px solid red', padding: '10px' }}>
-                        Нет правых объявлений
-                    </div>
+                    <>   </>
                 )}
             </div>
         </div>

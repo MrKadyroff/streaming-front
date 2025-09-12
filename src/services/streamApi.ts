@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://13.62.12.103/';
+const API_BASE_URL = 'https://f4u.online/';
 
 export interface Stream {
     id: number;
@@ -35,7 +35,7 @@ class StreamApiService {
 
     async getStreams(page: number = 1, limit: number = 20): Promise<StreamsResponse> {
         try {
-            const response = await this.api.get(`/admin/streams`, {
+            const response = await this.api.get(`/api/admin/streams`, {
                 params: { page, limit }
             });
             return response.data;

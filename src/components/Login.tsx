@@ -94,12 +94,7 @@ const Login: React.FC = () => {
                         </button>
                     </form>
 
-                    <div className="login-footer">
-                        <div className="login-hint">
-                            <p>Подсказка для разработки:</p>
-                            <p>Логин: <code>admin</code>, Пароль: <code>admin</code></p>
-                        </div>
-                    </div>
+
                 </div>
             </div>
         </div>

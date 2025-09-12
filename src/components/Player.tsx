@@ -179,7 +179,7 @@ const Player: React.FC<PlayerProps> = ({
         const onPause = () => setIsPlaying(false);
         const onError = (e: Event) => {
             const target = e.target as HTMLVideoElement;
-            setLastError(target.error?.message || 'Ошибка воспроизведения');
+            // setLastError(target.error?.message || 'Ошибка воспроизведения');
         };
 
         video.addEventListener('play', onPlay);

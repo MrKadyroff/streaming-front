@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'https://f4u.online:5001';
+const API_BASE_URL = 'https://f4u.online';
 
 // Create axios instance
 const api = axios.create({
