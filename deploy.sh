@@ -42,4 +42,4 @@ else
 fi
 
 echo "🎉 Deployment completed!"
-echo "🌐 Visit: http://185.4.180.54"
+echo "🌐 Visit: https://f4u.online"

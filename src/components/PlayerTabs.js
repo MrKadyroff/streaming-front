@@ -6,10 +6,10 @@ export default function PlayerTabs() {
     const [streams, setStreams] = useState([]);
     const [selectedStreamId, setSelectedStreamId] = useState('');
     const demoSrc = 'https://media.w3.org/2010/05/sintel/trailer_hd.mp4';
-    const HLS_ORIGIN = 'http://185.4.180.54';
+    const HLS_ORIGIN = 'https://f4u.online';
 
     useEffect(() => {
-        fetch('http://185.4.180.54:5001/streams')
+        fetch('https://f4u.online:5001/streams')
             .then(r => r.json())
             .then(data => {
                 setStreams(data);

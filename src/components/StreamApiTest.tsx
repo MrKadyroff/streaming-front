@@ -83,7 +83,7 @@ const StreamApiTest: React.FC = () => {
                 }}>
                     <h4>❌ Ошибка подключения:</h4>
                     <p>{error}</p>
-                    <small>API URL: http://185.4.180.54:5001/api/admin/streams</small>
+                    <small>API URL: https://f4u.online:5001/api/admin/streams</small>
                 </div>
             )}
 

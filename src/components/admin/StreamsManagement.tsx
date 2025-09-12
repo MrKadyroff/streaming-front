@@ -27,7 +27,7 @@ const StreamsManagement: React.FC<StreamsManagementProps> = ({
 
     const [formData, setFormData] = useState({
         title: '',
-        streamUrl: 'http://185.4.180.54/hls/stream1/index.m3u8',
+        streamUrl: 'https://f4u.online/hls/stream1/index.m3u8',
         fallbackUrl: '',
         status: 'upcoming' as Stream['status'],
         quality: ['1080p', '720p', '480p']
@@ -36,7 +36,7 @@ const StreamsManagement: React.FC<StreamsManagementProps> = ({
     // API методы для управления стримами
     const createStream = async (streamData: Omit<Stream, 'id' | 'viewers'>) => {
         try {
-            const response = await fetch('http://185.4.180.54:5001/api/admin/streams', {
+            const response = await fetch('https://f4u.online:5001/api/admin/streams', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -57,7 +57,7 @@ const StreamsManagement: React.FC<StreamsManagementProps> = ({
 
     const updateStream = async (id: number, streamData: Partial<Stream>) => {
         try {
-            const response = await fetch(`http://185.4.180.54:5001/api/admin/streams/${id}`, {
+            const response = await fetch(`https://f4u.online:5001/api/admin/streams/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -78,7 +78,7 @@ const StreamsManagement: React.FC<StreamsManagementProps> = ({
 
     const deleteStream = async (id: number) => {
         try {
-            const response = await fetch(`http://185.4.180.54:5001/api/admin/streams/${id}`, {
+            const response = await fetch(`https://f4u.online:5001/api/admin/streams/${id}`, {
                 method: 'DELETE'
             });
 
@@ -107,7 +107,7 @@ const StreamsManagement: React.FC<StreamsManagementProps> = ({
             setEditingStream(null);
             setFormData({
                 title: '',
-                streamUrl: 'http://185.4.180.54/hls/stream1/index.m3u8',
+                streamUrl: 'https://f4u.online/hls/stream1/index.m3u8',
                 fallbackUrl: '',
                 status: 'upcoming',
                 quality: ['1080p', '720p', '480p']
@@ -324,10 +324,10 @@ const StreamsManagement: React.FC<StreamsManagementProps> = ({
                                     type="url"
                                     value={formData.streamUrl}
                                     onChange={(e) => setFormData({ ...formData, streamUrl: e.target.value })}
-                                    placeholder="http://185.4.180.54/hls/stream1/index.m3u8"
+                                    placeholder="https://f4u.online/hls/stream1/index.m3u8"
                                     required
                                 />
-                                <small>Базовый URL: http://185.4.180.54/hls/</small>
+                                <small>Базовый URL: https://f4u.online/hls/</small>
                             </div>
 
                             <div className="form-group">

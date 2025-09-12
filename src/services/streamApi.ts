@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://185.4.180.54:5001/api';
+const API_BASE_URL = 'http://13.62.12.103/';
 
 export interface Stream {
     id: number;
