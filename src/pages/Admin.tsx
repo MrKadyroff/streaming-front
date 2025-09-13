@@ -131,8 +131,7 @@ const Admin: React.FC = () => {
                 time: matchData.time || '00:00',
                 tournament: matchData.tournament || '',
                 sport: matchData.sport || 'football',
-                venue: matchData.venue || '',
-                status: matchData.status || 'upcoming'
+                venue: matchData.venue || ''
             };
 
             if (editingMatch) {

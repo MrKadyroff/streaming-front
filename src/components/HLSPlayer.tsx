@@ -196,14 +196,6 @@ const HLSPlayer: React.FC<HLSPlayerProps> = ({
         }
     };
 
-    // Обновление плеера
-    const handleRefresh = () => {
-        setError(null);
-        if (videoRef.current && stream?.streamUrl) {
-            videoRef.current.load();
-        }
-    };
-
     // Обработчики событий видео
     const handleVideoPlay = () => setIsPlaying(true);
     const handleVideoPause = () => setIsPlaying(false);
