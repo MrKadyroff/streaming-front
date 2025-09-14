@@ -18,6 +18,7 @@ const Home: React.FC = () => {
     const [selectedMatch, setSelectedMatch] = useState<Match | null>(null);
     const [activeStream, setActiveStream] = useState<Stream | null>(null);
     const [allStreams, setAllStreams] = useState<Stream[]>([]);
+    const [upcomingStreams, setUpcomingStreams] = useState<Stream[]>([]);
     const [streamLoading, setStreamLoading] = useState<boolean>(true);
 
     // Загружаем активные потоки
@@ -48,10 +49,26 @@ const Home: React.FC = () => {
             }
         };
 
+        const loadUpcomingStreams = async () => {
+            try {
+                console.log('Загружаем предстоящие стримы...');
+                const upcoming = await streamApi.getUpcomingStreams();
+                console.log('Предстоящие стримы:', upcoming);
+                setUpcomingStreams(upcoming);
+            } catch (error) {
+                console.error('Error loading upcoming streams:', error);
+                setUpcomingStreams([]);
+            }
+        };
+
         loadActiveStreams();
+        loadUpcomingStreams();
 
         // Обновляем потоки каждые 30 секунд
-        const interval = setInterval(loadActiveStreams, 30000);
+        const interval = setInterval(() => {
+            loadActiveStreams();
+            loadUpcomingStreams();
+        }, 30000);
 
         return () => clearInterval(interval);
     }, []);
@@ -69,6 +86,45 @@ const Home: React.FC = () => {
 
     const closePlayer = () => {
         setSelectedMatch(null);
+    };
+
+    // Функция для форматирования времени
+    const formatStreamTime = (startTime: string) => {
+        const date = new Date(startTime);
+        return date.toLocaleTimeString('ru-RU', {
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    };
+
+    // Функция для форматирования даты
+    const formatStreamDate = (startTime: string) => {
+        const date = new Date(startTime);
+        const today = new Date();
+        const tomorrow = new Date(today);
+        tomorrow.setDate(today.getDate() + 1);
+
+        if (date.toDateString() === today.toDateString()) {
+            return 'Сегодня';
+        } else if (date.toDateString() === tomorrow.toDateString()) {
+            return 'Завтра';
+        } else {
+            return date.toLocaleDateString('ru-RU', {
+                day: '2-digit',
+                month: '2-digit'
+            });
+        }
+    };
+
+    // Функция для получения понятного статуса
+    const getStreamStatusText = (status: string) => {
+        switch (status) {
+            case 'live': return 'В эфире';
+            case 'upcoming': return 'Скоро';
+            case 'ended': return 'Завершен';
+            case 'offline': return 'Офлайн';
+            default: return 'Неизвестно';
+        }
     };
 
     // Фильтруем только футбольные матчи
@@ -123,28 +179,72 @@ const Home: React.FC = () => {
                     </div>
                     <HLSPlayer stream={activeStream} />
 
-                    {/* Информация о текущем стриме */}
-                    {activeStream && (
-                        <div className="stream-info-panel">
-                            <h3>{activeStream.title}</h3>
-                            <div className="stream-details">
-                                <span className="stream-status">
-                                    <span className="status-dot"></span>
-                                    {activeStream.status === 'live' ? 'В эфире' : 'Доступен'}
-                                </span>
-                                {activeStream.viewers > 0 && (
-                                    <span className="stream-viewers">
-                                        👥 {activeStream.viewers} зрителей
+                    {/* Информация о текущем стриме и расписание */}
+                    <div className="stream-info-panel">
+                        {activeStream && (
+                            <div className="current-stream-info">
+                                <h3>{activeStream.title}</h3>
+                                <div className="stream-details">
+                                    <span className="stream-status">
+                                        <span className="status-dot"></span>
+                                        {getStreamStatusText(activeStream.status)}
                                     </span>
-                                )}
-                                {activeStream.quality && activeStream.quality.length > 0 && (
-                                    <span className="stream-quality">
-                                        📺 {activeStream.quality.join(', ')}
-                                    </span>
-                                )}
+                                    {(activeStream.viewers || 0) > 0 && (
+                                        <span className="stream-viewers">
+                                            👥 {activeStream.viewers || 0} зрителей
+                                        </span>
+                                    )}
+                                </div>
                             </div>
-                        </div>
-                    )}
+                        )}
+
+                        {/* Расписание предстоящих эфиров */}
+                        {false && (
+                            <div className="upcoming-schedule">
+                                <h3 className="schedule-title">
+                                    📅 Расписание трансляций
+                                </h3>
+
+                                {upcomingStreams.length > 0 ? (
+                                    <div className="schedule-list">
+                                        {upcomingStreams.slice(0, 4).map((stream) => (
+                                            <div key={stream.id} className="schedule-item">
+                                                <div className="schedule-time">
+                                                    <div className="schedule-date">
+                                                        {formatStreamDate(stream.startTime!)}
+                                                    </div>
+                                                    <div className="schedule-clock">
+                                                        {formatStreamTime(stream.startTime!)}
+                                                    </div>
+                                                </div>
+                                                <div className="schedule-content">
+                                                    <div className="schedule-title-text">
+                                                        {stream.title}
+                                                    </div>
+                                                    <div className="schedule-status">
+                                                        <span className="status-badge upcoming-badge">
+                                                            {getStreamStatusText(stream.status)}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+
+                                        {upcomingStreams.length > 4 && (
+                                            <div className="schedule-more">
+                                                <Link to="/schedule" className="schedule-more-link">
+                                                    Ещё {upcomingStreams.length - 4} трансляций →
+                                                </Link>
+                                            </div>
+                                        )}
+                                    </div>
+                                ) : (
+                                    <div className="no-upcoming">
+                                        <p>На данный момент нет запланированных трансляций</p>
+                                    </div>
+                                )}
+                            </div>)}
+                    </div>
                 </div>
 
                 {/* Ближайший матч на фоне футбольного поля */}

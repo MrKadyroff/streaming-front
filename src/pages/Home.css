@@ -690,6 +690,140 @@
     gap: 4px;
 }
 
+/* Schedule Styles */
+.stream-info-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.current-stream-info {
+    text-align: center;
+}
+
+.upcoming-schedule {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 20px;
+}
+
+.schedule-title {
+    color: #ffffff;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0 0 16px 0;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.schedule-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.schedule-item {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 16px;
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.schedule-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--primary-color);
+    transform: translateY(-1px);
+}
+
+.schedule-time {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.schedule-date {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 500;
+}
+
+.schedule-clock {
+    font-size: 16px;
+    color: var(--primary-color);
+    font-weight: 700;
+}
+
+.schedule-content {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.schedule-title-text {
+    font-size: 14px;
+    color: #ffffff;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.schedule-status {
+    display: flex;
+    align-items: center;
+}
+
+.status-badge {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.upcoming-badge {
+    background: rgba(245, 158, 11, 0.2);
+    color: #f59e0b;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.schedule-more {
+    text-align: center;
+    margin-top: 8px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.schedule-more-link {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.schedule-more-link:hover {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+.no-upcoming {
+    text-align: center;
+    padding: 20px;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 14px;
+}
+
+.no-upcoming p {
+    margin: 0;
+}
+
 @keyframes pulse {
 
     0%,
@@ -782,5 +916,31 @@
 
     .stream-info-panel h3 {
         font-size: 1rem;
+    }
+
+    /* Mobile schedule styles */
+    .schedule-item {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto;
+        gap: 8px;
+        text-align: center;
+    }
+
+    .schedule-time {
+        flex-direction: row;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .schedule-date {
+        font-size: 12px;
+    }
+
+    .schedule-clock {
+        font-size: 14px;
+    }
+
+    .schedule-title-text {
+        font-size: 13px;
     }
 }

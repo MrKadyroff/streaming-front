@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Deploy script for SportCast frontend
+# Deploy script for F4U frontend
 echo "🚀 Starting deployment to server..."
 
 # Build the project

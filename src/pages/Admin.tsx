@@ -129,7 +129,7 @@ const Admin: React.FC = () => {
                 awayTeam: typeof matchData.awayTeam === 'string' ? matchData.awayTeam : matchData.awayTeam?.name || matchData.player2,
                 date: matchData.date || new Date().toISOString(),
                 time: matchData.time || '00:00',
-                tournament: matchData.tournament || '',
+                tournament: '', // Всегда отправляем пустой турнир
                 sport: matchData.sport || 'football',
                 venue: matchData.venue || ''
             };

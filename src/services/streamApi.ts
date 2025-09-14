@@ -6,7 +6,7 @@ export interface Stream {
     id: number;
     title: string;
     status: 'upcoming' | 'live' | 'ended' | 'offline';
-    viewers: number;
+    viewers: number | null;
     streamUrl: string;
     fallbackUrl: string;
     startTime: string | null;
@@ -61,6 +61,26 @@ class StreamApiService {
             return activeStreams;
         } catch (error) {
             console.error('Error fetching active streams:', error);
+            return [];
+        }
+    }
+
+    async getUpcomingStreams(): Promise<Stream[]> {
+        try {
+            const response = await this.getStreams(1, 50);
+            // Фильтруем предстоящие стримы
+            const upcomingStreams = response.streams.filter(stream =>
+                stream.status === 'upcoming' && stream.startTime
+            );
+
+            // Сортируем по времени начала
+            return upcomingStreams.sort((a, b) => {
+                const timeA = new Date(a.startTime!).getTime();
+                const timeB = new Date(b.startTime!).getTime();
+                return timeA - timeB;
+            });
+        } catch (error) {
+            console.error('Error fetching upcoming streams:', error);
             return [];
         }
     }

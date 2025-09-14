@@ -9,7 +9,7 @@ interface HlsStream {
     status: string;
     quality: string;
     bitrate: number;
-    viewers: number;
+    viewers: number | null;
     createdAt: string;
     updatedAt: string;
 }
@@ -264,7 +264,7 @@ const HlsManagement: React.FC = () => {
                                         </div>
                                         <div className="stat">
                                             <span className="stat-label">Зрители:</span>
-                                            <span className="stat-value">{stream.viewers}</span>
+                                            <span className="stat-value">{stream.viewers || 0}</span>
                                         </div>
                                     </div>
                                 </div>

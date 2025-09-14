@@ -36,7 +36,7 @@ const Login: React.FC = () => {
                 <div className="login-card">
                     <div className="login-header">
                         <div className="login-logo">
-                            <img src="/logo.svg" alt="SportCast" />
+                            <img src="/logo.svg" alt="F4U" />
                         </div>
                         <h1>Вход в админ-панель</h1>
                         <p>Введите учетные данные для доступа</p>

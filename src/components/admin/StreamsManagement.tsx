@@ -5,10 +5,14 @@ export interface Stream {
     id: number;
     title: string;
     status: 'active' | 'upcoming' | 'ended';
-    viewers: number;
+    viewers: number | null;
     streamUrl: string;
     fallbackUrl?: string;
     startTime?: string;
+    date?: string;
+    player1?: string;
+    player2?: string;
+    venue?: string;
     quality: string[];
 }
 
@@ -190,7 +194,7 @@ const StreamsManagement: React.FC<StreamsManagementProps> = ({
     return (
         <div className="streams-management">
             <div className="management-header">
-                <h2>Управление эфирами</h2>
+                <h2>Расписание трансляций</h2>
                 <div className="header-actions">
                     <button
                         className="refresh-btn"
@@ -208,7 +212,7 @@ const StreamsManagement: React.FC<StreamsManagementProps> = ({
                 </div>
             </div>
 
-            <div className="streams-grid">
+            <div className="schedule-list">
                 {streams.length === 0 ? (
                     <div className="no-streams">
                         <div className="no-streams-icon">📺</div>
@@ -223,9 +227,35 @@ const StreamsManagement: React.FC<StreamsManagementProps> = ({
                     </div>
                 ) : (
                     streams.map(stream => (
-                        <div key={stream.id} className="stream-card">
-                            <div className="stream-header">
-                                <div className="stream-status">
+                        <div key={stream.id} className="schedule-item">
+                            <div className="schedule-time">
+                                <div className="match-date">
+                                    {stream.date ? new Date(stream.date).toLocaleDateString('ru-RU', {
+                                        day: '2-digit',
+                                        month: '2-digit'
+                                    }) : 'Сегодня'}
+                                </div>
+                                <div className="match-time">
+                                    {stream.startTime ? new Date(stream.startTime).toLocaleTimeString('ru-RU', {
+                                        hour: '2-digit',
+                                        minute: '2-digit'
+                                    }) : '--:--'}
+                                </div>
+                            </div>
+
+                            <div className="schedule-teams">
+                                <div className="team-names">
+                                    <div className="team">{stream.player1 || 'Команда 1'}</div>
+                                    <div className="vs">VS</div>
+                                    <div className="team">{stream.player2 || 'Команда 2'}</div>
+                                </div>
+                                {stream.venue && (
+                                    <div className="venue">{stream.venue}</div>
+                                )}
+                            </div>
+
+                            <div className="schedule-status">
+                                <div className="status-badge" data-status={stream.status}>
                                     <span
                                         className="status-indicator"
                                         style={{ backgroundColor: getStatusColor(stream.status) }}
@@ -234,63 +264,50 @@ const StreamsManagement: React.FC<StreamsManagementProps> = ({
                                         {getStatusText(stream.status)}
                                     </span>
                                 </div>
-                                <div className="stream-actions">
-                                    <button
-                                        className="edit-btn"
-                                        onClick={() => handleOpenModal(stream)}
-                                        title="Редактировать"
-                                    >
-                                        ✏️
-                                    </button>
-                                    <button
-                                        className="delete-btn"
-                                        onClick={() => handleDelete(stream.id)}
-                                        title="Удалить"
-                                    >
-                                        🗑️
-                                    </button>
-                                </div>
+
+                                {stream.status === 'active' && (
+                                    <div className="viewers-count">
+                                        👥 {(stream.viewers || 0).toLocaleString()}
+                                    </div>
+                                )}
                             </div>
 
-                            <div className="stream-content">
-                                <h3 className="stream-title">{stream.title}</h3>
+                            <div className="schedule-actions">
+                                <button
+                                    className="edit-btn"
+                                    onClick={() => handleOpenModal(stream)}
+                                    title="Редактировать"
+                                >
+                                    ✏️
+                                </button>
 
-                                <div className="stream-info">
-                                    <div className="info-item">
-                                        <span className="info-label">Зрители:</span>
-                                        <span className="info-value">{stream.viewers.toLocaleString()}</span>
-                                    </div>
+                                {stream.status === 'upcoming' && (
+                                    <button
+                                        className="start-btn compact"
+                                        onClick={() => handleStatusChange(stream.id, 'active')}
+                                        title="Запустить эфир"
+                                    >
+                                        ▶️
+                                    </button>
+                                )}
 
-                                    <div className="info-item">
-                                        <span className="info-label">Качество:</span>
-                                        <span className="info-value">{stream.quality.join(', ')}</span>
-                                    </div>
-                                </div>
+                                {stream.status === 'active' && (
+                                    <button
+                                        className="stop-btn compact"
+                                        onClick={() => handleStatusChange(stream.id, 'ended')}
+                                        title="Завершить эфир"
+                                    >
+                                        ⏹️
+                                    </button>
+                                )}
 
-                                <div className="stream-url">
-                                    <span className="url-label">Stream URL:</span>
-                                    <code className="url-value">{stream.streamUrl}</code>
-                                </div>
-
-                                <div className="stream-controls">
-                                    {stream.status === 'upcoming' && (
-                                        <button
-                                            className="start-btn"
-                                            onClick={() => handleStatusChange(stream.id, 'active')}
-                                        >
-                                            🔴 Запустить эфир
-                                        </button>
-                                    )}
-
-                                    {stream.status === 'active' && (
-                                        <button
-                                            className="stop-btn"
-                                            onClick={() => handleStatusChange(stream.id, 'ended')}
-                                        >
-                                            ⏹️ Завершить эфир
-                                        </button>
-                                    )}
-                                </div>
+                                <button
+                                    className="delete-btn"
+                                    onClick={() => handleDelete(stream.id)}
+                                    title="Удалить"
+                                >
+                                    🗑️
+                                </button>
                             </div>
                         </div>
                     ))

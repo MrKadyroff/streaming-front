@@ -38,7 +38,7 @@ const Navigation: React.FC = () => {
 
                     <div className="nav-brand">
                         <Link to="/" className="brand-link">
-                            <img src="/logo.svg" alt="SportCast" className="brand-logo" />
+                            <img src="/logo.svg" alt="F4U" className="brand-logo" />
                         </Link>
                     </div>
 

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './MatchModal.css';
-import { Match, FootballTeamInfo } from '../types';
-import TeamSelector from './TeamSelector';
+import { Match } from '../types';
 
 interface MatchModalProps {
     isOpen: boolean;
@@ -17,13 +16,11 @@ const MatchModal: React.FC<MatchModalProps> = ({ isOpen, onClose, onSubmit, edit
         date: '',
         time: '',
         tournament: '',
-        sport: 'tennis',
+        sport: 'football',
         isLive: false,
         status: 'upcoming' as 'live' | 'upcoming' | 'finished',
         streamUrl: '',
         previewImage: '',
-        homeTeam: null as FootballTeamInfo | null,
-        awayTeam: null as FootballTeamInfo | null,
         venue: ''
     });
 
@@ -40,8 +37,6 @@ const MatchModal: React.FC<MatchModalProps> = ({ isOpen, onClose, onSubmit, edit
                 status: editMatch.status,
                 streamUrl: editMatch.streamUrl || '',
                 previewImage: editMatch.previewImage || '',
-                homeTeam: editMatch.homeTeam || null,
-                awayTeam: editMatch.awayTeam || null,
                 venue: editMatch.venue || ''
             });
         } else {
@@ -51,13 +46,11 @@ const MatchModal: React.FC<MatchModalProps> = ({ isOpen, onClose, onSubmit, edit
                 date: '',
                 time: '',
                 tournament: '',
-                sport: 'tennis',
+                sport: 'football',
                 isLive: false,
                 status: 'upcoming',
                 streamUrl: '',
                 previewImage: '',
-                homeTeam: null,
-                awayTeam: null,
                 venue: ''
             });
         }
@@ -67,8 +60,7 @@ const MatchModal: React.FC<MatchModalProps> = ({ isOpen, onClose, onSubmit, edit
         e.preventDefault();
         const submitData = {
             ...formData,
-            homeTeam: formData.homeTeam || undefined,
-            awayTeam: formData.awayTeam || undefined,
+            tournament: '', // Всегда отправляем пустой турнир
             venue: formData.venue || undefined
         };
         onSubmit(submitData);
@@ -80,17 +72,6 @@ const MatchModal: React.FC<MatchModalProps> = ({ isOpen, onClose, onSubmit, edit
         setFormData(prev => ({
             ...prev,
             [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value
-        }));
-    };
-
-    const handleTeamChange = (teamType: 'homeTeam' | 'awayTeam', team: FootballTeamInfo | null) => {
-        setFormData(prev => ({
-            ...prev,
-            [teamType]: team,
-            // Автоматически заполняем названия игроков/команд для футбола
-            ...(formData.sport === 'football' && {
-                [teamType === 'homeTeam' ? 'player1' : 'player2']: team?.name || ''
-            })
         }));
     };
 
@@ -115,7 +96,6 @@ const MatchModal: React.FC<MatchModalProps> = ({ isOpen, onClose, onSubmit, edit
                                 value={formData.player1}
                                 onChange={handleChange}
                                 required
-                                disabled={formData.sport === 'football' && !!formData.homeTeam}
                             />
                         </div>
                         <div className="form-group">
@@ -127,46 +107,21 @@ const MatchModal: React.FC<MatchModalProps> = ({ isOpen, onClose, onSubmit, edit
                                 value={formData.player2}
                                 onChange={handleChange}
                                 required
-                                disabled={formData.sport === 'football' && !!formData.awayTeam}
                             />
                         </div>
                     </div>
 
-                    {formData.sport === 'football' && (
-                        <>
-                            <div className="form-section-title">Футбольные команды</div>
-                            <div className="form-row">
-                                <div className="form-group">
-                                    <TeamSelector
-                                        label="Домашняя команда:"
-                                        selectedTeam={formData.homeTeam}
-                                        onTeamSelect={(team) => handleTeamChange('homeTeam', team)}
-                                        placeholder="Выберите домашнюю команду"
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <TeamSelector
-                                        label="Гостевая команда:"
-                                        selectedTeam={formData.awayTeam}
-                                        onTeamSelect={(team) => handleTeamChange('awayTeam', team)}
-                                        placeholder="Выберите гостевую команду"
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="form-group">
-                                <label htmlFor="venue">Стадион:</label>
-                                <input
-                                    type="text"
-                                    id="venue"
-                                    name="venue"
-                                    value={formData.venue}
-                                    onChange={handleChange}
-                                    placeholder="Название стадиона"
-                                />
-                            </div>
-                        </>
-                    )}
+                    <div className="form-group">
+                        <label htmlFor="venue">Стадион/Место проведения:</label>
+                        <input
+                            type="text"
+                            id="venue"
+                            name="venue"
+                            value={formData.venue}
+                            onChange={handleChange}
+                            placeholder="Например: Стадион Лужники"
+                        />
+                    </div>
 
                     <div className="form-row">
                         <div className="form-group">
@@ -195,14 +150,11 @@ const MatchModal: React.FC<MatchModalProps> = ({ isOpen, onClose, onSubmit, edit
 
                     <div className="form-row">
                         <div className="form-group">
-                            <label htmlFor="tournament">Турнир:</label>
+                            {/* Скрытое поле турнира - отправляется как пустая строка */}
                             <input
-                                type="text"
-                                id="tournament"
+                                type="hidden"
                                 name="tournament"
                                 value={formData.tournament}
-                                onChange={handleChange}
-                                required
                             />
                         </div>
                         <div className="form-group">
@@ -214,8 +166,8 @@ const MatchModal: React.FC<MatchModalProps> = ({ isOpen, onClose, onSubmit, edit
                                 onChange={handleChange}
                                 required
                             >
-                                <option value="tennis">Теннис</option>
                                 <option value="football">Футбол</option>
+                                <option value="tennis">Теннис</option>
                                 <option value="basketball">Баскетбол</option>
                                 <option value="hockey">Хоккей</option>
                                 <option value="nfl">NFL</option>
