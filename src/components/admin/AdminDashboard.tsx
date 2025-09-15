@@ -1,5 +1,6 @@
 import React from 'react';
 import SystemInfo from './SystemInfo';
+import OnlineUsers from './OnlineUsers';
 import { BannerData } from '../PromoBanner';
 import { Match } from '../../types';
 import './AdminDashboard.css';
@@ -76,6 +77,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     </button>
                 </div>
             </div>
+
+            <OnlineUsers />
 
             <SystemInfo
                 serverHealth={serverHealth}

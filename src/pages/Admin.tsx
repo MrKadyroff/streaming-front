@@ -187,10 +187,7 @@ const Admin: React.FC = () => {
                 );
             case 'streams':
                 return (
-                    <StreamsManagement
-                        streams={allStreams}
-                        onRefresh={loadStreams}
-                    />
+                    <StreamsManagement />
                 );
             case 'ads':
                 return (

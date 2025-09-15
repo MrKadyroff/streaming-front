@@ -41,14 +41,14 @@ const SystemInfo: React.FC<SystemInfoProps> = ({
                     <span className="info-label">API Пользователи:</span>
                     <span className="info-value">{apiUsers.length}</span>
                 </div>
-                <div className="info-item">
+                {/* <div className="info-item">
                     <span className="info-label">API Отчеты:</span>
                     <span className="info-value">{apiReports.length}</span>
                 </div>
                 <div className="info-item">
                     <span className="info-label">HLS Стримы:</span>
                     <span className="info-value">{hlsStreams.length}</span>
-                </div>
+                </div> */}
                 <div className="info-item">
                     <span className="info-label">Всего рекламы:</span>
                     <span className="info-value">{allAds.length}</span>

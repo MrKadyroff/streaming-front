@@ -4,6 +4,7 @@ import { ThemeProvider } from './contexts/ThemeContext';
 import { DataProvider } from './contexts/DataContext';
 import { AdsProvider } from './contexts/BannerContext';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { useWebSocket } from './hooks/useWebSocket';
 import Home from './pages/Home';
 import Schedule from './pages/Schedule';
 import Admin from './pages/Admin';
@@ -90,6 +91,9 @@ const Footer: React.FC = () => {
 const AppContent: React.FC = () => {
     const location = useLocation();
     const isLoginPage = location.pathname === '/login';
+
+    // Инициализируем WebSocket соединение для отслеживания онлайн пользователей
+    useWebSocket();
 
     if (isLoginPage) {
         return (

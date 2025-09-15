@@ -89,8 +89,8 @@ const Home: React.FC = () => {
     };
 
     // Функция для форматирования времени
-    const formatStreamTime = (startTime: string) => {
-        const date = new Date(startTime);
+    const formatStreamTime = (scheduledTime: string) => {
+        const date = new Date(scheduledTime);
         return date.toLocaleTimeString('ru-RU', {
             hour: '2-digit',
             minute: '2-digit'
@@ -98,8 +98,8 @@ const Home: React.FC = () => {
     };
 
     // Функция для форматирования даты
-    const formatStreamDate = (startTime: string) => {
-        const date = new Date(startTime);
+    const formatStreamDate = (scheduledTime: string) => {
+        const date = new Date(scheduledTime);
         const today = new Date();
         const tomorrow = new Date(today);
         tomorrow.setDate(today.getDate() + 1);
@@ -199,7 +199,7 @@ const Home: React.FC = () => {
                         )}
 
                         {/* Расписание предстоящих эфиров */}
-                        {false && (
+                        {upcomingStreams.length > 0 && (
                             <div className="upcoming-schedule">
                                 <h3 className="schedule-title">
                                     📅 Расписание трансляций
@@ -211,10 +211,16 @@ const Home: React.FC = () => {
                                             <div key={stream.id} className="schedule-item">
                                                 <div className="schedule-time">
                                                     <div className="schedule-date">
-                                                        {formatStreamDate(stream.startTime!)}
+                                                        {(stream.scheduledTime || stream.startTime) ?
+                                                            formatStreamDate(stream.scheduledTime || stream.startTime!) :
+                                                            'Сегодня'
+                                                        }
                                                     </div>
                                                     <div className="schedule-clock">
-                                                        {formatStreamTime(stream.startTime!)}
+                                                        {(stream.scheduledTime || stream.startTime) ?
+                                                            formatStreamTime(stream.scheduledTime || stream.startTime!) :
+                                                            '--:--'
+                                                        }
                                                     </div>
                                                 </div>
                                                 <div className="schedule-content">
@@ -243,7 +249,8 @@ const Home: React.FC = () => {
                                         <p>На данный момент нет запланированных трансляций</p>
                                     </div>
                                 )}
-                            </div>)}
+                            </div>
+                        )}
                     </div>
                 </div>
 

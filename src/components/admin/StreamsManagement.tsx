@@ -1,13 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './StreamsManagement.css';
 
 export interface Stream {
     id: number;
     title: string;
+    description?: string;
     status: 'active' | 'upcoming' | 'ended';
     viewers: number | null;
     streamUrl: string;
     fallbackUrl?: string;
+    scheduledTime?: string;
+    sport?: string;
+    tournament?: string;
+    homeTeam?: string;
+    awayTeam?: string;
     startTime?: string;
     date?: string;
     player1?: string;
@@ -17,28 +23,66 @@ export interface Stream {
 }
 
 interface StreamsManagementProps {
-    streams: Stream[];
-    onRefresh: () => void;
+    // Убираем props, компонент сам будет загружать данные
 }
 
-const StreamsManagement: React.FC<StreamsManagementProps> = ({
-    streams,
-    onRefresh
-}) => {
+const StreamsManagement: React.FC<StreamsManagementProps> = () => {
+    const [streams, setStreams] = useState<Stream[]>([]);
+    const [streamsLoading, setStreamsLoading] = useState(true);
     const [showModal, setShowModal] = useState(false);
     const [editingStream, setEditingStream] = useState<Stream | null>(null);
     const [loading, setLoading] = useState(false);
 
     const [formData, setFormData] = useState({
         title: '',
+        description: '',
         streamUrl: 'https://f4u.online/hls/stream1/index.m3u8',
         fallbackUrl: '',
+        scheduledTime: '',
+        sport: 'Футбол',
+        tournament: '',
+        homeTeam: '',
+        awayTeam: '',
         status: 'upcoming' as Stream['status'],
         quality: ['1080p', '720p', '480p']
     });
 
+    // Функция для загрузки стримов
+    const loadStreams = async () => {
+        setStreamsLoading(true);
+        try {
+            const response = await fetch('https://f4u.online/api/admin/streams/all', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Ошибка при загрузке стримов');
+            }
+
+            const data = await response.json();
+            console.log('Загруженные стримы:', data);
+
+            // API возвращает объект с полем streams
+            const streamsArray = Array.isArray(data.streams) ? data.streams : [];
+            setStreams(streamsArray);
+        } catch (error) {
+            console.error('Ошибка загрузки стримов:', error);
+            setStreams([]);
+        } finally {
+            setStreamsLoading(false);
+        }
+    };
+
+    // Загружаем стримы при монтировании компонента
+    useEffect(() => {
+        loadStreams();
+    }, []);
+
     // API методы для управления стримами
-    const createStream = async (streamData: Omit<Stream, 'id' | 'viewers'>) => {
+    const createStream = async (streamData: any) => {
         try {
             const response = await fetch('https://f4u.online/api/admin/streams', {
                 method: 'POST',
@@ -59,7 +103,7 @@ const StreamsManagement: React.FC<StreamsManagementProps> = ({
         }
     };
 
-    const updateStream = async (id: number, streamData: Partial<Stream>) => {
+    const updateStream = async (id: number, streamData: any) => {
         try {
             const response = await fetch(`https://f4u.online/api/admin/streams/${id}`, {
                 method: 'PUT',
@@ -97,30 +141,51 @@ const StreamsManagement: React.FC<StreamsManagementProps> = ({
         }
     };
 
-    const handleOpenModal = (stream?: Stream) => {
+    const handleOpenModal = async (stream?: Stream) => {
         if (stream) {
             setEditingStream(stream);
+
+            // Поскольку мы уже загружаем полную информацию через /api/admin/streams/all,
+            // можем использовать данные напрямую без дополнительного запроса
+
+            // Форматируем scheduledTime для datetime-local input
+            let formattedScheduledTime = '';
+            if (stream.scheduledTime) {
+                const date = new Date(stream.scheduledTime);
+                formattedScheduledTime = date.toISOString().slice(0, 16);
+            }
+
             setFormData({
-                title: stream.title,
-                streamUrl: stream.streamUrl,
+                title: stream.title || '',
+                description: stream.description || '',
+                streamUrl: stream.streamUrl || '',
                 fallbackUrl: stream.fallbackUrl || '',
-                status: stream.status,
-                quality: stream.quality
+                scheduledTime: formattedScheduledTime,
+                sport: stream.sport || 'Футбол',
+                tournament: stream.tournament || '',
+                homeTeam: stream.homeTeam || '',
+                awayTeam: stream.awayTeam || '',
+                status: stream.status || 'upcoming',
+                quality: stream.quality || ['1080p', '720p', '480p']
             });
         } else {
             setEditingStream(null);
             setFormData({
                 title: '',
+                description: '',
                 streamUrl: 'https://f4u.online/hls/stream1/index.m3u8',
                 fallbackUrl: '',
+                scheduledTime: '',
+                sport: 'Футбол',
+                tournament: '',
+                homeTeam: '',
+                awayTeam: '',
                 status: 'upcoming',
                 quality: ['1080p', '720p', '480p']
             });
         }
         setShowModal(true);
-    };
-
-    const handleCloseModal = () => {
+    }; const handleCloseModal = () => {
         setShowModal(false);
         setEditingStream(null);
     };
@@ -130,19 +195,32 @@ const StreamsManagement: React.FC<StreamsManagementProps> = ({
         setLoading(true);
 
         try {
+            // Подготавливаем данные для отправки
+            const submitData = {
+                title: formData.title,
+                description: formData.description || '',
+                streamUrl: formData.streamUrl,
+                fallbackUrl: formData.fallbackUrl || '',
+                scheduledTime: formData.scheduledTime ? new Date(formData.scheduledTime).toISOString() : '',
+                sport: formData.sport,
+                tournament: formData.tournament || '',
+                homeTeam: formData.homeTeam,
+                awayTeam: formData.awayTeam,
+                status: formData.status,
+                // Убираем поля, которые не нужны для API
+            };
+
             if (editingStream) {
-                await updateStream(editingStream.id, formData);
+                await updateStream(editingStream.id, submitData);
             } else {
-                await createStream({
-                    ...formData,
-                    startTime: formData.status === 'active' ? new Date().toISOString() : undefined
-                });
+                await createStream(submitData);
             }
 
-            onRefresh();
+            loadStreams();
             handleCloseModal();
         } catch (error) {
-            alert('Ошибка при сохранении стрима');
+            console.error('Ошибка при сохранении эфира:', error);
+            alert('Ошибка при сохранении эфира');
         } finally {
             setLoading(false);
         }
@@ -152,7 +230,7 @@ const StreamsManagement: React.FC<StreamsManagementProps> = ({
         if (window.confirm('Вы уверены, что хотите удалить этот стрим?')) {
             try {
                 await deleteStream(id);
-                onRefresh();
+                loadStreams();
             } catch (error) {
                 alert('Ошибка при удалении стрима');
             }
@@ -167,7 +245,7 @@ const StreamsManagement: React.FC<StreamsManagementProps> = ({
             };
 
             await updateStream(id, updateData);
-            onRefresh();
+            loadStreams();
         } catch (error) {
             alert('Ошибка при изменении статуса стрима');
         }
@@ -198,7 +276,7 @@ const StreamsManagement: React.FC<StreamsManagementProps> = ({
                 <div className="header-actions">
                     <button
                         className="refresh-btn"
-                        onClick={onRefresh}
+                        onClick={loadStreams}
                         title="Обновить список"
                     >
                         🔄 Обновить
@@ -213,7 +291,12 @@ const StreamsManagement: React.FC<StreamsManagementProps> = ({
             </div>
 
             <div className="schedule-list">
-                {streams.length === 0 ? (
+                {streamsLoading ? (
+                    <div className="streams-loading">
+                        <div className="loading-spinner">⏳</div>
+                        <p>Загрузка стримов...</p>
+                    </div>
+                ) : streams.length === 0 ? (
                     <div className="no-streams">
                         <div className="no-streams-icon">📺</div>
                         <h3>Нет активных эфиров</h3>
@@ -230,13 +313,13 @@ const StreamsManagement: React.FC<StreamsManagementProps> = ({
                         <div key={stream.id} className="schedule-item">
                             <div className="schedule-time">
                                 <div className="match-date">
-                                    {stream.date ? new Date(stream.date).toLocaleDateString('ru-RU', {
+                                    {stream.scheduledTime ? new Date(stream.scheduledTime).toLocaleDateString('ru-RU', {
                                         day: '2-digit',
                                         month: '2-digit'
                                     }) : 'Сегодня'}
                                 </div>
                                 <div className="match-time">
-                                    {stream.startTime ? new Date(stream.startTime).toLocaleTimeString('ru-RU', {
+                                    {stream.scheduledTime ? new Date(stream.scheduledTime).toLocaleTimeString('ru-RU', {
                                         hour: '2-digit',
                                         minute: '2-digit'
                                     }) : '--:--'}
@@ -245,12 +328,16 @@ const StreamsManagement: React.FC<StreamsManagementProps> = ({
 
                             <div className="schedule-teams">
                                 <div className="team-names">
-                                    <div className="team">{stream.player1 || 'Команда 1'}</div>
+                                    <div className="team">{stream.homeTeam || stream.player1 || 'Команда 1'}</div>
                                     <div className="vs">VS</div>
-                                    <div className="team">{stream.player2 || 'Команда 2'}</div>
+                                    <div className="team">{stream.awayTeam || stream.player2 || 'Команда 2'}</div>
                                 </div>
-                                {stream.venue && (
-                                    <div className="venue">{stream.venue}</div>
+                                {(stream.venue || stream.tournament) && (
+                                    <div className="venue">
+                                        {stream.tournament && <span>{stream.tournament}</span>}
+                                        {stream.venue && stream.tournament && <span> • </span>}
+                                        {stream.venue && <span>{stream.venue}</span>}
+                                    </div>
                                 )}
                             </div>
 
@@ -324,15 +411,98 @@ const StreamsManagement: React.FC<StreamsManagementProps> = ({
                         </div>
 
                         <form className="stream-form" onSubmit={handleSubmit}>
-                            <div className="form-group">
-                                <label>Название эфира</label>
-                                <input
-                                    type="text"
-                                    value={formData.title}
-                                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                                    placeholder="Например: Эль Класико: Реал vs Барселона"
-                                    required
-                                />
+                            <div className="form-row">
+                                <div className="form-group">
+                                    <label>Название эфира</label>
+                                    <input
+                                        type="text"
+                                        value={formData.title}
+                                        onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                                        placeholder="Например: Эль Класико: Реал vs Барселона"
+                                        required
+                                    />
+                                </div>
+
+                                {/* <div className="form-group">
+                                    <label>Описание (опционально)</label>
+                                    <textarea
+                                        value={formData.description}
+                                        onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                                        placeholder="Краткое описание эфира"
+                                        rows={3}
+                                    />
+                                </div> */}
+                            </div>
+
+                            <div className="form-row">
+                                <div className="form-group">
+                                    <label>Домашняя команда</label>
+                                    <input
+                                        type="text"
+                                        value={formData.homeTeam}
+                                        onChange={(e) => setFormData({ ...formData, homeTeam: e.target.value })}
+                                        placeholder="Название домашней команды"
+                                        required
+                                    />
+                                </div>
+
+                                <div className="form-group">
+                                    <label>Гостевая команда</label>
+                                    <input
+                                        type="text"
+                                        value={formData.awayTeam}
+                                        onChange={(e) => setFormData({ ...formData, awayTeam: e.target.value })}
+                                        placeholder="Название гостевой команды"
+                                        required
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="form-row">
+                                <div className="form-group">
+                                    <label>Спорт</label>
+                                    <input
+                                        type="text"
+                                        value={formData.sport}
+                                        onChange={(e) => setFormData({ ...formData, sport: e.target.value })}
+                                        placeholder="Например: Футбол, Баскетбол, Теннис"
+                                        required
+                                    />
+                                </div>
+
+                                <div className="form-group">
+                                    <label>Турнир</label>
+                                    <input
+                                        type="text"
+                                        value={formData.tournament}
+                                        onChange={(e) => setFormData({ ...formData, tournament: e.target.value })}
+                                        placeholder="Например: Чемпионат мира, Лига чемпионов"
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="form-row">
+                                <div className="form-group">
+                                    <label>Запланированное время</label>
+                                    <input
+                                        type="datetime-local"
+                                        value={formData.scheduledTime}
+                                        onChange={(e) => setFormData({ ...formData, scheduledTime: e.target.value })}
+                                        required
+                                    />
+                                </div>
+
+                                <div className="form-group">
+                                    <label>Статус</label>
+                                    <select
+                                        value={formData.status}
+                                        onChange={(e) => setFormData({ ...formData, status: e.target.value as Stream['status'] })}
+                                    >
+                                        <option value="upcoming">Ожидает</option>
+                                        <option value="active">В эфире</option>
+                                        <option value="ended">Завершен</option>
+                                    </select>
+                                </div>
                             </div>
 
                             <div className="form-group">
@@ -355,18 +525,6 @@ const StreamsManagement: React.FC<StreamsManagementProps> = ({
                                     onChange={(e) => setFormData({ ...formData, fallbackUrl: e.target.value })}
                                     placeholder="https://backup.example.com/stream"
                                 />
-                            </div>
-
-                            <div className="form-group">
-                                <label>Статус</label>
-                                <select
-                                    value={formData.status}
-                                    onChange={(e) => setFormData({ ...formData, status: e.target.value as Stream['status'] })}
-                                >
-                                    <option value="upcoming">Ожидает</option>
-                                    <option value="active">В эфире</option>
-                                    <option value="ended">Завершен</option>
-                                </select>
                             </div>
 
                             <div className="form-actions">

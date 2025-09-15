@@ -1,0 +1,154 @@
+.online-users-widget {
+    background: var(--bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.online-users-widget:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.widget-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.widget-header h3 {
+    margin: 0;
+    color: var(--text-color);
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.refresh-btn {
+    background: none;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 6px 10px;
+    cursor: pointer;
+    color: var(--text-secondary);
+    transition: all 0.2s ease;
+    font-size: 14px;
+}
+
+.refresh-btn:hover:not(:disabled) {
+    background: var(--accent-color);
+    color: white;
+    border-color: var(--accent-color);
+}
+
+.refresh-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.online-stats {
+    text-align: center;
+}
+
+.stat-item {
+    margin-bottom: 16px;
+}
+
+.stat-value {
+    font-size: 48px;
+    font-weight: bold;
+    color: var(--accent-color);
+    line-height: 1;
+    margin-bottom: 8px;
+}
+
+.stat-label {
+    font-size: 14px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.stat-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border-color);
+    font-size: 12px;
+}
+
+.connection-status {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}
+
+.status-connected {
+    color: #22c55e;
+    font-weight: 500;
+}
+
+.status-disconnected {
+    color: #ef4444;
+    font-weight: 500;
+}
+
+.last-updated {
+    color: var(--text-secondary);
+    text-align: center;
+}
+
+/* Темная тема */
+[data-theme="dark"] .online-users-widget {
+    background: var(--bg-secondary);
+    border-color: var(--border-color-dark);
+}
+
+[data-theme="dark"] .widget-header {
+    border-bottom-color: var(--border-color-dark);
+}
+
+[data-theme="dark"] .refresh-btn {
+    border-color: var(--border-color-dark);
+    color: var(--text-secondary-dark);
+}
+
+[data-theme="dark"] .refresh-btn:hover:not(:disabled) {
+    background: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+[data-theme="dark"] .stat-meta {
+    border-top-color: var(--border-color-dark);
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .online-users-widget {
+        padding: 16px;
+        margin-bottom: 16px;
+    }
+
+    .widget-header h3 {
+        font-size: 16px;
+    }
+
+    .stat-value {
+        font-size: 36px;
+    }
+
+    .refresh-btn {
+        padding: 4px 8px;
+        font-size: 12px;
+    }
+
+    .stat-meta {
+        font-size: 11px;
+    }
+}

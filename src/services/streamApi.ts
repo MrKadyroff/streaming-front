@@ -10,6 +10,7 @@ export interface Stream {
     streamUrl: string;
     fallbackUrl: string;
     startTime: string | null;
+    scheduledTime?: string | null;
     quality: string[];
     thumbnail?: string;
     description?: string;
@@ -70,13 +71,13 @@ class StreamApiService {
             const response = await this.getStreams(1, 50);
             // Фильтруем предстоящие стримы
             const upcomingStreams = response.streams.filter(stream =>
-                stream.status === 'upcoming' && stream.startTime
+                stream.status === 'upcoming' && (stream.scheduledTime || stream.startTime)
             );
 
-            // Сортируем по времени начала
+            // Сортируем по времени начала (используем scheduledTime приоритетно)
             return upcomingStreams.sort((a, b) => {
-                const timeA = new Date(a.startTime!).getTime();
-                const timeB = new Date(b.startTime!).getTime();
+                const timeA = new Date((a.scheduledTime || a.startTime)!).getTime();
+                const timeB = new Date((b.scheduledTime || b.startTime)!).getTime();
                 return timeA - timeB;
             });
         } catch (error) {
