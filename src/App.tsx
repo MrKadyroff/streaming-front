@@ -95,6 +95,7 @@ const AppContent: React.FC = () => {
     // Инициализируем WebSocket соединение для отслеживания онлайн пользователей
     useWebSocket();
 
+
     if (isLoginPage) {
         return (
             <div className="app-container">

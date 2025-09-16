@@ -1,34 +1,29 @@
-import { useEffect } from 'react';
-import { webSocketService } from '../services/websocketService';
+// useWebSocket.ts
+import { useEffect, useState } from "react";
+import { webSocketService, Status } from "../services/websocketService";
 
 export const useWebSocket = () => {
+    const [status, setStatus] = useState<Status>("connecting");
+    const [onlineCount, setOnlineCount] = useState(0);
+
     useEffect(() => {
-        // Подключаемся к WebSocket при монтировании компонента
-        const connectWebSocket = async () => {
-            try {
-                await webSocketService.connect();
-            } catch (error) {
-                console.error('Ошибка подключения к WebSocket:', error);
-            }
-        };
+        let mounted = true;
 
-        connectWebSocket();
+        const s = (st: Status) => { if (mounted) setStatus(st); };
+        const c = (n: number) => { if (mounted) setOnlineCount(n); };
 
-        // Отключаемся при размонтировании или закрытии страницы
-        const handleBeforeUnload = async () => {
-            await webSocketService.disconnect();
-        };
+        webSocketService.onStatus(s);
+        webSocketService.onOnlineCount(c);
 
-        window.addEventListener('beforeunload', handleBeforeUnload);
+        webSocketService.connect().catch(console.error);
 
         return () => {
-            window.removeEventListener('beforeunload', handleBeforeUnload);
-            webSocketService.disconnect();
+            mounted = false;
+            webSocketService.offStatus(s);
+            webSocketService.offOnlineCount(c);
+            // НЕ останавливаем соединение здесь, иначе один компонент «уронит» сокет всем
         };
     }, []);
 
-    return {
-        connection: webSocketService.getConnection(),
-        isConnected: webSocketService.isConnectionActive()
-    };
+    return { status, onlineCount, connection: webSocketService.getConnection() };
 };
