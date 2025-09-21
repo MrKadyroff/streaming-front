@@ -1,22 +1,16 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import Hls from 'hls.js';
 import { PlayerConfig, VideoLevel } from '../types';
+import { usePageVisibility } from '../hooks/usePageVisibility';
 import './player.css';
 
+// ── utils ──────────────────────────────────────────────────────────────────────
 async function probeHls(url: string, timeoutMs: number): Promise<boolean> {
     const ac = new AbortController();
     const t = setTimeout(() => ac.abort(), timeoutMs);
-
     try {
-        const res = await fetch(url, {
-            method: 'GET',
-            cache: 'no-store',
-            redirect: 'follow',
-            signal: ac.signal,
-        });
-
+        const res = await fetch(url, { method: 'GET', cache: 'no-store', redirect: 'follow', signal: ac.signal });
         if (!res.ok) return false;
-
         const txt = (await res.text()).slice(0, 2048);
         return txt.includes('#EXTM3U');
     } catch {
@@ -36,7 +30,6 @@ interface PlayerProps extends PlayerConfig {
 const Player: React.FC<PlayerProps> = ({
     primarySrc,
     fallbackSrc = '',
-    checkIntervalMs = 5000,
     requestTimeoutMs = 3000,
     autoPlayMuted = true,
     retryBaseDelayMs = 3000,
@@ -46,99 +39,148 @@ const Player: React.FC<PlayerProps> = ({
     matchTitle,
     isLive = false
 }) => {
+    // ── state ────────────────────────────────────────────────────────────────────
     const [effSrc, setEffSrc] = useState<string>(fallbackSrc);
     const [effType, setEffType] = useState<'video' | 'hls'>('video');
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [muted, setMuted] = useState(autoPlayMuted);
+    const [volume, setVolume] = useState(1);
+    const [isFullscreen, setIsFullscreen] = useState(false);
+    const [hasActiveStream, setHasActiveStream] = useState(false);
+    const [lastError, setLastError] = useState<string | null>(null);
+    const [playbackRate, setPlaybackRate] = useState(1);
+    const [levels, setLevels] = useState<VideoLevel[]>([]);
+    const [currentLevel, setCurrentLevel] = useState(-1);
+    const [reloadNonce, setReloadNonce] = useState(0);
+    const [playPromise, setPlayPromise] = useState<Promise<void> | null>(null);
+    const [showControls, setShowControls] = useState(true);
 
+    // ── refs ─────────────────────────────────────────────────────────────────────
     const videoRef = useRef<HTMLVideoElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
     const hlsRef = useRef<Hls | null>(null);
     const retryTimerRef = useRef<NodeJS.Timeout | null>(null);
+    const hideControlsTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-    const [retryAttempt, setRetryAttempt] = useState<number>(0);
-    const [isPlaying, setIsPlaying] = useState<boolean>(false);
-    const [muted, setMuted] = useState<boolean>(autoPlayMuted);
-    const [volume, setVolume] = useState<number>(1);
-    const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
-    const [hasActiveStream, setHasActiveStream] = useState<boolean>(false);
-    const [lastError, setLastError] = useState<string | null>(null);
+    const isPageVisible = usePageVisibility();
 
-    // Новые фичи
-    const [playbackRate, setPlaybackRate] = useState<number>(1);
-    const [levels, setLevels] = useState<VideoLevel[]>([]);
-    const [currentLevel, setCurrentLevel] = useState<number>(-1);
-    const [reloadNonce, setReloadNonce] = useState<number>(0);
+    // env
+    const ua = typeof navigator !== 'undefined' ? navigator.userAgent : '';
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+    const isIOS = /iPad|iPhone|iPod/.test(ua);
 
-    const clearRetryTimer = (): void => {
+    // helpers
+    const getFsElement = () =>
+        document.fullscreenElement ||
+        (document as any).webkitFullscreenElement ||
+        (document as any).mozFullScreenElement ||
+        (document as any).msFullscreenElement ||
+        null;
+
+    const isDocActive = () =>
+        document.visibilityState === 'visible' &&
+        (document.hasFocus ? document.hasFocus() : true);
+
+    const clearRetryTimer = useCallback(() => {
         if (retryTimerRef.current) {
             clearTimeout(retryTimerRef.current);
             retryTimerRef.current = null;
         }
-    };
+    }, []);
 
-    const scheduleRetry = useCallback((nextAttempt?: number): void => {
-        clearRetryTimer();
-        const attempt = nextAttempt ?? retryAttempt + 1;
-        const delay = Math.min(
-            retryMaxDelayMs,
-            retryBaseDelayMs * Math.pow(1.7, Math.max(0, attempt - 1))
-        );
-        retryTimerRef.current = setTimeout(() => setRetryAttempt(attempt), delay);
-    }, [retryAttempt, retryBaseDelayMs, retryMaxDelayMs]);
+    const scheduleRetry = useCallback(
+        (nextAttempt?: number) => {
+            clearRetryTimer();
+            const attempt = nextAttempt ?? 1;
+            const delay = Math.min(retryMaxDelayMs, retryBaseDelayMs * Math.pow(1.7, attempt - 1));
+            retryTimerRef.current = setTimeout(() => { /* place retry action here if нужно */ }, delay);
+        },
+        [retryBaseDelayMs, retryMaxDelayMs, clearRetryTimer]
+    );
 
-    // Первичная проверка
+    const exitFullscreenSafe = useCallback(async () => {
+        // если уже не в ФС — ок
+        const hasFs = () =>
+            !!(document.fullscreenElement ||
+                (document as any).webkitFullscreenElement ||
+                (document as any).mozFullScreenElement ||
+                (document as any).msFullscreenElement);
+
+        const tryExit = async () => {
+            if (!hasFs()) return true;
+            try {
+                if (document.exitFullscreen) {
+                    await document.exitFullscreen();
+                } else if ((document as any).webkitExitFullscreen) {
+                    await (document as any).webkitExitFullscreen();
+                }
+                return true;
+            } catch (e: any) {
+                // та самая ошибка
+                if (typeof e?.message === 'string' && /Document not active/i.test(e.message)) return false;
+                // иногда браузер кидает DOMException без message
+                if (e?.name === 'InvalidStateError') return false;
+                throw e;
+            }
+        };
+
+        // iOS нативный фуллскрин у <video>
+        const v: any = videoRef.current;
+        if (v?.webkitDisplayingFullscreen) {
+            try { v.webkitExitFullscreen?.(); } catch { }
+            return;
+        }
+
+        // Ждём, пока документ станет «активным», потом пытаемся выйти.
+        // 8 попыток с коротким бэк-оффом.
+        for (let i = 0; i < 8; i++) {
+            const active = document.visibilityState === 'visible' && (document.hasFocus?.() ?? true);
+            if (active) {
+                const ok = await tryExit();
+                if (ok) return;
+            }
+            await new Promise(r => setTimeout(r, 80 * (i + 1)));
+            if (!hasFs()) return; // уже вышли где-то по дороге
+        }
+
+        // последний шанс: попробуем ещё раз, не падая наружу
+        try { await tryExit(); } catch { }
+    }, []);
+
+
+    // ── первичная проверка источника ─────────────────────────────────────────────
     useEffect(() => {
         let cancelled = false;
-
         (async () => {
             const ok = await probeHls(primarySrc, requestTimeoutMs);
             if (cancelled) return;
-
             if (ok) {
                 setHasActiveStream(true);
                 setEffSrc(primarySrc);
                 setEffType('hls');
-                setRetryAttempt(0);
             } else {
                 setHasActiveStream(false);
                 setEffSrc(fallbackSrc);
                 setEffType('video');
-                scheduleRetry(1);
             }
         })();
+        return () => { cancelled = true; clearRetryTimer(); };
+    }, [primarySrc, fallbackSrc, requestTimeoutMs, clearRetryTimer]);
 
-        return () => {
-            cancelled = true;
-            clearRetryTimer();
-        };
-    }, [primarySrc, fallbackSrc, requestTimeoutMs, scheduleRetry]);
-
-    // Инициализация источника
+    // ── init / recreate media source (НЕ пересоздаём на громкости/скорости) ──────
     useEffect(() => {
         const video = videoRef.current;
         if (!video || !effSrc) return;
 
-        setLastError(null);
-        setLevels([]);
-        setCurrentLevel(-1);
-
-        video.muted = muted;
-        video.volume = volume;
-        video.playbackRate = playbackRate;
+        // очистка предыдущего HLS
+        if (hlsRef.current) {
+            try { hlsRef.current.destroy(); } catch { }
+            hlsRef.current = null;
+        }
 
         if (effType === 'hls' && Hls.isSupported()) {
-            const hls = new Hls({
-                maxBufferLength: 30,
-                backBufferLength: 30,
-                enableWorker: true,
-                lowLatencyMode: true,
-            });
-
+            const hls = new Hls();
             hlsRef.current = hls;
-
-            hls.on(Hls.Events.MEDIA_ATTACHED, () => {
-                const src = reloadNonce ? `${effSrc}?r=${reloadNonce}` : effSrc;
-                hls.loadSource(src);
-            });
 
             hls.on(Hls.Events.MANIFEST_PARSED, () => {
                 const parsedLevels: VideoLevel[] = (hls.levels || []).map((lv, i) => ({
@@ -151,256 +193,247 @@ const Player: React.FC<PlayerProps> = ({
                 setCurrentLevel(hls.currentLevel ?? -1);
             });
 
+            hls.on(Hls.Events.LEVEL_SWITCHED, (_e, data) => {
+                setCurrentLevel(typeof data?.level === 'number' ? data.level : -1);
+            });
+
             hls.attachMedia(video);
+            hls.loadSource(effSrc);
         } else {
-            video.src = reloadNonce ? `${effSrc}?r=${reloadNonce}` : effSrc;
+            // прогрессивный mp4/фоллбек
+            video.src = effSrc;
             video.load();
         }
 
         return () => {
-            clearRetryTimer();
-            if (hlsRef.current) {
-                try {
-                    hlsRef.current.destroy();
-                } catch (e) {
-                    console.error('Error destroying HLS instance:', e);
-                }
-                hlsRef.current = null;
-            }
+            try { hlsRef.current?.destroy(); } catch { }
+            hlsRef.current = null;
         };
-    }, [effSrc, effType, reloadNonce, muted, volume, playbackRate]);
+    }, [effSrc, effType, reloadNonce]);
 
-    // Слушатели событий
+    // ── применяем параметры без пересоздания потока ──────────────────────────────
+    useEffect(() => {
+        const v = videoRef.current;
+        if (!v) return;
+        v.muted = muted;
+        v.volume = volume;
+        v.playbackRate = playbackRate;
+    }, [muted, volume, playbackRate]);
+
+    // ── слушатели play/pause ─────────────────────────────────────────────────────
     useEffect(() => {
         const video = videoRef.current;
         if (!video) return;
-
         const onPlay = () => setIsPlaying(true);
         const onPause = () => setIsPlaying(false);
-        const onError = (e: Event) => {
-            const target = e.target as HTMLVideoElement;
-            // setLastError(target.error?.message || 'Ошибка воспроизведения');
-        };
-
         video.addEventListener('play', onPlay);
         video.addEventListener('pause', onPause);
-        video.addEventListener('error', onError);
-
         return () => {
             video.removeEventListener('play', onPlay);
             video.removeEventListener('pause', onPause);
-            video.removeEventListener('error', onError);
         };
     }, []);
 
-    // Fullscreen listener
+    // ── iOS атрибуты и inline ────────────────────────────────────────────────────
     useEffect(() => {
-        const onFullscreenChange = () => {
-            setIsFullscreen(!!document.fullscreenElement);
-        };
-
-        document.addEventListener('fullscreenchange', onFullscreenChange);
-        return () => document.removeEventListener('fullscreenchange', onFullscreenChange);
+        const v = videoRef.current as any;
+        if (!v) return;
+        v.setAttribute('playsinline', '');
+        v.setAttribute('webkit-playsinline', '');
     }, []);
 
-    // Управление
-    const togglePlay = (): void => {
-        const v = videoRef.current;
-        if (!v) return;
+    // ── фуллскрин слушатели + «резюм» после выхода ───────────────────────────────
+    useEffect(() => {
+        const video = videoRef.current as HTMLVideoElement & { webkitDisplayingFullscreen?: boolean } | null;
+        if (!video) return;
 
-        if (v.paused) {
-            v.play().catch(console.error);
-        } else {
-            v.pause();
-        }
-    };
+        let wasPlaying = false;
 
-    const togglePiP = async (): Promise<void> => {
-        const v = videoRef.current;
-        if (!v) return;
-
-        try {
-            if (document.pictureInPictureElement) {
-                await document.exitPictureInPicture();
-            } else {
-                await v.requestPictureInPicture();
+        const onFsChange = () => {
+            const domFs = !!getFsElement();
+            const iosFs = isIOS && !!(video as any).webkitDisplayingFullscreen;
+            const nowFs = domFs || iosFs;
+            setIsFullscreen(nowFs);
+            if (!nowFs && wasPlaying && video.paused) {
+                video.play().catch(() => { });
             }
-        } catch (error) {
-            console.error('PiP error:', error);
+        };
+        const onPlay = () => { wasPlaying = true; };
+        const onPause = () => { wasPlaying = false; };
+
+        document.addEventListener('fullscreenchange', onFsChange);
+        document.addEventListener('webkitfullscreenchange', onFsChange as any);
+        if (isIOS) {
+            (video as any).addEventListener?.('webkitbeginfullscreen', onFsChange);
+            (video as any).addEventListener?.('webkitendfullscreen', onFsChange);
         }
-    };
+        video.addEventListener('play', onPlay);
+        video.addEventListener('pause', onPause);
 
-    const reloadStream = (): void => {
-        setReloadNonce(n => n + 1);
-    };
+        return () => {
+            document.removeEventListener('fullscreenchange', onFsChange);
+            document.removeEventListener('webkitfullscreenchange', onFsChange as any);
+            if (isIOS) {
+                (video as any).removeEventListener?.('webkitbeginfullscreen', onFsChange);
+                (video as any).removeEventListener?.('webkitendfullscreen', onFsChange);
+            }
+            video.removeEventListener('play', onPlay);
+            video.removeEventListener('pause', onPause);
+        };
+    }, [isIOS]);
 
-    const takeScreenshot = (): void => {
-        const v = videoRef.current;
-        if (!v) return;
+    // ── ручное переключение качества ─────────────────────────────────────────────
+    useEffect(() => {
+        const hls = hlsRef.current;
+        if (!hls) return;
+        if (hls.currentLevel !== currentLevel) {
+            hls.currentLevel = currentLevel; // -1 = авто
+        }
+    }, [currentLevel]);
 
-        const canvas = document.createElement('canvas');
-        canvas.width = v.videoWidth;
-        canvas.height = v.videoHeight;
-        const ctx = canvas.getContext('2d');
-
-        if (!ctx) return;
-
-        ctx.drawImage(v, 0, 0, canvas.width, canvas.height);
-        canvas.toBlob(blob => {
-            if (!blob) return;
-
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = `frame-${Date.now()}.png`;
-            a.click();
-            URL.revokeObjectURL(a.href);
-        });
-    };
-
-    const toggleFullscreen = (): void => {
+    // ── controls автоскрытие на десктопе (опц.) ──────────────────────────────────
+    useEffect(() => {
         const container = containerRef.current;
         if (!container) return;
 
-        if (!document.fullscreenElement) {
-            container.requestFullscreen?.();
-        } else {
-            document.exitFullscreen?.();
-        }
-    };
+        const show = () => {
+            setShowControls(true);
+            clearTimeout(hideControlsTimeoutRef.current!);
+            hideControlsTimeoutRef.current = setTimeout(() => setShowControls(false), 2500);
+        };
 
-    const changeQuality = (e: React.ChangeEvent<HTMLSelectElement>): void => {
-        const idx = Number(e.target.value);
-        setCurrentLevel(idx);
-        if (hlsRef.current) {
-            hlsRef.current.currentLevel = idx;
-        }
-    };
+        const mousemove = () => show();
+        const mouseleave = () => setShowControls(false);
 
-    const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-        const newVolume = Number(e.target.value);
-        setVolume(newVolume);
-        if (videoRef.current) {
-            videoRef.current.volume = newVolume;
-        }
-    };
+        container.addEventListener('mousemove', mousemove);
+        container.addEventListener('mouseleave', mouseleave);
+        show();
 
-    const handlePlaybackRateChange = (e: React.ChangeEvent<HTMLSelectElement>): void => {
-        const newRate = Number(e.target.value);
-        setPlaybackRate(newRate);
-        if (videoRef.current) {
-            videoRef.current.playbackRate = newRate;
-        }
-    };
+        return () => {
+            container.removeEventListener('mousemove', mousemove);
+            container.removeEventListener('mouseleave', mouseleave);
+            if (hideControlsTimeoutRef.current) clearTimeout(hideControlsTimeoutRef.current);
+        };
+    }, []);
 
+    // ── actions ──────────────────────────────────────────────────────────────────
+    const togglePlay = useCallback(async () => {
+        const v = videoRef.current;
+        if (!v) return;
+        try {
+            if (playPromise) await playPromise;
+            if (v.paused || v.ended) {
+                const p = v.play();
+                setPlayPromise(p);
+                await p;
+                setPlayPromise(null);
+            } else {
+                v.pause();
+                setPlayPromise(null);
+            }
+        } catch {
+            setPlayPromise(null);
+        }
+    }, [playPromise]);
+
+    // ГЛАВНОЕ: Фуллскриним контейнер (кроме iOS — нативный FS у video)
+    const toggleFullscreen = useCallback(async () => {
+        const container = containerRef.current as any;
+        const video = videoRef.current as any;
+        if (!container || !video) return;
+
+        if ((toggleFullscreen as any)._busy) return;
+        (toggleFullscreen as any)._busy = true;
+        const release = () => setTimeout(() => ((toggleFullscreen as any)._busy = false), 120);
+
+        try {
+            const fsEl = getFsElement();
+            const inIosVideoFS = !!video.webkitDisplayingFullscreen;
+            const inDomFS = !!fsEl;
+
+            if (!inIosVideoFS && !inDomFS) {
+                // ENTER
+                if (isIOS && typeof video.webkitEnterFullscreen === 'function') {
+                    try { if (video.paused) await video.play(); } catch { }
+                    video.webkitEnterFullscreen();
+                    release();
+                    return;
+                }
+
+                if (container.requestFullscreen) {
+                    await container.requestFullscreen();
+                } else if (container.webkitRequestFullscreen) {
+                    await container.webkitRequestFullscreen();
+                } else {
+                    // крайний случай
+                    if (video.requestFullscreen) await video.requestFullscreen();
+                    else if (video.webkitRequestFullscreen) await video.webkitRequestFullscreen();
+                }
+            } else {
+                // EXIT
+                await exitFullscreenSafe();
+            }
+        } catch (error) {
+            console.error('Fullscreen error:', error);
+            setIsFullscreen(false);
+        } finally {
+            release();
+        }
+    }, [isIOS, exitFullscreenSafe]);
+
+    // ── render ───────────────────────────────────────────────────────────────────
     return (
-        <div className={`player ${className}`} ref={containerRef}>
+        <div className={`player ${className} ${showControls ? 'show-controls' : ''}`} ref={containerRef}>
             {!isLive && previewImage ? (
                 <div className="player-preview">
-                    <img
-                        src={previewImage}
-                        alt={matchTitle || "Превью матча"}
-                        className="preview-image"
-                    />
-                    <div className="preview-overlay">
-                        <div className="preview-content">
-                            <div className="preview-status">
-                                <span className="preview-icon">⏰</span>
-                                <span className="preview-text">Эфир скоро начнется</span>
-                            </div>
-                            {matchTitle && (
-                                <div className="preview-title">{matchTitle}</div>
-                            )}
-                        </div>
-                    </div>
+                    <img src={previewImage} alt={matchTitle || 'Превью'} className="preview-image" />
                 </div>
             ) : (
-                <>
-                    <video
-                        ref={videoRef}
-                        muted={muted}
-                        autoPlay
-                        playsInline
-                        preload="metadata"
-                        className="player-video"
-                        onClick={togglePlay}
-                    />
-
-                    {lastError && (
-                        <div className="player-error">
-                            <span>Ошибка: {lastError}</span>
-                            <button onClick={reloadStream}>Попробовать снова</button>
-                        </div>
-                    )}
-                </>
+                <video
+                    ref={videoRef}
+                    muted={muted}
+                    autoPlay
+                    playsInline
+                    preload="metadata"
+                    className="player-video"
+                />
             )}
 
             <div className="controls-bar">
-                <button className="btn control-btn" onClick={togglePlay} title="Воспроизведение">
-                    {isPlaying ? 'Pause' : 'Play'}
-                </button>
-
-                <button className="btn control-btn" onClick={() => setMuted(m => !m)} title="Звук">
-                    {muted ? 'Mute' : 'Sound'}
-                </button>
+                <button className="control-btn" onClick={togglePlay}>{isPlaying ? 'Pause' : 'Play'}</button>
+                <button className="control-btn" onClick={() => setMuted(m => !m)}>{muted ? 'Mute' : 'Sound'}</button>
 
                 <input
-                    type="range"
-                    min="0"
-                    max="1"
-                    step="0.05"
-                    value={volume}
-                    onChange={handleVolumeChange}
                     className="volume-slider"
-                    title="Громкость"
+                    type="range" min="0" max="1" step="0.05"
+                    value={volume}
+                    onChange={e => setVolume(+e.target.value)}
+                    aria-label="Volume"
                 />
 
                 <select
-                    value={playbackRate}
-                    onChange={handlePlaybackRateChange}
                     className="speed-select"
-                    title="Скорость"
+                    value={playbackRate}
+                    onChange={e => setPlaybackRate(+e.target.value)}
+                    aria-label="Speed"
                 >
-                    {[0.5, 0.75, 1, 1.25, 1.5, 2].map(r => (
-                        <option key={r} value={r}>{r}×</option>
-                    ))}
+                    {[0.5, 0.75, 1, 1.25, 1.5, 2].map(r => <option key={r} value={r}>{r}×</option>)}
                 </select>
 
                 {effType === 'hls' && levels.length > 0 && (
                     <select
-                        value={currentLevel}
-                        onChange={changeQuality}
                         className="quality-select"
-                        title="Качество"
+                        value={currentLevel}
+                        onChange={e => setCurrentLevel(+e.target.value)}
+                        aria-label="Quality"
                     >
                         <option value={-1}>Авто</option>
-                        {levels.map(lv => (
-                            <option key={lv.index} value={lv.index}>{lv.name}</option>
-                        ))}
+                        {levels.map(lv => <option key={lv.index} value={lv.index}>{lv.name}</option>)}
                     </select>
                 )}
 
-                <button className="btn control-btn" onClick={togglePiP} title="Картинка в картинке">
-                    PiP
-                </button>
-
-                <button className="btn control-btn" onClick={takeScreenshot} title="Скриншот">
-                    Screenshot
-                </button>
-
-                <button className="btn control-btn" onClick={reloadStream} title="Обновить">
-                    ↻
-                </button>
-
-                <button className="btn control-btn" onClick={toggleFullscreen} title="Полный экран">
-                    {isFullscreen ? '⤓' : '⤢'}
-                </button>
+                <button className="control-btn" onClick={toggleFullscreen}>{isFullscreen ? '⤓' : '⤢'}</button>
             </div>
-
-            {!hasActiveStream && isLive && (
-                <div className="stream-status">
-                    <span>Поиск активного потока...</span>
-                </div>
-            )}
         </div>
     );
 };
