@@ -6,45 +6,19 @@
     max-width: 1200px;
     margin: 0 auto;
     position: relative;
-    background: linear-gradient(135deg, #0d4a1e 0%, #1a5c2e 25%, #22c55e 50%, #16a34a 75%, #15803d 100%);
-    background-size: 400% 400%;
-    animation: footballFieldGradient 15s ease infinite;
-    border-radius: 20px;
+    background: #111;
+    border-radius: 16px;
     overflow: hidden;
-    box-shadow: 0 0 30px rgba(34, 197, 94, .3), 0 20px 60px rgba(0, 0, 0, .4), inset 0 1px 0 rgba(255, 255, 255, .1);
-    border: 2px solid rgba(34, 197, 94, .4);
+    box-shadow: 0 0 24px rgba(0,0,0,.5);
+    border: 1px solid rgba(255,255,255,.08);
     box-sizing: border-box;
+    transition: background .3s ease, box-shadow .3s ease;
 }
 
-@keyframes footballFieldGradient {
-    0% {
-        background-position: 0% 50%;
-    }
-
-    50% {
-        background-position: 100% 50%;
-    }
-
-    100% {
-        background-position: 0% 50%;
-    }
-}
+/* football gradient animation removed */
 
 /* Узор футбольного поля */
-.hls-player::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background:
-        radial-gradient(circle at 50% 50%, transparent 60px, rgba(255, 255, 255, .1) 61px, rgba(255, 255, 255, .1) 63px, transparent 64px),
-        linear-gradient(90deg, transparent 49%, rgba(255, 255, 255, .1) 50%, transparent 51%),
-        linear-gradient(0deg, transparent 49%, rgba(255, 255, 255, .08) 50%, transparent 51%),
-        linear-gradient(90deg, rgba(255, 255, 255, .05) 0%, rgba(255, 255, 255, .05) 15%, transparent 15%, transparent 85%, rgba(255, 255, 255, .05) 85%, rgba(255, 255, 255, .05) 100%);
-    background-size: 200px 200px, 100px 100px, 100px 100px, 100% 100%;
-    pointer-events: none;
-    z-index: 1;
-    opacity: .6;
-}
+/* decorative overlay removed */
 
 .player-container {
     position: relative;
@@ -61,9 +35,10 @@
     background: #000;
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 0 20px rgba(255, 255, 255, .2), inset 0 0 20px rgba(0, 0, 0, .3);
-    border: 3px solid rgba(255, 255, 255, .3);
+    box-shadow: 0 0 12px rgba(0,0,0,.7);
+    border: 1px solid rgba(255,255,255,.08);
     box-sizing: border-box;
+    transition: box-shadow .3s ease, border-color .3s ease;
 }
 
 .video-element {
@@ -207,10 +182,10 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(transparent, rgba(0, 0, 0, .8));
-    padding: 20px;
+    background: linear-gradient(transparent, rgba(0,0,0,.85));
+    padding: 14px 18px 20px;
     opacity: 0;
-    transition: opacity 120ms ease;
+    transition: opacity 140ms ease;
     z-index: 5;
 }
 
@@ -431,13 +406,38 @@
 }
 
 /* === Fullscreen (на уровне корня или вложенных) === */
-:where(.hls-player, .video-wrapper, .video-element):fullscreen {
+/* Fullscreen minimal mode */
+:where(.hls-player, .video-wrapper, .video-element):fullscreen,
+.hls-player.fullscreen-active {
+    max-width: none !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    margin: 0 !important;
+    background: #000 !important;
+    border-radius: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+:where(.hls-player, .video-wrapper, .video-element):fullscreen .player-container,
+.hls-player.fullscreen-active .player-container {
+    padding: 0 !important;
+}
+
+:where(.hls-player, .video-wrapper, .video-element):fullscreen .video-wrapper,
+.hls-player.fullscreen-active .video-wrapper {
+    aspect-ratio: auto;
+    width: 100vw !important;
+    height: 100vh !important;
     border-radius: 0 !important;
     border: none !important;
 }
 
-:where(.hls-player, .video-wrapper, .video-element):fullscreen .player-container {
-    padding: 0 !important;
+:where(.hls-player, .video-wrapper, .video-element):fullscreen .video-element,
+.hls-player.fullscreen-active .video-element {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover;
 }
 
 /* Доступность */

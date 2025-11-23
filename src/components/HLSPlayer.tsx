@@ -339,7 +339,7 @@ const HLSPlayer: React.FC<HLSPlayerProps> = ({ stream, onError, className = '' }
     }
 
     return (
-        <div ref={containerRef} className={`hls-player ${isLoading ? 'is-loading' : ''} ${className}`}>
+        <div ref={containerRef} className={`hls-player ${isLoading ? 'is-loading' : ''} ${isFullscreen ? 'fullscreen-active' : ''} ${className}`}>
             <div className="player-container">
                 <div className="video-wrapper">
                     <video
